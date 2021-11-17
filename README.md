@@ -27,8 +27,11 @@ $ yarn start
     ├── src                     # Source files
         ├── assets              # Contains images, svgs, styles, uri's, screens name etc
         ├── components          # Shared componenets and widgets in the app E.g Button, Loader Navbar etc.
-        ├── core                # AppContext and Helpers for screens and the app
-        ├── pages               # The app pages
+        ├── core                # AppContext and helpers for screens and the app
+            ├── hooks           # App hooks
+            ├── store           # App store and related modules
+            ├── utils           # helpers and queries
+        ├── modules             # The app pages
     ├── App.js                  # App entry point
     ├── index.js                # Project entry
     ├── .eslintignore           # Ignore eslint errors
