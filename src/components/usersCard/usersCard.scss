@@ -1,0 +1,45 @@
+
+.users-card{
+    background-color: white;
+    padding: 10px 12px;
+    // width: 272px;
+    height: 359px;
+    border-radius: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px;
+    
+    .users-cards-top{
+        display: flex;
+        justify-content: space-between;
+        .users-cards-top-title-left{
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .users-cards-top-title-right{
+            display: flex;
+            
+            div{
+                margin-left: 10px;
+            }
+            a{
+                margin-left: 5px;
+                font-weight: bold;
+            }
+        }
+    }
+    .users-cards-middle{
+        padding-left: 10px;
+        img {
+           padding-bottom: 10px;
+        }
+        b.users-cards-middle-text {
+            font-size: 30px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+    }
+
+}

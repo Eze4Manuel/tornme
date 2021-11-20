@@ -1,0 +1,40 @@
+
+.usersDistribution-card{
+    background-color: white;
+    padding: 10px 12px;
+    // width: 574px;
+    height: 359px;
+    border-radius: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px;
+    
+    .usersDistribution-cards-top{
+        display: flex;
+        justify-content: space-between;
+        .usersDistribution-cards-top-title-left{
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .usersDistribution-cards-top-title-right{
+            a{
+                margin-left: 5px;
+                font-weight: bold;
+            }
+        }
+    }
+    .usersDistribution-cards-middle{
+        padding-left: 10px;
+        img {
+           padding-bottom: 10px;
+        }
+        b.usersDistribution-cards-middle-text {
+            font-size: 30px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+    }
+
+}

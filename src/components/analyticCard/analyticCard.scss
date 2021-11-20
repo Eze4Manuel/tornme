@@ -1,0 +1,47 @@
+
+.custom-cards{
+    background-color: white;
+    padding: 10px 12px;
+    // width: 254px;
+    height: 119px;
+    border-radius: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px;
+    
+    .custom-cards-top{
+        display: flex;
+        justify-content: space-between;
+        .custom-cards-top-title-left{
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .custom-cards-top-title-right{
+            a{
+                margin-left: 5px;
+                font-weight: bold;
+            }
+        }
+    }
+    .custom-cards-middle{
+        padding-left: 10px;
+        img {
+           padding-bottom: 10px;
+        }
+        b.custom-cards-middle-text {
+            font-size: 30px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+    }
+
+}
+
+
+@media screen and (max-width: 650px ){
+    .custom-cards{
+        flex-grow: 1;
+    }
+}
