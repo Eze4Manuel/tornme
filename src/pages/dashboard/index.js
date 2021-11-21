@@ -31,13 +31,34 @@ const Dashboard = () => {
         </Menu>
     );
     const dataSource = [
-        {img: btc, userHandle: "@priewereer", followers: 2325},
-        {img: onlineUser, userHandle: "@priewereer", followers: 5445},
-        {img: newUser, userHandle: "@priewereer", followers: 335},
-        {img: onlineUser, userHandle: "@priewereer", followers: 2145},
-        {img: newUser, userHandle: "@priewereer", followers: 2245},
-        {img: btc, userHandle: "@priewereer", followers: 2340}
+        { img: btc, userHandle: "@priewereer", followers: 2325 },
+        { img: onlineUser, userHandle: "@priewereer", followers: 5445 },
+        { img: newUser, userHandle: "@priewereer", followers: 335 },
+        { img: onlineUser, userHandle: "@priewereer", followers: 2145 },
+        { img: newUser, userHandle: "@priewereer", followers: 2245 },
+        { img: btc, userHandle: "@priewereer", followers: 2340 }
     ]
+    const supportSource = [
+        { img: btc, userHandle: "@priewereer", time: '23h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do Amet minim mollit non deserut uamc ersit aliqua dolor doAmet minim  " },
+        { img: onlineUser, userHandle: "@priewereer", time: '13h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
+        { img: btc, userHandle: "@priewereer", time: '12h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
+        { img: newUser, userHandle: "@priewereer", time: '10h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
+        { img: btc, userHandle: "@priewereer", time: '20h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
+        { img: newUser, userHandle: "@priewereer", time: '10h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " }
+    ]
+
+    const data = [
+        {
+            type: 'Inactive',
+            value: 8,
+        },
+        {
+            type: 'Active',
+            value: 70,
+        },
+
+    ];
+
     return (
         <Structure>
             <PageHeaderComp title="Dashboard" />
@@ -87,65 +108,75 @@ const Dashboard = () => {
             </div>
             <div className="chart-cards">
                 <Row>
-                    <Col flex={11}>
-                        <ChartCard
-                            textColor={{ "color": "#276AFF" }}
-                            image={btc}
-                            topLeft={"Your Earnings"}
-                            bottomText={0.5989}
-                            menu={menu}
-                            topRight={"Month"}
-                            icon={<ReloadIcon />}
-                        />
+                    <Col flex={100}>
+                        <Row>
+                            <Col flex={20}>
+                                <ChartCard
+                                    textColor={{ "color": "#276AFF" }}
+                                    image={btc}
+                                    topLeft={"Your Earnings"}
+                                    bottomText={0.5989}
+                                    menu={menu}
+                                    topRight={"Month"}
+                                    icon={<ReloadIcon />}
+                                />
+                            </Col>
+
+                            <Col >
+                                <UsersCard
+                                    textColor={{ "color": "#276AFF" }}
+                                    image={btc}
+                                    topLeft={"Users"}
+                                    data={data}
+                                />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col flex={1}>
+                                <UsersDistributionCard
+                                    textColor={{ "color": "#276AFF" }}
+                                    image={btc}
+                                    topLeft={"Users Distribution"}
+                                    bottomText={0.5989}
+                                    menu={menu}
+                                    topRight={"Month"}
+                                    icon={<ReloadIcon />}
+                                />
+                            </Col>
+                        </Row>
                     </Col>
 
-                    <Col flex={2}>
-                        <UsersCard
-                            textColor={{ "color": "#276AFF" }}
-                            image={btc}
-                            topLeft={"Users"}
-                            bottomText={0.5989}
-                            menu={menu}
-                            topRightFirst={"Year"}
-                            topRightSecond={"Month"}
-                            icon={<ReloadIcon />}
-                        />
+                    <Col flex={1}>
+                        <Row>
+                            <Col flex={1}>
+                                <TopUserCard
+                                    textColor={{ "color": "#276AFF" }}
+                                    topLeft={"Top Users"}
+                                    data={dataSource}
+                                    bottomText={0.5989}
+                                />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col flex={1}>
+                                <SupportCard
+                                    textColor={{ "color": "#276AFF" }}
+                                    image={btc}
+                                    topLeft={"Support"}
+                                    data={supportSource}
+                                />
+                            </Col>
+                        </Row>
                     </Col>
-                    <Col flex={3}>
-                        <TopUserCard
-                            textColor={{ "color": "#276AFF" }}
-                            topLeft={"Top Users"}
-                            data = {dataSource}
-                            bottomText={0.5989}
-                        />
-                    </Col>
-
-
                 </Row>
             </div>
 
+
+
+
+
             <div className="info-cards">
-                <Row>
-                    <Col flex={12}>
-                        <UsersDistributionCard
-                            textColor={{ "color": "#276AFF" }}
-                            image={btc}
-                            topLeft={"Users Distribution"}
-                            bottomText={0.5989}
-                            menu={menu}
-                            topRight={"Month"}
-                            icon={<ReloadIcon />}
-                        />
-                    </Col>
-                    <Col flex={3}>
-                        <SupportCard
-                            textColor={{ "color": "#276AFF" }}
-                            image={btc}
-                            topLeft={"Support"}
-                            bottomText={0.5989}
-                                                    />
-                    </Col>
-                </Row>
+
             </div>
         </Structure>
     )

@@ -6,9 +6,8 @@
     height: 359px;
     border-radius: 6px;
     display: flex;
-    flex-wrap: wrap;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: start;
     margin: 10px;
     
     .users-cards-top{
@@ -32,13 +31,46 @@
     }
     .users-cards-middle{
         padding-left: 10px;
+       
         img {
            padding-bottom: 10px;
         }
-        b.users-cards-middle-text {
+        .users-cards-middle-text {
             font-size: 30px;
             font-weight: bold;
             padding-left: 5px;
+            width: 250px;
+            height: 250px;
+            margin: auto;
+        }
+        .users-cards-middle-bullets{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            span:first-child{
+                h3{
+                    font-size: 24px;
+                    color: #09A479;
+                    font-weight: bold;
+                    margin: 0px;
+                }
+                p{
+                    font-size: 14px;
+                    margin: 0px;
+                }
+            }
+            span{
+                h3{
+                    font-size: 24px;
+                    color: #276AFF;
+                    margin: 0px;
+                }
+                p{
+                    font-size: 14px;
+                    margin: 0px;
+                }
+            }
         }
     }
 

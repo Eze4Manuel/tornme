@@ -1,6 +1,8 @@
+import ReactDOM from 'react-dom';
 import { Dropdown, } from 'antd';
 import { CaretDownFilled } from '@ant-design/icons';
 import './chartCard.scss';
+import { TinyArea } from '@ant-design/charts';
 
 export const ChartCard = (props) => {
 
@@ -17,16 +19,15 @@ export const ChartCard = (props) => {
                             {props.topRight}
                             {props.topRight ?
                                 <CaretDownFilled /> :
-                                null }
+                                null}
                         </a>
                     </Dropdown>
                 </span>
             </div>
             <div className="chart-cards-middle">
-                <img src={props.image} alt="logo" />
-                <b className="chart-cards-middle-text" style={props.textColor}>
-                    {props.bottomText}
-                </b>
+                <div className="chart-cards-middle-text" style={props.textColor}>
+                    <chart />
+                </div>
             </div>
         </div>
     )

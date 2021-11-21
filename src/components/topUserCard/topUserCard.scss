@@ -3,14 +3,14 @@
     background-color: white;
     padding: 10px 20px;
     // width: 254px;
-    height: 359px;
+    height: 459px;
     border-radius: 6px;
     overflow: scroll;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     margin: 10px;
-    
+    max-width: 359px;
+
     .topuser-cards-top{
         display: flex;
         .topuser-cards-top-title-left{
@@ -48,7 +48,6 @@
             height: 25px;
             color: #276AFF;
             border-radius: 4px;
-            
         }
     }
 }

@@ -13,12 +13,12 @@ const { Header, Content } = Layout;
 const menu = (
     <Menu>
         <Menu.Item key="0">
-            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+            <a href="#">
                 1st menu item
             </a>
         </Menu.Item>
         <Menu.Item key="1">
-            <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+            <a href="#">
                 2nd menu item
             </a>
         </Menu.Item>
@@ -26,7 +26,6 @@ const menu = (
 );
 
 const Structure = (props) => {
-
     return (
         <Layout className="layout">
             <Header style={{ position: 'fixed', zIndex: 1, width: '100%', padding: '0px' }}>
