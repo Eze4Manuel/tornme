@@ -3,6 +3,8 @@ import { Dropdown, } from 'antd';
 import { CaretDownFilled } from '@ant-design/icons';
 import './chartCard.scss';
 import { TinyArea } from '@ant-design/charts';
+import React, { useState, useEffect } from 'react';
+import { Line } from '@ant-design/charts';
 
 export const ChartCard = (props) => {
 
@@ -25,10 +27,30 @@ export const ChartCard = (props) => {
                 </span>
             </div>
             <div className="chart-cards-middle">
-                <div className="chart-cards-middle-text" style={props.textColor}>
-                    <chart />
+                <div className="chart-cards-middle-text">
+                    <DemoLine  data={props.data}/>
                 </div>
             </div>
         </div>
     )
 }
+
+const DemoLine = (props) => { 
+   
+  const config = {
+    data: props.data,
+    padding: 'auto',
+    xField: 'Date',
+    yField: 'scales',
+    xAxis: {
+      tickCount: 3,
+    },
+    slider: {
+      start: 0.1,
+      end: 0.5,
+    },
+  };
+
+  return <Line {...config} />;
+};
+

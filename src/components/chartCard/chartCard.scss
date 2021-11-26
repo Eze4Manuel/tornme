@@ -2,21 +2,21 @@
 .chart-card{
     background-color: white;
     padding: 10px 12px;
-    // width: 574px;
-    height: 359px;
+    width: 600px;
+    // height: 359px;
     border-radius: 6px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
+    // flex-wrap: wrap;
     justify-content: space-between;
     margin: 10px;
-    
+
+
     .chart-cards-top{
         display: flex;
         justify-content: space-between;
         .chart-cards-top-title-left{
             font-weight: bold;
             font-size: 14px;
+            margin-bottom: 20px;
         }
         .chart-cards-top-title-right{
             a{
@@ -27,13 +27,12 @@
     }
     .chart-cards-middle{
         padding-left: 10px;
-        img {
-           padding-bottom: 10px;
-        }
-        b.chart-cards-middle-text {
+       
+        .chart-cards-middle-text {
             font-size: 30px;
             font-weight: bold;
             padding-left: 5px;
+            // width: 550px;
         }
     }
 

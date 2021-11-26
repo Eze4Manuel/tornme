@@ -28,7 +28,7 @@ const menu = (
 const Structure = (props) => {
     return (
         <Layout className="layout">
-            <Header style={{ position: 'fixed', zIndex: 1, width: '100%', padding: '0px' }}>
+            <Header style={{ position: 'fixed', zIndex: 100, width: '100%', padding: '0px' }}>
                 <Row style={{ width: '100%' }}>
                     <Col xs={20} sm={20} md={6} lg={5} xl={6}>
                         <Menu mode="horizontal">
@@ -41,22 +41,22 @@ const Structure = (props) => {
                     <Col xs={0} sm={0} md={12} lg={14} xl={12} >
                         <Menu mode="horizontal" justify="center">
                             <Menu.Item key="overview">
-                                <a href="/overview" target="_blank" rel="noopener noreferrer">
+                                <a href="/overview">
                                     Overview
                                 </a>
                             </Menu.Item>
                             <Menu.Item key="finance">
-                                <a href="/finance" target="_blank" rel="noopener noreferrer">
+                                <a href="/finance">
                                     Finance
                                 </a>
                             </Menu.Item>
                             <Menu.Item key="user">
-                                <a href="/users" target="_blank" rel="noopener noreferrer">
+                                <a href="/users">
                                     Users
                                 </a>
                             </Menu.Item>
                             <Menu.Item key="support">
-                                <a href="/support" target="_blank" rel="noopener noreferrer">
+                                <a href="/support">
                                     Support
                                 </a>
                             </Menu.Item>
@@ -65,7 +65,7 @@ const Structure = (props) => {
                     <Col xs={4} sm={4} md={6} lg={5} xl={6}>
                         <Menu mode="horizontal">
                             <Menu.Item key="notification">
-                                <a href="/support" target="_blank" rel="noopener noreferrer">
+                                <a href="/support">
                                     <img src={notification} alt="logo" />
                                 </a>
                             </Menu.Item>
