@@ -7,8 +7,6 @@ import { ReloadIcon } from '@modulz/radix-icons';
 import './finance.scss';
 
 import btc from '../../assets/images/icons/btc.png'; // Tell webpack this JS file uses this image
-import newUser from '../../assets/images/icons/new_users.png'; // Tell webpack this JS file uses this image
-import onlineUser from '../../assets/images/icons/online_users.png'; // Tell webpack this JS file uses this image
 
 const Finance = () => {
   const menu = (

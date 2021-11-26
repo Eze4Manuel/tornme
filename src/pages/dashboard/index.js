@@ -6,7 +6,7 @@ import { UsersCard } from '../../components/usersCard/usersCard';
 import { TopUserCard } from '../../components/topUserCard/topUserCard';
 import { SupportCard } from '../../components/supportCard/supportCard';
 import { UsersDistributionCard } from '../../components/usersDistributionCard/usersDistributionCard';
-import { Menu, Dropdown, Row, Col } from 'antd';
+import { Menu, Row, Col } from 'antd';
 import { ReloadIcon } from '@modulz/radix-icons';
 import './dashboard.scss';
 

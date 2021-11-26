@@ -1,9 +1,7 @@
-import ReactDOM from 'react-dom';
 import { Dropdown, } from 'antd';
 import { CaretDownFilled } from '@ant-design/icons';
 import './chartCard.scss';
-import { TinyArea } from '@ant-design/charts';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Line } from '@ant-design/charts';
 
 export const ChartCard = (props) => {

@@ -5,7 +5,7 @@ import './supportCard.scss';
 export const SupportCard = (props) => {
 
     return (
-        <div className="support-cards">
+        <div className="support-cards" style={props.style} >
             <div className="support-cards-top">
                 <span className="support-cards-top-title-left">
                     {props.topLeft}
@@ -37,10 +37,8 @@ export const SupportCard = (props) => {
 
 
 const SupportTile = (props) => {
-    { console.log(props) }
-
     return (
-        <div className='support-tile-card'>
+        <div className='support-tile-card' style={{backgroundColor: "#EEF3FF"}}>
             <span>
                 <img src={props.data.img} alt="logo" />
             </span>

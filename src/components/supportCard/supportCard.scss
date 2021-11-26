@@ -36,7 +36,9 @@
         }
         .support-tile-card{
             display: flex;
-            margin: 15px 0px;
+            margin: 5px 0px;
+            border-radius: 5px;
+            padding: 5px 5px;
             :first-child{
                 margin-right: 10px;
             }
@@ -49,6 +51,41 @@
                 margin-bottom: 0px;
                 font-size: 13px;
             }
+        }
+        /* CSS talk bubble */
+        .talk-bubble {
+            margin: 10px;
+            padding: 10px;
+        display: inline-block;
+        position: relative;
+            width: 200px;
+            height: auto;
+            background-color: lightyellow;
+        }
+        /* Right triangle placed top left flush. */
+        .tri-right.border.left-top:before {
+            content: ' ';
+            position: absolute;
+            width: 0;
+            height: 0;
+        left: -40px;
+            right: auto;
+        top: -8px;
+            bottom: auto;
+            border: 32px solid;
+            border-color: #666 transparent transparent transparent;
+        }
+        .tri-right.left-top:after{
+            content: ' ';
+            position: absolute;
+            width: 0;
+            height: 0;
+        left: -20px;
+            right: auto;
+        top: 0px;
+            bottom: auto;
+            border: 22px solid;
+            border-color: lightyellow transparent transparent transparent;
         }
         .supports-cards-middle-text{
             padding: 2px 15px;
