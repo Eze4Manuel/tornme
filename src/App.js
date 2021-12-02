@@ -1,5 +1,6 @@
 import { AppProvider } from '../src/core/store/Store'
 import './App.css';
+import Authenticated from './pages/index';
 
 //providers
 
@@ -7,7 +8,7 @@ function App() {
   return (
     <AppProvider>
         <div>
-          The Admin Application for Tornme
+          <Authenticated />
         </div>
       </AppProvider>
   );

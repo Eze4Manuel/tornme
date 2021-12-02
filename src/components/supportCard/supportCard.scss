@@ -1,0 +1,103 @@
+
+.support-cards{
+    background-color: white;
+    padding: 10px 12px;
+    height: 359px;
+    border-radius: 6px;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px;
+    max-width: 359px;
+    .support-cards-top{
+        display: flex;
+        .support-cards-top-title-left{
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 20px;
+
+        }
+        .support-cards-top-title-right{
+            a{
+                margin-left: 5px;
+                font-weight: bold;
+            }
+        }
+    }
+    .support-cards-middle{
+        padding-left: 0px;
+        .support-cards-middle-subtitle{
+            display: flex;
+            justify-content: space-between;
+        }
+        .support-cards-middle-supporttile{
+            
+        }
+        .support-tile-card{
+            display: flex;
+            margin: 5px 0px;
+            border-radius: 5px;
+            padding: 5px 5px;
+            :first-child{
+                margin-right: 10px;
+            }
+            p:first-child{
+                color: #276AFF;
+                font-size: 13px;
+                font-weight: bold;
+            }
+            p{
+                margin-bottom: 0px;
+                font-size: 13px;
+            }
+        }
+        /* CSS talk bubble */
+        .talk-bubble {
+            margin: 10px;
+            padding: 10px;
+        display: inline-block;
+        position: relative;
+            width: 200px;
+            height: auto;
+            background-color: lightyellow;
+        }
+        /* Right triangle placed top left flush. */
+        .tri-right.border.left-top:before {
+            content: ' ';
+            position: absolute;
+            width: 0;
+            height: 0;
+        left: -40px;
+            right: auto;
+        top: -8px;
+            bottom: auto;
+            border: 32px solid;
+            border-color: #666 transparent transparent transparent;
+        }
+        .tri-right.left-top:after{
+            content: ' ';
+            position: absolute;
+            width: 0;
+            height: 0;
+        left: -20px;
+            right: auto;
+        top: 0px;
+            bottom: auto;
+            border: 22px solid;
+            border-color: lightyellow transparent transparent transparent;
+        }
+        .supports-cards-middle-text{
+            padding: 2px 15px;
+            height: 25px;
+            font-size: 11px;
+        }
+    }
+}
+
+
+@media screen and (max-width: 650px ){
+    .support-cards{
+        flex-grow: 1;
+    }
+}
