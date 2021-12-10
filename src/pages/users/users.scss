@@ -4,3 +4,29 @@
         margin-top: 30px;
     }
 }
+
+.sidebar-features{
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    .sidebar-features-card{
+        border: 1px solid lightgrey;
+        margin-bottom: 20px;
+        border-radius: 6px;
+    }
+}
+
+
+.sidebar-action{
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    .sidebar-action-button{
+        margin-bottom: 15px;
+        border-radius: 6px;
+    }
+}

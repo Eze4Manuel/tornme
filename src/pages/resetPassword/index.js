@@ -6,9 +6,9 @@ import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 
 import { Form, Input, Button, Radio } from 'antd';
 
-import './login.scss';
+import './resetPassword.scss';
 
-const Login = () => {
+const ResetPassword = () => {
     const [values, setValues] = useState({ username: '', password: '' })
     const [error, setError] = useState('')
     const [form] = Form.useForm();
@@ -20,7 +20,8 @@ const Login = () => {
                 <div className="app-login">
                     <div className="app-login__container">
                         <div className="app-login__content">
-                            <PageHeaderComp title="Login" />
+                            <PageHeaderComp title="Reset Password" />
+                            <p>A 4-digits code would be sent to your phone number</p>
                             <div className="app-login__error">
                                 {error ? <ErrorMessage message={error} /> : null}
                             </div>
@@ -34,16 +35,15 @@ const Login = () => {
                                                 layout: formLayout,
                                             }}
                                         >
-                                            <Form.Item label="Email" required tooltip="This is a required field" >
-                                                <Input placeholder="example@email.com" style={{ padding: "10px", borderRadius: "6px"}}/>
+                                            <Form.Item label="Email or Phone number" required tooltip="This is a required field" >
+                                                <Input placeholder="" style={{ padding: "10px", borderRadius: "6px" }} />
                                             </Form.Item>
-                                            <Form.Item label="Password" required tooltip="This is a required field">
-                                                <Input placeholder="password" style={{ padding: "10px", borderRadius: "6px"}}/>
-                                            </Form.Item>
+
                                             <Form.Item>
-                                                <ButtonComponent text="LOGIN" />
-                                                <div className="" style={{marginTop: "30px"}}>
-                                                    <PageHeaderComp title="forgot password" style={{ fontSize: "16px", color: "#276AFF" }} />
+                                                <ButtonComponent text="SEND CODE" />
+                                                <div className="" style={{ marginTop: "30px" }}>
+                                                    <p>Have an account? <a style={{color: "#276AFF", fontWeight: "bold"}}>Sign in</a></p>
+
                                                 </div>
                                             </Form.Item>
                                         </Form>
@@ -57,4 +57,4 @@ const Login = () => {
         </Structure>
     )
 }
-export default Login;
+export default ResetPassword;

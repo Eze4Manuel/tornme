@@ -5,10 +5,13 @@ import TableBlock from '../../components/table/table';
 import { Menu, Row, Col, Tag } from 'antd';
 import { ReloadIcon } from '@modulz/radix-icons';
 import './users.scss';
+import { useNavigate } from "react-router-dom";
 
 import btc from '../../assets/images/icons/btc.png'; // Tell webpack this JS file uses this image
 
-const Finance = () => {
+const Users = () => {
+  const navigate = useNavigate();
+
   const menu = (
     <Menu>
       <Menu.Item key="0">
@@ -143,6 +146,10 @@ const Finance = () => {
     },
   ];
 
+  const onRowSelected = (record) => {
+    navigate('/user-posts', { state: {record: record}, replace: false })
+  }
+
   return (
     <Structure className="users">
       <PageHeaderComp title="Users" />
@@ -172,11 +179,11 @@ const Finance = () => {
       <div className="finance-data" style={{ "margin-top": "40px" }}>
         <Row>
           <Col flex={1}>
-            <TableBlock data={dataBundle} columns={columns} title={"Transactions"} export={true} />
+            <TableBlock onSelected={onRowSelected} data={dataBundle} columns={columns} title={"Transactions"} export={true} />
           </Col>
         </Row>
       </div>
     </Structure>
   )
 }
-export default Finance;
+export default Users;

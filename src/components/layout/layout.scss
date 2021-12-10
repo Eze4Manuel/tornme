@@ -1,9 +1,10 @@
+body{
+  background-color: #eff2f5;    
+}
+
 .layout{
     margin-top: 0px;
     padding-top: 0px;
-    top: 0%;
-
-     
     .site-layout-content {
       min-height: 280px;
       padding: 14px;
@@ -28,4 +29,20 @@
       color: #276AFF;
     }
 }
+
+.ant-modal-close{
+  display: none;
+
   
+}
+.modal_block_logout{
+  img{
+    width: 80px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+  p{
+    margin-bottom: 40px;
+  }
+  
+}

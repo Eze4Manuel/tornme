@@ -6,9 +6,9 @@ import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 
 import { Form, Input, Button, Radio } from 'antd';
 
-import './login.scss';
+import './verifyPhone.scss';
 
-const Login = () => {
+const VerifyPhone = () => {
     const [values, setValues] = useState({ username: '', password: '' })
     const [error, setError] = useState('')
     const [form] = Form.useForm();
@@ -20,7 +20,9 @@ const Login = () => {
                 <div className="app-login">
                     <div className="app-login__container">
                         <div className="app-login__content">
-                            <PageHeaderComp title="Login" />
+                            <PageHeaderComp title="Verify Phone" />
+                            <p>Enter the 4-digits code sent to  0801 234 5678
+                                Edit number?</p>
                             <div className="app-login__error">
                                 {error ? <ErrorMessage message={error} /> : null}
                             </div>
@@ -33,17 +35,29 @@ const Login = () => {
                                             initialValues={{
                                                 layout: formLayout,
                                             }}
+                                            
                                         >
-                                            <Form.Item label="Email" required tooltip="This is a required field" >
-                                                <Input placeholder="example@email.com" style={{ padding: "10px", borderRadius: "6px"}}/>
-                                            </Form.Item>
-                                            <Form.Item label="Password" required tooltip="This is a required field">
-                                                <Input placeholder="password" style={{ padding: "10px", borderRadius: "6px"}}/>
-                                            </Form.Item>
-                                            <Form.Item>
-                                                <ButtonComponent text="LOGIN" />
-                                                <div className="" style={{marginTop: "30px"}}>
-                                                    <PageHeaderComp title="forgot password" style={{ fontSize: "16px", color: "#276AFF" }} />
+                                            <div style={{ display: "flex", justifyContent: "space-around"}}>
+                                                <Form.Item >
+                                                    <Input placeholder="" style={{ width: "60px", height:"60px", padding: "10px", borderRadius: "6px" }} />
+                                                </Form.Item>
+                                                <Form.Item >
+                                                    <Input placeholder="" style={{ width: "60px", height:"60px", padding: "10px", borderRadius: "6px" }} />
+                                                </Form.Item>
+                                                <Form.Item >
+                                                    <Input placeholder="" style={{ width: "60px", height:"60px", padding: "10px", borderRadius: "6px" }} />
+                                                </Form.Item>
+                                                <Form.Item >
+                                                    <Input placeholder="" style={{ width: "60px", height:"60px", padding: "10px", borderRadius: "6px" }} />
+                                                </Form.Item>
+                                            </div>
+
+                                            <Form.Item> 
+                                                <p>Resend in <b>0:50</b></p>
+                                                <ButtonComponent text="SUBMIT" />
+                                                <div className="" style={{ marginTop: "30px" }}>
+                                                    <p>Have an account? <a style={{ color: "#276AFF", fontWeight: "bold" }}>Sign in</a></p>
+
                                                 </div>
                                             </Form.Item>
                                         </Form>
@@ -57,4 +71,4 @@ const Login = () => {
         </Structure>
     )
 }
-export default Login;
+export default VerifyPhone;
