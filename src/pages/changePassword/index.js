@@ -4,14 +4,12 @@ import React, { useState } from 'react';
 import { ButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 
-import { Form, Input, Button, Radio } from 'antd';
+import { Form, Input } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 import './changePassword.scss';
 
 const ChangePasswordPage = () => {
-    
-
     return (
         <Structure className="login">
             <div className="login-center">
@@ -26,10 +24,9 @@ export default ChangePasswordPage;
 
 
 export const ChangePassword = () => {
-    const [values, setValues] = useState({ username: '', password: '' })
-    const [error, setError] = useState('')
+    const [error, ] = useState('')
     const [form] = Form.useForm();
-    const [formLayout, setFormLayout] = useState('vertical');
+    const [formLayout,] = useState('vertical');
     return(
         <div className="app-login__container" style={{textAlign: "center", borderRadius:"8px"}}>
         <div className="app-login__content" style={{textAlign: "center", borderRadius:"12px"}}>

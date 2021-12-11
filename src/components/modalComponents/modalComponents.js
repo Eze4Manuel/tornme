@@ -14,7 +14,6 @@ export const LogoutModal = ({ isModalVisible, handleOk, handleCancel }) => {
                     <PageHeaderComp title="Logout" />
                     <img className="modal_block_img" src={btc} />
                     <p>This action will log log you out of your account</p>
-
                     <ButtonComponent onClick={handleOk} text="LOGOUT" />
                     <GoBackComponent text="Go Back" onClick={handleCancel} />
                 </div>

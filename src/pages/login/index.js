@@ -4,15 +4,14 @@ import React, { useState } from 'react';
 import { ButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 
-import { Form, Input, Button, Radio } from 'antd';
+import { Form, Input} from 'antd';
 
 import './login.scss';
 
 const Login = () => {
-    const [values, setValues] = useState({ username: '', password: '' })
-    const [error, setError] = useState('')
+    const [error,] = useState('')
     const [form] = Form.useForm();
-    const [formLayout, setFormLayout] = useState('vertical');
+    const [formLayout,] = useState('vertical');
 
     return (
         <Structure className="login">

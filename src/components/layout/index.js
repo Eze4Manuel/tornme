@@ -61,6 +61,11 @@ const Structure = (props) => {
                                     Support
                                 </Link>
                             </Menu.Item>
+                            <Menu.Item key="profile">
+                                <Link to="/profile">
+                                    Profile
+                                </Link>
+                            </Menu.Item>
                         </Menu>
                     </Col>
                     <Col xs={4} sm={4} md={6} lg={5} xl={6}>

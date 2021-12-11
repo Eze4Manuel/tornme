@@ -4,15 +4,14 @@ import React, { useState } from 'react';
 import { ButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 
-import { Form, Input, Button, Radio } from 'antd';
+import { Form, Input} from 'antd';
 
 import './resetPassword.scss';
 
 const ResetPassword = () => {
-    const [values, setValues] = useState({ username: '', password: '' })
-    const [error, setError] = useState('')
+    const [error, ] = useState('')
     const [form] = Form.useForm();
-    const [formLayout, setFormLayout] = useState('vertical');
+    const [formLayout,] = useState('vertical');
 
     return (
         <Structure className="login">
@@ -42,7 +41,7 @@ const ResetPassword = () => {
                                             <Form.Item>
                                                 <ButtonComponent text="SEND CODE" />
                                                 <div className="" style={{ marginTop: "30px" }}>
-                                                    <p>Have an account? <a style={{color: "#276AFF", fontWeight: "bold"}}>Sign in</a></p>
+                                                    <p>Have an account? <a href='#' style={{color: "#276AFF", fontWeight: "bold"}}>Sign in</a></p>
 
                                                 </div>
                                             </Form.Item>

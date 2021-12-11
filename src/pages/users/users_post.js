@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-
 import Structure from "../../components/layout/index";
 import { Row, Col, Menu, Modal } from 'antd';
 import { } from '../../components/supportCard/supportCard';
@@ -16,14 +15,6 @@ import person from '../../assets/images/icons/person.png'; // Tell webpack this 
 import { GoBackComponent, ActionButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import { SuspendAccountModal, DeleteAccountModal } from '../../components/modalComponents/modalComponents';
 
-const supportSource = [
-  { img: btc, userHandle: "@priewereer", time: '23h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do Amet minim mollit non deserut uamc ersit aliqua dolor doAmet minim  " },
-  { img: onlineUser, userHandle: "@priewereer", time: '13h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-  { img: btc, userHandle: "@priewereer", time: '12h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-  { img: newUser, userHandle: "@priewereer", time: '10h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-  { img: btc, userHandle: "@priewereer", time: '20h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-  { img: newUser, userHandle: "@priewereer", time: '10h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " }
-]
 
 const UsersPosts = () => {
   const navigate = useNavigate();
@@ -37,14 +28,8 @@ const UsersPosts = () => {
       <GoBackComponent text="Go Back" onClick={goBack} />
       <div className="support-top">
         <Row>
-          <Col flex={7}>
-            <UsersPostCard
-              style={{}}
-              textColor={{ "color": "#276AFF" }}
-              image={btc}
-              topLeft={"Support"}
-              data={supportSource}
-            />
+          <Col flex={20}>
+            <UsersPostCard/>
           </Col>
           <Col flex={1}>
             <div className="sidebar">
@@ -91,7 +76,6 @@ const SideBarFeatures = () => {
           topLeft={"Following"}
           bottomText={4735}
           menu={menu}
-
         />
       </div>
 
@@ -104,13 +88,12 @@ const SideBarFeatures = () => {
           menu={menu}
         />
       </div>
-
       <div className='sidebar-features-card'>
         <AnalyticCard
           textColor={{ "color": "#09A479" }}
           image={onlineUser}
           topLeft={"Total Post"}
-          bottomText={1, 453}
+          bottomText={1453}
           menu={menu}
         />
       </div>
@@ -133,7 +116,6 @@ const SideBarActions = () => {
   const [isDeleteAccountModalVisible, setIsDeleteAccountModalVisible] = useState(false);
   const [isSuspendedAccountModalVisible, setIsSuspendedAccountModalVisible] = useState(false);
   const [isResetAccountModalVisible, setIsResetAccountModalVisible] = useState(false);
-
 
   const showDeleteAccountModal = () => {
     setIsDeleteAccountModalVisible(true);
