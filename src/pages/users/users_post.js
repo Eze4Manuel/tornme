@@ -16,6 +16,7 @@ import person from '../../assets/images/icons/person.png'; // Tell webpack this 
 import { GoBackComponent, ActionButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import { SuspendAccountModal, DeleteAccountModal } from '../../components/modalComponents/modalComponents';
 import { useAuth } from '../../core/hooks/useAuth';
+import { useNotifications } from '@mantine/notifications';
 
 import lib from './lib';
 import helpers from '../../core/func/Helpers';
@@ -28,11 +29,11 @@ const UsersPosts = (props, history) => {
   const [ userData, setuserData ] = useState({});
   const { set, user} = useAuth();
 
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     (async () => {
       setLoader(true)
-      let reqData = await lib.getUserDetail(user?.token, state.record.key);
+      let reqData = await lib.getUserDetail(user?.token, state.record?.key);
       
       if (reqData.status === "error") {
         helpers.sessionHasExpired(set, reqData.msg);
@@ -44,7 +45,6 @@ const UsersPosts = (props, history) => {
     })()
   }, [user?.token,]);
   
-
   const goBack = () => {
     navigate('/users')
   }
@@ -60,7 +60,7 @@ const UsersPosts = (props, history) => {
           <Col flex={1}>
             <div className="sidebar">
               <SideBarFeatures />
-              <SideBarActions />
+              <SideBarActions user_id={userData?._id}/>
             </div>
           </Col>
         </Row>
@@ -134,10 +134,15 @@ const SideBarFeatures = () => {
   )
 }
 
-const SideBarActions = () => {
+const SideBarActions = (props) => {
   const [isDeleteAccountModalVisible, setIsDeleteAccountModalVisible] = useState(false);
   const [isSuspendedAccountModalVisible, setIsSuspendedAccountModalVisible] = useState(false);
   const [isResetAccountModalVisible, setIsResetAccountModalVisible] = useState(false);
+
+  const { set, user} = useAuth();
+  const [,setLoader] = useState(false);
+  const notify = useNotifications();
+  const navigate = useNavigate();
 
   const showDeleteAccountModal = () => {
     setIsDeleteAccountModalVisible(true);
@@ -151,23 +156,36 @@ const SideBarActions = () => {
 
 
 
-  const handleDeleteAccountOk = () => {
+  const handleDeleteAccountOk = async () => {
+    console.log('delete ok');
+    setLoader(true)
+      let reqData = await lib.deleteUser(user?.token, props.user_id);
+      
+      if (reqData.status === "error") {
+        helpers.sessionHasExpired(set, reqData.msg);
+      }
+      if (reqData.status === 'ok') {
+        helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Deleted' })
+        navigate('/users')
+      }
+      console.log(reqData);
+      setLoader(false);
     setIsDeleteAccountModalVisible(false);
 
   }
   const handleSuspendedAccountOk = () => {
     setIsSuspendedAccountModalVisible(false);
-
   }
   const handleResetAccountOk = () => {
     setIsResetAccountModalVisible(false);
 
   }
 
-
   const handleDeleteAccountCancel = () => {
-    setIsDeleteAccountModalVisible(false);
+    console.log('delete cancel');
+    
 
+    setIsDeleteAccountModalVisible(false);
   }
   const handleSuspendedAccountCancel = () => {
     setIsSuspendedAccountModalVisible(false);

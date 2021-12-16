@@ -27,7 +27,6 @@ export const UsersPostCard = (props) => {
         navigate('/user-post-detail', { state: { record: record }, replace: false })
     }
 
-    console.log(props);
     return (
         <div className="userposts">
             <div className="post-cards" style={props.style} >
@@ -56,7 +55,7 @@ export const UsersPostCard = (props) => {
                                         Username:
                                     </span>
                                     <span>
-                                        {props.data?.username}
+                                        @{props.data?.username}
                                     </span>
                                 </li>
                                 <li>

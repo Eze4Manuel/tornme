@@ -53,7 +53,6 @@ const Users = () => {
       status: [e.account_status],
       actions: [e.status_visibility_access],
     }
-  
   });
 
 
@@ -86,7 +85,6 @@ const Users = () => {
       key: 'earnings',
       sorter: (a, b) => a.earnings - b.earnings,
     },
-
     {
       title: 'Status',
       key: 'status',
@@ -134,7 +132,6 @@ const Users = () => {
       ),
     },
   ];
-
   const onRowSelected = (record) => {
     navigate('/user-posts', { state: {record: record}, replace: false })
   }

@@ -26,4 +26,17 @@ lib.getUserDetail = async (token, auth_id) => {
     }
 }
 
+
+lib.deleteUser = async (token, auth_id) => {
+    let uri = '';
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7));
+            uri = `/users/admin-delete-user/${auth_id}`;
+            console.log(uri);
+        return await (await Axios_users.delete(uri, cfg)).data
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    }
+}
+
 export default lib;
