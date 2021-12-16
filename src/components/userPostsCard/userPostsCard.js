@@ -27,12 +27,12 @@ export const UsersPostCard = (props) => {
         navigate('/user-post-detail', { state: { record: record }, replace: false })
     }
 
-
+    console.log(props);
     return (
         <div className="userposts">
             <div className="post-cards" style={props.style} >
                 <div className="post-cards-top">
-                    <Button>Active</Button>
+                    <Button>{props.data?.account_status == 0 ? 'Not Active': 'Active'}</Button>
                 </div>
                 <div className="post-cards-middle">
                     <Row >
@@ -48,7 +48,7 @@ export const UsersPostCard = (props) => {
                                         Name:
                                     </span>
                                     <span>
-                                        Kathryn Murphy
+                                        {props.data?.name}
                                     </span>
                                 </li>
                                 <li>
@@ -56,7 +56,7 @@ export const UsersPostCard = (props) => {
                                         Username:
                                     </span>
                                     <span>
-                                        @brunopadilha
+                                        {props.data?.username}
                                     </span>
                                 </li>
                                 <li>
@@ -64,7 +64,7 @@ export const UsersPostCard = (props) => {
                                         Phone number:
                                     </span>
                                     <span>
-                                        0801 234 5678
+                                        {props.data?.phone_number}
                                     </span>
                                 </li>
                                 <li>
@@ -72,7 +72,7 @@ export const UsersPostCard = (props) => {
                                         Date registered:
                                     </span>
                                     <span>
-                                        20 May, 2011
+                                        {new Date(props.data?.createdAt).toLocaleDateString()}
                                     </span>
                                 </li>
                                 <li>
@@ -87,7 +87,7 @@ export const UsersPostCard = (props) => {
                     <Row>
                         <Col flex={3} style={{ maxWidth: "fit-content" }}>
                             <div className="post-cards-bottom">
-                                <h2>@isabellasava</h2>
+                                <h2>@{props.data?.username}</h2>
                                 <h6>Fitness coach</h6>
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. e fermentum. Auctor mi laoreet purient aliquet mi sed. see moreLorem ipsum dolor sit amet, consectetur adipiscing elit. e fermentum. Auctor mi laoreet parturient aliquet mi sed. see moreLorem ipsum dolor sit amet, consectetur adipiscing elit. e fermentum. Auctor mi laoreet parturient aliquet mi sed. see more

@@ -1,8 +1,9 @@
 
+.login{
 
 .login-center{
     text-align: center;
-    background-color: #fff;
+    background-color: #eee;
     width: fit-content;
     padding: 30px 40px;
     border-radius: 10px;
@@ -10,4 +11,33 @@
 }
 .ant-layout-content{
     height: initial;
+}
+}
+
+.login{
+    margin-top: 0px;
+    padding-top: 0px;
+    .site-layout-content {
+      min-height: 280px;
+      padding: 14px;
+      padding-top: 0px;
+      background: #fff;
+    }
+    .ant-menu{
+        justify-content: center;
+    }
+    #components-layout-demo-top .logo {
+      float: left;
+      width: 120px;
+      height: 31px;
+      margin: 16px 24px 16px 0;
+      background: rgba(255, 255, 255, 0.3);
+    }
+    .ant-row-rtl #components-layout-demo-top .logo {
+      float: right;
+      margin: 16px 0 16px 24px;
+    }
+    a.ant-dropdown-link{
+      color: #276AFF;
+    }
 }

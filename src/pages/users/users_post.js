@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Structure from "../../components/layout/index";
 import { Row, Col, Menu, Modal } from 'antd';
@@ -9,15 +9,41 @@ import { useNavigate } from "react-router-dom";
 import { AnalyticCard } from '../../components/analyticCard/analyticCard';
 import { ChangePassword } from '../changePassword/index';
 import './users.scss';
+import { useLocation } from "react-router-dom";
 import newUser from '../../assets/images/icons/new_users.png'; // Tell webpack this JS file uses this image
 import onlineUser from '../../assets/images/icons/online_users.png'; // Tell webpack this JS file uses this image
 import person from '../../assets/images/icons/person.png'; // Tell webpack this JS file uses this image
 import { GoBackComponent, ActionButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import { SuspendAccountModal, DeleteAccountModal } from '../../components/modalComponents/modalComponents';
+import { useAuth } from '../../core/hooks/useAuth';
+
+import lib from './lib';
+import helpers from '../../core/func/Helpers';
 
 
-const UsersPosts = () => {
+const UsersPosts = (props, history) => {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const [,setLoader] = useState(false);
+  const [ userData, setuserData ] = useState({});
+  const { set, user} = useAuth();
+
+  
+  useEffect(()=>{
+    (async () => {
+      setLoader(true)
+      let reqData = await lib.getUserDetail(user?.token, state.record.key);
+      
+      if (reqData.status === "error") {
+        helpers.sessionHasExpired(set, reqData.msg);
+      }
+      if (reqData.status === 'ok') {
+        setuserData(reqData.data)
+      }
+      setLoader(false);
+    })()
+  }, [user?.token,]);
+  
 
   const goBack = () => {
     navigate('/users')
@@ -29,7 +55,7 @@ const UsersPosts = () => {
       <div className="support-top">
         <Row>
           <Col flex={20}>
-            <UsersPostCard/>
+            <UsersPostCard data={userData}/>
           </Col>
           <Col flex={1}>
             <div className="sidebar">
@@ -49,11 +75,7 @@ export default UsersPosts;
 const SideBarFeatures = () => {
   const menu = (
     <Menu>
-      <Menu.Item key="0">
-        <a href="https://www.antgroup.com">
-          1st menu item
-        </a>
-      </Menu.Item>
+      
     </Menu>
   );
 

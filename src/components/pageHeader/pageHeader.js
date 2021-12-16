@@ -8,7 +8,7 @@ export const PageHeaderComp = (props) => {
   }
   return (
      <>
-      <h2 className="site-page-header" style={props.style ? props.style : styles}>
+      <h2 onClick={props.onClick} className="site-page-header" style={props.style ? props.style : styles}>
           {props.title}
       </h2>
      </> 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Menu, Dropdown, Row, Col } from 'antd';
+import { Layout, Menu, Row, Col } from 'antd';
 import {Link} from 'react-router-dom';
 import './layout.scss';
 import { CaretDownFilled } from '@ant-design/icons';
@@ -7,6 +7,10 @@ import logo from '../../assets/images/Logo.svg'; // Tell webpack this JS file us
 import person from '../../assets/images/icons/person.png'; // Tell webpack this JS file uses this image
 import notification from '../../assets/images/icons/notification.png'; 
 import { LogoutModal } from '../../components/modalComponents/modalComponents';
+import { useAuth } from '../../core/hooks/useAuth';
+import { useNotifications } from '@mantine/notifications';
+import helpers from '../../core/func/Helpers';
+import lib from './lib';
 
 const { Header, Content } = Layout;
 
@@ -14,14 +18,26 @@ const { Header, Content } = Layout;
 
 const Structure = (props) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const { set, user } = useAuth();
+    const notify = useNotifications();
 
     const showModal = () => {
         setIsModalVisible(true);
     };
 
-    const handleOk = () => {
+    const handleLogout = async () => {
+        
+        let reqData = await lib.logout(user?.token)
+        if (reqData.status === "error") {
+            helpers.sessionHasExpired(set, reqData.msg)
+        }
+        if (reqData.status === "ok") {
+            helpers.alert({notifications: notify, icon: 'success', color: 'green', message: 'Logout Success'})
+            helpers.logout(set);
+        }
         setIsModalVisible(false);
     };
+
 
     const handleCancel = () => {
         setIsModalVisible(false);
@@ -30,6 +46,7 @@ const Structure = (props) => {
 
     return (
         <Layout className="layout">
+            {(!props.noHeader) ? 
             <Header style={{ position: 'fixed', zIndex: 100, width: '100%', padding: '0px' }}>
                 <Row style={{ width: '100%' }}>
                     <Col xs={20} sm={20} md={6} lg={5} xl={6}>
@@ -76,7 +93,7 @@ const Structure = (props) => {
                                 </Link>
                             </Menu.Item>
                             <Menu.Item key="account">
-                                <LogoutModal isModalVisible={isModalVisible} handleOk={handleOk} handleCancel={handleCancel} />
+                                <LogoutModal isModalVisible={isModalVisible} handleOk={handleLogout} handleCancel={handleCancel} />
                                 <a className="ant-dropdown-link" onClick={e => { e.preventDefault(); showModal() }} style={{ color: '#276AFF' }}>
                                     <img src={person} alt="logo" />
                                     Logout  <CaretDownFilled />
@@ -89,6 +106,8 @@ const Structure = (props) => {
                     </Col>
                 </Row>
             </Header>
+            :
+            null}
             <Content style={{ padding: '100px 50px'}}>
                 {props.children}
             </Content>

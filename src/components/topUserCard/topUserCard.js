@@ -40,7 +40,6 @@ export const TopUserCard = (props) => {
 
 
 const UserTile = (props) => {
-    {console.log(props)}
 
     return (
         <div className='user-tile-card'>

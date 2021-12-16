@@ -17,11 +17,11 @@ const pages = config.pages;
 export const routes = [
     {link: pages.overview, Component: Dashboard },
     {link: pages.finance, Component: Finance },
+    {link: pages.login, Component: Login },
     {link: pages.users, Component: Users },
     {link: pages.userpost, Component: UsersPosts },
     {link: pages.userpostdetail, Component: UsersPostDetail },
     {link: pages.support, Component: Support },
-    {link: pages.login, Component: Login },
     {link: pages.resetpassword, Component: ResetPassword },
     {link: pages.changepassword, Component: ChangePassword },
     {link: pages.verifyphone, Component: VerifyPhone },

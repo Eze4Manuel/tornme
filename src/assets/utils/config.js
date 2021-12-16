@@ -14,7 +14,12 @@ const config = {
         changepassword: '/change-password',
         verifyphone: '/verify-phone',
         profile: '/profile'
-    }
+    },
+    key: {
+        user: '___@tornme_user',
+        token: '___@utornme_token'
+    },
+
 };
 
 
