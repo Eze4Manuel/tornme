@@ -1,6 +1,107 @@
 
+body{
+    background-color: #eff2f5!important;
+}
 .users{
     .users-data{
         margin-top: 30px;
+    }
+}
+
+.sidebar-features{
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    .sidebar-features-card{
+        border: 1px solid lightgrey;
+        margin-bottom: 20px;
+        border-radius: 6px;
+    }
+}
+
+
+.sidebar-action{
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    .sidebar-action-button{
+        margin-bottom: 15px;
+        border-radius: 6px;
+    }
+}
+
+
+.detail-top{
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    .detail-headers{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        span:first-child{
+            font-size: 15px;
+            font-weight: bold;
+        }
+    }
+    .detail-image{
+         background-position: center;
+         background-repeat: no-repeat;
+         background-size: cover;
+         height: 600px;
+         border-radius: 10px;
+        margin-bottom: 10px;
+        
+    }
+    .detail-bottom-actions{
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        div{
+            span{
+                margin-right: 10px;
+            }
+        }
+    }
+}
+.detail-cards-message{
+    padding: 20px;
+    .detail-cards-message-block{
+        display: flex;
+    span{
+        display: flex;
+        justify-content: flex-start;
+        input{
+            margin: 0px 20px;
+            border: 2px solid #276AFF;
+            background-color: transparent;
+            padding: 10px;
+            border-radius: 10px;
+            width: 100%;
+         }
+         button{
+             background-color: #276AFF;
+             border: none;
+             padding: 5px 8px 10px 13px;
+             border-radius: 10px;
+             width: 60px;
+             span{
+                 transform: rotate(-30deg);
+                 color: #fff;
+                 font-size: 20px;
+             }
+         }
+        }
+    }
+    
+    .detail-cards-middle-text{
+        padding: 2px 15px;
+        height: 25px;
+        font-size: 11px;
     }
 }

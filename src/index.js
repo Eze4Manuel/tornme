@@ -4,9 +4,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { AppProvider } from './core/context/Store';
+import { AuthProvider } from './core/hooks/useAuth';
+import { NotificationsProvider } from '@mantine/notifications';
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <NotificationsProvider position="top-right" zIndex={2077}>
+        <AppProvider>
+          <App />
+        </AppProvider>
+      </NotificationsProvider>
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

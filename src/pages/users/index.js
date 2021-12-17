@@ -1,68 +1,60 @@
+import React, { useEffect, useState } from 'react';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 import Structure from "../../components/layout/index";
 import { AnalyticCard } from '../../components/analyticCard/analyticCard';
 import TableBlock from '../../components/table/table';
 import { Menu, Row, Col, Tag } from 'antd';
 import { ReloadIcon } from '@modulz/radix-icons';
+import { useAuth } from '../../core/hooks/useAuth';
 import './users.scss';
+import { useNavigate } from "react-router-dom";
+import lib from './lib';
+import btc from '../../assets/images/icons/btc.png';
+import helpers from '../../core/func/Helpers';
 
-import btc from '../../assets/images/icons/btc.png'; // Tell webpack this JS file uses this image
+const Users = () => {
+  const navigate = useNavigate();
+  const { set, user} = useAuth();
+  const [,setLoader] = useState(false);
+  const [data,setData] = useState([]);
+  // data 
+  useEffect(() => {
+    (async () => {
+      setLoader(true)
+      let reqData = await lib.get(user?.token);
+      
+      if (reqData.status === "error") {
+        helpers.sessionHasExpired(set, reqData.msg);
+      }
+      if (reqData.status === 'ok') {
+        setData(reqData.data)
+      }
+      setLoader(false);
 
-const Finance = () => {
+    })();
+  }, [user?.token, set])
+
+
   const menu = (
     <Menu>
-      <Menu.Item key="0">
-        <a href="https://www.antgroup.com">
-          1st menu item
-        </a>
-      </Menu.Item>
+      
     </Menu>
   );
 
-
-  const dataBundle = [
-    {
-      key: '1',
-      name: 'John Brown',
-      username: '@JohnnyBrown',
-      phone_number: 32,
-      earnings: 50200,
+  
+  const dataBundle = data?.map( (e, ind) => {
+    return {
+      key: e.auth_id,
+      name: e.name,
+      username: e.username,
+      phone_number: e.phone_number,
+      earnings: '',
       followers: 32,
-      status: ['online'],
-      actions: ['suspended'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      username: '@JimmyGreen',
-      phone_number: 42,
-      earnings: 20000,
-      followers: 32,
-      status: ['online'],
-      actions: ['suspended'],
-
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      username: '@23JohnBlack',
-      phone_number: 32,
-      earnings: 38400,
-      followers: 32,
-      status: ['online'],
-      actions: ['suspended']
-    },
-    {
-      key: '4',
-      name: 'Joe Black',
-      username: '@ForteJoeB',
-      phone_number: 44,
-      earnings: '22000',
-      followers: 44,
-      status: ['online'],
-      actions: ['suspended']
-    },
-  ];
+      status: [e.account_status],
+      actions: [e.status_visibility_access],
+    }
+  
+  });
 
 
   const columns = [
@@ -103,15 +95,15 @@ const Finance = () => {
         <>
           {status.map(stat => {
             let color = 'green'
-            if (stat === 'suspended') {
+            if (stat === 0) {
               color = 'volcano';
             }
-            if (stat === 'online') {
+            if (stat === 1) {
               color = 'geekblue';
             }
             return (
               <Tag color={color} key={stat}>
-                {stat.toUpperCase()}
+                {(stat == 0) ? 'OFFLINE': 'ONLINE'}
               </Tag>
             );
           })}
@@ -126,15 +118,15 @@ const Finance = () => {
         <>
           {actions.map(action => {
             let color = 'green'
-            if (action === 'suspended') {
+            if (action === 0) {
               color = 'volcano';
             }
-            if (action === 'online') {
+            if (action === 1) {
               color = 'geekblue';
             }
             return (
               <Tag color={color} key={action}>
-                {action.toUpperCase()}
+                {action == 0 ? 'SUSPENDED': 'ACTIVE'}
               </Tag>
             );
           })}
@@ -142,6 +134,10 @@ const Finance = () => {
       ),
     },
   ];
+
+  const onRowSelected = (record) => {
+    navigate('/user-posts', { state: {record: record}, replace: false })
+  }
 
   return (
     <Structure className="users">
@@ -172,11 +168,11 @@ const Finance = () => {
       <div className="finance-data" style={{ "margin-top": "40px" }}>
         <Row>
           <Col flex={1}>
-            <TableBlock data={dataBundle} columns={columns} title={"Transactions"} export={true} />
+            <TableBlock  onSelected={onRowSelected} data={dataBundle} columns={columns} title={""} export={true} />
           </Col>
         </Row>
       </div>
     </Structure>
   )
 }
-export default Finance;
+export default Users;

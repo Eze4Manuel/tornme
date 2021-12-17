@@ -1,0 +1,118 @@
+
+.userposts{
+    background-color: white;
+    padding: 10px 12px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px;
+    .post-cards{
+        .post-cards-top{
+            display: flex;
+            justify-content: end;
+            button{
+                background-color: #276AFF1A;
+                color: #276AFF;
+                border-radius: 14px;
+                border: none;
+            }
+            
+        }
+        .post-cards-middle{
+            padding-left: 0px;
+                img{
+                    width: 200px;
+                    height: 200px;
+                }
+                ul{
+                    list-style: none;
+                    padding-left: 10px;
+                    padding-top: 10px;
+                    li{
+                        width: 300px;
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 10px;
+                        span:first-Child{
+
+                        }
+                        span:last-Child{
+                            font-weight: bold;
+                            align-content: flex-end;
+                        }
+
+                        button{
+                            background-color: #ECF2FF;
+                            color: #276AFF;
+                            border: none;
+                            border-radius: 8px;
+                            padding: 10px 25px;
+                            span:first-child{
+                                margin-right: 5px;
+                            }
+                            span:last-child{
+                                font-weight: 400;
+                            }
+                        }
+
+                    }
+                }
+
+            .post-cards-bottom{
+                padding: 30px;
+                h2{
+                    font-weight: bold;
+                }
+                h6{
+                    font-weight: 600;
+                    font-size: 16px;
+                }
+                p{
+                    font-size: 16px;
+                }
+
+            }
+      
+            .post-single-card{
+                        width: 98%;
+                        margin: auto;
+                        border-radius: 5px;
+                        margin-bottom: 5px;
+                        height: 300px;
+                    .post-single-card-background{   
+                        position: relative;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        height: inherit;
+                        background-size: cover;
+                        border-radius: 5px;
+
+                    }
+                    
+                
+                .post-single-card-image{
+                    margin-right: 20px;
+                    position: relative;
+                    top: -64px;
+                    left: 10px;
+                    img{
+                        width: 45px;
+                        height: 45px;
+                    }
+                }
+            }
+            
+            .userposts-cards-middle-text{
+                padding: 2px 15px;
+                height: 25px;
+                font-size: 11px;
+            }
+        }
+    }
+    
+}
+
+@media screen and (max-width: 650px ){
+    
+}
