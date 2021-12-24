@@ -28,6 +28,9 @@ import './support.scss';
 import '../profile/profile.scss';
 
 
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const { Option } = Select;
 
 const chatSource = [
@@ -39,15 +42,6 @@ const chatSource = [
   { img: newUser, userHandle: "@priewereer", time: '10h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " }
 ]
 
-
-const personnelSource = [
-  { img: btc, userHandle: "@priewereer", time: '23h', text: "Level 1 " },
-  { img: onlineUser, userHandle: "@priewereer", time: '13h', text: "Level 2" },
-  { img: btc, userHandle: "@priewereer", time: '12h', text: "Level 3 " },
-  { img: newUser, userHandle: "@priewereer", time: '10h', text: "Level 4" },
-  { img: btc, userHandle: "@priewereer", time: '20h', text: "Level 3 " },
-  { img: newUser, userHandle: "@priewereer", time: '10h', text: "Level 3 " }
-]
 
 const Support = () => {
 
@@ -61,6 +55,7 @@ const Support = () => {
   const [selectedAdmin, setSelectedAdmin] = useState({});
   const [personnelActive, setPersonnelActive] = useState(0);
   const [, setLoader] = useState(false);
+  const [load, setLoading] = useState(false);
   const [error, setError] = useState('')
   let navigate = useNavigate();
 
@@ -127,6 +122,7 @@ const Support = () => {
       }
       builder.auth_id = selectedAdmin?.auth_id;
 
+      setLoading(true);
       let reqData = await lib.update(builder, user?.token)
       if (reqData.status === "error") {
         helpers.sessionHasExpired(set, reqData.msg)
@@ -134,7 +130,7 @@ const Support = () => {
       if (reqData.status === 'ok') {
         helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Updated' })
       }
-      setLoader(false);
+      setLoading(false);
     } else {
       helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'Insufficient Access on this Operation' })
     }
@@ -143,6 +139,8 @@ const Support = () => {
 
   const handleDelete = async () => {
     if (user?.user_type === 'superadmin' || user?.access_level == 3) {
+      setLoading(true);
+
       let reqData = await lib.delete(user?.token, selectedAdmin.auth_id)
       if (reqData.status === "error") {
         helpers.sessionHasExpired(set, reqData.msg)
@@ -150,7 +148,7 @@ const Support = () => {
       if (reqData.status === 'ok') {
         helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Admin Account Deleted' })
       }
-      setLoader(false);
+      setLoading(false);
     } else {
       helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'Insufficient Access on this Operation' })
     }
@@ -163,34 +161,34 @@ const Support = () => {
   };
 
   const handleAdminCreate = async (values) => {
-    setError('');
-    setLoader(true);
-    try {
-      let builder = formValidator.validateCreateAdmin(values, {}, setError);
-      console.log(builder);
-      if (!builder) return;
+    if (user?.user_type === 'superadmin' || user?.access_level == 3) {
+      setError('');
+      try {
+        let builder = formValidator.validateCreateAdmin(values, {}, setError);
+        if (!builder) return;
+        setLoading(true);
 
-      let reqData = await lib.createAdmin(builder, user?.token);
-
-      if (reqData.status === "error") {
-        helpers.sessionHasExpired(set, reqData.msg);
+        let reqData = await lib.createAdmin(builder, user?.token);
+  
+        if (reqData.status === "error") {
+          helpers.sessionHasExpired(set, reqData.msg);
+          helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
+        }
+        if (reqData.status === 'ok') {
+          helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Admin account created' })
+        }
+        setLoading(false);
+  
+      } catch (err) {
+        setLoading(false);
+        setError(err?.response?.data?.msg || err?.message)
       }
-      if (reqData.status === 'ok') {
-        helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Admin account created' })
-      }
-      setLoader(false);
-      console.log(reqData);
-
-    } catch (err) {
-      setLoader(false);
-      setError(err?.response?.data?.msg || err?.message)
+      setIsModalVisible(false);
+    }else {
+      helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'Insufficient Access on this Operation' })
     }
-    setIsModalVisible(false);
+    
   };
-
-
-
-
 
 
 
@@ -213,7 +211,7 @@ const Support = () => {
         <PageHeaderComp title="Support" />
         <ButtonComponent onClick={showModal} style={{ ...styleActive, borderRadius: "6px", width: "200px" }} text="CREATE ADMIN" />
 
-        <CreateAdminModal error={error} handleOk={handleAdminCreate} handleCancel={handleCancel} isModalVisible={isModalVisible} />
+        <CreateAdminModal load={load} error={error} handleOk={handleAdminCreate} handleCancel={handleCancel} isModalVisible={isModalVisible} />
 
       </Row>
 
@@ -310,6 +308,7 @@ const Support = () => {
                         <Form.Item style={{ width: "350px", marginRight: "10px" }}>
                           <ButtonComponent style={styles} onClick={handleUpdate} text="UPDATE" />
                         </Form.Item>
+                        {load ? <Spin style={{marginRight: "10px"}} indicator={antIcon} /> : null}
                         <Form.Item style={{ width: "350px", marginRight: "10px" }}>
                           <ButtonComponent style={styles} onClick={handleDelete} text="DELETE ADMIN" />
                         </Form.Item>

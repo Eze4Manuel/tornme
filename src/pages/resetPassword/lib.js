@@ -8,7 +8,7 @@ lib.resetpassword = async (token, builder) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7));
 
-            uri = `/auth/init-password-reset`;
+            uri = `/auth/generate-otp`;
 
         return await (await request.post(uri, builder, cfg)).data 
     } catch (e) {

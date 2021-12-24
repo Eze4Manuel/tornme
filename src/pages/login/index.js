@@ -11,14 +11,18 @@ import formValidator from './formvalidation';
 import { Form, Input} from 'antd';
 import helpers from '../../core/func/Helpers';
 import { useNotifications } from '@mantine/notifications';
-
 import './login.scss';
+
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
 
 const Login = () => {
     const [form] = Form.useForm();
     const [formLayout,] = useState('vertical');
     const [values, setValues] = useState({});
-    const [,setLoading] = useState(false);
+    const [load,setLoading] = useState(false);
     const [error, setError] = useState('')
     const { set, } = useAuth();
     let navigate = useNavigate();
@@ -27,29 +31,29 @@ const Login = () => {
 
     const handleSubmit = async ()  => {
         setError('')
-        setLoading(true)
         try {
             let builder = formValidator.validatelogin(values, {}, setError);
             if(!builder) return;
+            setLoading(true)
 
             let reqData = await (await request.post('/auth/admin-login', builder)).data
-            setLoading(false)
             if (reqData.status === 'error') {
                 setError(reqData?.msg);
                 helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
 
             }
-            if (reqData.status === 'ok' && ['admin', 'superadmin'].indexOf(reqData?.data?.user_type) === -1) {
-                setError("You do not have the right authorization for this resource")
-            } else {
-                helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Login Success' })
-
+            
+            if(reqData.status === 'ok' ) {
+                if (['admin', 'superadmin'].indexOf(reqData?.data?.user_type) === -1) {
+                    setError("You do not have the right authorization for this resource");
+                    return
+                } 
                 Helpers.loadUserInStore(reqData?.data)
                 set(reqData?.data);
-                navigate('/');
+                helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Login Success' })   
+                navigate('/')
             }
             setLoading(false);
-            console.log(reqData);
         } catch (err) {
             setLoading(false)
             setError(err?.response?.data?.msg || err?.message)
@@ -82,9 +86,13 @@ const Login = () => {
                                             <Form.Item label="Password" required tooltip="This is a required field">
                                                 <Input type='password' placeholder="*******" onChange={e => setValues(d => ({...d, password: e.target.value}))} autoFocus value={values.password}  style={{ padding: "10px", borderRadius: "6px"}}/>
                                             </Form.Item>
+                                            {load ? <Spin indicator={antIcon} /> : null}
                                             <Form.Item>
+                                                
                                                 <ButtonComponent text="LOGIN" onClick={handleSubmit} />
+                                                
                                                 <div className="" style={{marginTop: "30px"}}>
+                                                    
                                                     <PageHeaderComp onClick={()=> navigate('/reset-password')} title="forgot password" style={{ fontSize: "16px", color: "#276AFF", cursor: "pointer" }} />
                                                 </div>
                                             </Form.Item>

@@ -10,10 +10,10 @@ export const AnalyticCard = (props) => {
                 <span className="custom-cards-top-title-left">
                     {props.topLeft}
                 </span>
-                <span className="custom-cards-top-title-right">
+                <span className="custom-cards-top-title-right" onClick={e => e.preventDefault()}>
                     {props.icon}
                     <Dropdown overlay={props.menu}>
-                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                        <a className="ant-dropdown-link" >
                             {props.topRight}
                             {props.topRight ?
                                 <CaretDownFilled /> :

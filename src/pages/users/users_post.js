@@ -28,6 +28,10 @@ import formValidator from './formvalidation';
 import helpers from '../../core/func/Helpers';
 import { Form, Input } from 'antd';
 
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
 
 const UsersPosts = (props, history) => {
   const navigate = useNavigate();
@@ -36,7 +40,7 @@ const UsersPosts = (props, history) => {
   const [userData, setuserData] = useState({});
   const { set, user } = useAuth();
 
-  
+
   useEffect(() => {
     (async () => {
       setLoader(true)
@@ -151,6 +155,7 @@ const SideBarActions = (props) => {
   const { state } = useLocation();
 
   const { set, user } = useAuth();
+  const [load, setLoading] = useState(false);
   const [, setLoader] = useState(false);
   const notify = useNotifications();
   const navigate = useNavigate();
@@ -168,7 +173,7 @@ const SideBarActions = (props) => {
 
 
   const handleDeleteAccountOk = async () => {
-    setLoader(true)
+    setLoading(true)
     let reqData = await lib.deleteUser(user?.token, props.user_id);
 
     if (reqData.status === "error") {
@@ -180,8 +185,7 @@ const SideBarActions = (props) => {
       helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Deleted' })
       navigate('/users')
     }
-    console.log(reqData);
-    setLoader(false);
+    setLoading(false);
     setIsDeleteAccountModalVisible(false);
 
   }
@@ -191,42 +195,29 @@ const SideBarActions = (props) => {
 
 
 
-
-
   const handleResetAccountOk = async (val) => {
- 
-    let builder = formValidator.validateResetUserPassword(val, {}, setError)
-    if (!builder) {
-      return
-    }
-    builder.auth_id = state?.record?.key;
 
- 
+    let builder = formValidator.validateResetUserPassword(val, {}, setError)
+    if (!builder) return
+
+    builder.auth_id = state?.record?.key;
+    setLoading(true);
+    
     let reqData = await lib.resetUserPassword(builder, user?.token)
     if (reqData.status === "error") {
-      // helpers.sessionHasExpired(set, reqData.msg)
+      helpers.sessionHasExpired(set, reqData.msg)
       helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
-
     }
     if (reqData.status === 'ok') {
       helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Updated' })
     }
-    setLoader(false);
-console.log(reqData);
-
-    // setIsResetAccountModalVisible(false);
-
+    setLoading(false);
+    setIsResetAccountModalVisible(false);
   }
-
-
-
-
 
 
   const handleDeleteAccountCancel = () => {
     console.log('delete cancel');
-
-
     setIsDeleteAccountModalVisible(false);
   }
   const handleSuspendedAccountCancel = () => {
@@ -252,10 +243,10 @@ console.log(reqData);
           <ActionButtonComponent text={"DELETE ACCOUNT"} onClick={showDeleteAccountModal} />
         </div>
 
-        <DeleteAccountModal isModalVisible={isDeleteAccountModalVisible} handleOk={handleDeleteAccountOk} handleCancel={handleDeleteAccountCancel} />
-        <SuspendAccountModal isModalVisible={isSuspendedAccountModalVisible} handleOk={handleSuspendedAccountOk} handleCancel={handleSuspendedAccountCancel} />
+        <DeleteAccountModal load={load} isModalVisible={isDeleteAccountModalVisible} handleOk={handleDeleteAccountOk} handleCancel={handleDeleteAccountCancel} />
+        <SuspendAccountModal load={load} isModalVisible={isSuspendedAccountModalVisible} handleOk={handleSuspendedAccountOk} handleCancel={handleSuspendedAccountCancel} />
 
-        <ChangeUserPassword isModalVisible={isResetAccountModalVisible} handleOk={handleResetAccountOk} handleCancel={handleResetAccountCancel} error={error} />
+        <ChangeUserPassword load={load} isModalVisible={isResetAccountModalVisible} handleOk={handleResetAccountOk} handleCancel={handleResetAccountCancel} error={error} />
 
 
       </div>
@@ -266,7 +257,7 @@ console.log(reqData);
 
 
 
-const ChangeUserPassword = ({ isModalVisible, handleOk, handleCancel, error }) => {
+const ChangeUserPassword = ({ isModalVisible, handleOk, handleCancel, error, load }) => {
   const [form] = Form.useForm();
   const [formLayout,] = useState('vertical');
   const [loading, setLoading] = useState('vertical');
@@ -312,6 +303,8 @@ const ChangeUserPassword = ({ isModalVisible, handleOk, handleCancel, error }) =
                   />
                 </Form.Item>
                 <Form.Item>
+                  {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
+                  <br />
                   <ButtonComponent onClick={() => handleOk(values)} text="UPDATE PASSWORD" />
                 </Form.Item>
               </Form>

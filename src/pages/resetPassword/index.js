@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import formValidator from './formvalidation';
 import helpers from '../../core/func/Helpers';
 import { useAuth } from '../../core/hooks/useAuth';
@@ -13,26 +14,30 @@ import lib from './lib';
 
 import { Form, Input } from 'antd';
 
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import './resetPassword.scss';
+
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const ResetPassword = (props) => {
     const [error, setError] = useState('')
     const [form] = Form.useForm();
     const [formLayout,] = useState('vertical');
-    const [loading, setLoading] = useState('vertical');
+    const [load,setLoading] = useState(false);
     const [values, setValues] = useState('');
     const { set, user } = useAuth();
     const notify = useNotifications();
+    let navigate = useNavigate();
 
     const handleSubmit = async ()  => {
         setError('');
-        setLoading(true);
         try {
             let builder = formValidator.resetPassword(values, {}, setError);
             if (!builder) return;
+            setLoading(true);
 
-            console.log(user?.token);
-            console.log(builder);
             let reqData = await lib.resetpassword(user?.token, builder)
             if (reqData.status === "error") {
                 helpers.sessionHasExpired(set, reqData.msg);
@@ -40,9 +45,9 @@ const ResetPassword = (props) => {
             }
             if (reqData.status === "ok") {
                 helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Password Reset' })
-                helpers.logout(set);
+                navigate('/verify-phone')
             }
-
+            console.log(reqData);
             setLoading(false)
         } catch (err) {
             setLoading(false)
@@ -76,6 +81,8 @@ const ResetPassword = (props) => {
                                             </Form.Item>
 
                                             <Form.Item>
+                                                {load ? <Spin style={{marginBottom: "10px"}} indicator={antIcon} /> : null}
+                                                <br />
                                                 <ButtonComponent onClick={handleSubmit} text="SEND CODE" />
                                                 <div className="" style={{ marginTop: "30px" }}>
                                                     <p>Have an account? <Link to='/login' style={{ color: "#276AFF", fontWeight: "bold" }}>Sign in</Link></p>
