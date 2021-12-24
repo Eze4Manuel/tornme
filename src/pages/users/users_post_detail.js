@@ -1,7 +1,7 @@
 
 import './users.scss';
 import { Row, Col } from 'antd';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Structure from "../../components/layout/index";
 import { GoBackComponent } from '../../components/buttonComponent/buttonComponent';
 import person from '../../assets/images/person.png'; // Tell webpack this JS file uses this image
@@ -20,11 +20,12 @@ import emoji from '../../assets/images/icons/emoji.png'; // Tell webpack this JS
 
 const UsersPostDetail = (props) => {
     const navigate = useNavigate();
+    const { state } = useLocation();
 
     const goBack = () => {
-        navigate(-1)
+        let record = {key: state?.record?._id}
+        navigate('/user-posts', { state: { record } });
     }
-
 
     const supportSource = [
         { img: btc, userHandle: "@priewereer", time: '23h', text: "Kathryn Murphy Aliqua id fugiat nostrud irure ex duis ea quis id quis adnt qui esse pariatur duis deserunt mollit dolore cillum miniAliqua id fugiat nostrud irure ex duis ea quis id quis adnt qui esse pariatur duis deserunt mollit dolore cillum mini     Reply       Like" },
@@ -38,7 +39,10 @@ const UsersPostDetail = (props) => {
     return (
         <Structure className="users-post-detail" >
             <div style={{ width: "70%", margin: "auto" }}>
-                <GoBackComponent text="Go Back" onClick={goBack} />
+                <div style={{ marginLeft: "0px", width: "fit-content" }} >
+                    <GoBackComponent text="Go Back" onClick={goBack} />
+                </div>
+
                 <div className="detail-top" >
                     <Row>
                         <Col flex={24}>
@@ -69,7 +73,7 @@ const UsersPostDetail = (props) => {
                                 <div >
                                     <span className='detail-icon-block'>
                                         <span>
-                                            <img alt="..."  src={message} />
+                                            <img alt="..." src={message} />
                                         </span>
                                         <span>
                                             23
@@ -77,7 +81,7 @@ const UsersPostDetail = (props) => {
                                     </span>
                                     <span className='detail-icon-block'>
                                         <span>
-                                            <img alt="..."  src={like} />
+                                            <img alt="..." src={like} />
                                         </span>
                                         <span>
                                             304
@@ -85,7 +89,7 @@ const UsersPostDetail = (props) => {
                                     </span>
                                     <span className='detail-icon-block'>
                                         <span>
-                                            <img alt="..."  src={share} />
+                                            <img alt="..." src={share} />
                                         </span>
                                         <span>
                                             453
@@ -94,7 +98,7 @@ const UsersPostDetail = (props) => {
                                 </div>
                                 <div>
                                     <span>
-                                        <img alt="..."  src={message} />
+                                        <img alt="..." src={message} />
                                     </span>
                                 </div>
                             </div>
@@ -124,9 +128,9 @@ const UsersPostDetail = (props) => {
                             <div className="detail-cards-message">
                                 <div className="detail-cards-message-block">
                                     <span>
-                                        <img alt="..."  src={emoji} />
+                                        <img alt="..." src={emoji} />
                                     </span>
-                                    <span style={{width: "100%"}}>
+                                    <span style={{ width: "100%" }}>
                                         <input type="text" name="message" placeholder="Say something about this video"></input>
                                         <button><SendOutlined /></button>
                                     </span>

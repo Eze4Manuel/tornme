@@ -13,7 +13,10 @@ const config = {
         resetpassword: '/reset-password',
         changepassword: '/change-password',
         verifyphone: '/verify-phone',
-        profile: '/profile'
+        profile: '/profile',
+        settings: '/settings',
+        settingspost: '/settings-posts',
+        settingspostdetail: '/settings-post-detail',
     },
     key: {
         user: '___@tornme_user',

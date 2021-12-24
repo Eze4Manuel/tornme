@@ -16,24 +16,32 @@ import person from '../../assets/images/icons/person.png'; // Tell webpack this 
 import { GoBackComponent, ActionButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import { SuspendAccountModal, DeleteAccountModal } from '../../components/modalComponents/modalComponents';
 import { useAuth } from '../../core/hooks/useAuth';
+import { useNotifications } from '@mantine/notifications';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+
+import { ButtonComponent } from '../../components/buttonComponent/buttonComponent';
+import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
+import ErrorMessage from '../../components/error/ErrorMessage';
 
 import lib from './lib';
+import formValidator from './formvalidation';
 import helpers from '../../core/func/Helpers';
+import { Form, Input } from 'antd';
 
 
 const UsersPosts = (props, history) => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const [,setLoader] = useState(false);
-  const [ userData, setuserData ] = useState({});
-  const { set, user} = useAuth();
+  const [, setLoader] = useState(false);
+  const [userData, setuserData] = useState({});
+  const { set, user } = useAuth();
 
   
-  useEffect(()=>{
+  useEffect(() => {
     (async () => {
       setLoader(true)
-      let reqData = await lib.getUserDetail(user?.token, state.record.key);
-      
+      let reqData = await lib.getUserDetail(user?.token, state?.record?.key);
+
       if (reqData.status === "error") {
         helpers.sessionHasExpired(set, reqData.msg);
       }
@@ -43,24 +51,25 @@ const UsersPosts = (props, history) => {
       setLoader(false);
     })()
   }, [user?.token,]);
-  
 
   const goBack = () => {
     navigate('/users')
   }
 
   return (
-    <Structure className="support">
-      <GoBackComponent text="Go Back" onClick={goBack} />
-      <div className="support-top">
+    <Structure className="users">
+      <div style={{ marginLeft: "0px", width: "fit-content" }} >
+        <GoBackComponent text="Go Back" onClick={goBack} />
+      </div>
+      <div className="users-top">
         <Row>
           <Col flex={20}>
-            <UsersPostCard data={userData}/>
+            <UsersPostCard data={userData} />
           </Col>
           <Col flex={1}>
             <div className="sidebar">
               <SideBarFeatures />
-              <SideBarActions />
+              <SideBarActions user_id={userData?._id} />
             </div>
           </Col>
         </Row>
@@ -75,7 +84,7 @@ export default UsersPosts;
 const SideBarFeatures = () => {
   const menu = (
     <Menu>
-      
+
     </Menu>
   );
 
@@ -134,10 +143,17 @@ const SideBarFeatures = () => {
   )
 }
 
-const SideBarActions = () => {
+const SideBarActions = (props) => {
   const [isDeleteAccountModalVisible, setIsDeleteAccountModalVisible] = useState(false);
   const [isSuspendedAccountModalVisible, setIsSuspendedAccountModalVisible] = useState(false);
   const [isResetAccountModalVisible, setIsResetAccountModalVisible] = useState(false);
+  const [error, setError] = useState('')
+  const { state } = useLocation();
+
+  const { set, user } = useAuth();
+  const [, setLoader] = useState(false);
+  const notify = useNotifications();
+  const navigate = useNavigate();
 
   const showDeleteAccountModal = () => {
     setIsDeleteAccountModalVisible(true);
@@ -151,23 +167,67 @@ const SideBarActions = () => {
 
 
 
-  const handleDeleteAccountOk = () => {
+  const handleDeleteAccountOk = async () => {
+    setLoader(true)
+    let reqData = await lib.deleteUser(user?.token, props.user_id);
+
+    if (reqData.status === "error") {
+      helpers.sessionHasExpired(set, reqData.msg);
+      helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData?.data?.msg })
+
+    }
+    if (reqData.status === 'ok') {
+      helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Deleted' })
+      navigate('/users')
+    }
+    console.log(reqData);
+    setLoader(false);
     setIsDeleteAccountModalVisible(false);
 
   }
   const handleSuspendedAccountOk = () => {
     setIsSuspendedAccountModalVisible(false);
+  }
+
+
+
+
+
+  const handleResetAccountOk = async (val) => {
+ 
+    let builder = formValidator.validateResetUserPassword(val, {}, setError)
+    if (!builder) {
+      return
+    }
+    builder.auth_id = state?.record?.key;
+
+ 
+    let reqData = await lib.resetUserPassword(builder, user?.token)
+    if (reqData.status === "error") {
+      // helpers.sessionHasExpired(set, reqData.msg)
+      helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
+
+    }
+    if (reqData.status === 'ok') {
+      helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Updated' })
+    }
+    setLoader(false);
+console.log(reqData);
+
+    // setIsResetAccountModalVisible(false);
 
   }
-  const handleResetAccountOk = () => {
-    setIsResetAccountModalVisible(false);
 
-  }
+
+
+
 
 
   const handleDeleteAccountCancel = () => {
-    setIsDeleteAccountModalVisible(false);
+    console.log('delete cancel');
 
+
+    setIsDeleteAccountModalVisible(false);
   }
   const handleSuspendedAccountCancel = () => {
     setIsSuspendedAccountModalVisible(false);
@@ -195,12 +255,70 @@ const SideBarActions = () => {
         <DeleteAccountModal isModalVisible={isDeleteAccountModalVisible} handleOk={handleDeleteAccountOk} handleCancel={handleDeleteAccountCancel} />
         <SuspendAccountModal isModalVisible={isSuspendedAccountModalVisible} handleOk={handleSuspendedAccountOk} handleCancel={handleSuspendedAccountCancel} />
 
-        <Modal visible={isResetAccountModalVisible} onOk={handleResetAccountOk} onCancel={handleResetAccountCancel} footer={null} style={{textAlign: "center", borderRadius:"8px"}}>
-          <ChangePassword />
-        </Modal>
+        <ChangeUserPassword isModalVisible={isResetAccountModalVisible} handleOk={handleResetAccountOk} handleCancel={handleResetAccountCancel} error={error} />
+
+
       </div>
     </>
   )
 }
 
 
+
+
+const ChangeUserPassword = ({ isModalVisible, handleOk, handleCancel, error }) => {
+  const [form] = Form.useForm();
+  const [formLayout,] = useState('vertical');
+  const [loading, setLoading] = useState('vertical');
+  const [values, setValues] = useState('');
+  const { set, user } = useAuth();
+  const notify = useNotifications();
+
+
+
+
+  return (
+    <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} style={{ textAlign: "center", borderRadius: "8px" }}>
+      <div className="app-login__content" style={{ textAlign: "center", borderRadius: "12px" }}>
+        <PageHeaderComp title="Change Password" />
+        <div className="app-login__error">
+          {error ? <ErrorMessage message={error} /> : null}
+        </div>
+        <div className="p-fluid p-formgrid p-grid p-mx-5">
+          <div style={{ width: '100%', marginTop: "35px" }} className="container">
+            <div className="row">
+              <Form layout={"vertical"} form={form} initialValues={{ layout: formLayout, }}>
+                {/* <Form.Item label="Old password" required tooltip="This is a required field" >
+                      <Input.Password style={{ padding: "10px", borderRadius: "6px" }}
+                        placeholder="input password"
+                        onChange={e => setValues(d => ({ ...d, old_password: e.target.value }))}
+                        value={values.old_password}
+                        iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                      />
+                    </Form.Item> */}
+                <Form.Item label="New password" required tooltip="This is a required field" >
+                  <Input.Password style={{ padding: "10px", borderRadius: "6px" }}
+                    placeholder="input password"
+                    onChange={e => setValues(d => ({ ...d, new_password: e.target.value }))}
+                    value={values.new_password}
+                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                  />
+                </Form.Item>
+                <Form.Item label="Confirm new password" required tooltip="This is a required field" >
+                  <Input.Password style={{ padding: "10px", borderRadius: "6px" }}
+                    placeholder="input password"
+                    onChange={e => setValues(d => ({ ...d, confirm_password: e.target.value }))}
+                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <ButtonComponent onClick={() => handleOk(values)} text="UPDATE PASSWORD" />
+                </Form.Item>
+              </Form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  )
+}

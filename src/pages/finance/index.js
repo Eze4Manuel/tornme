@@ -172,22 +172,6 @@ const columns = [
   return (
     <Structure className="finance">
       <PageHeaderComp title="Finance" />
-      <div className="finance-top">
-        <Row>
-          <Col flex={1}>
-            <AnalyticCard
-              textColor={{ "color": "#276AFF" }}
-              image={btc}
-              topLeft={"Your Earnings"}
-              bottomText={0.5989}
-              menu={menu}
-              topRight={"Today"}
-              icon={<ReloadIcon />}
-            />
-          </Col>
-
-        </Row>
-      </div>
       <div className="finance-data" style={{"margin-top": "40px"}}>
         <Row>
           <Col flex={1}>

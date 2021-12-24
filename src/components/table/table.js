@@ -27,11 +27,11 @@ const TableBlock = (props) => {
                     <h3>{props.title}</h3>
                 </Col>
                 <Col>
-                <Button type="dashed">Export</Button>
-
+                {props.export ? <Button type="dashed">Export</Button> : null}
                 </Col>
             </Row>
             <Table 
+          
             onRow={(record, rowIndex) => {
                 return {
                   onClick: event => {props.onSelected(record, rowIndex)}, // click row

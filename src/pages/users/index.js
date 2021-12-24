@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 import Structure from "../../components/layout/index";
-import { AnalyticCard } from '../../components/analyticCard/analyticCard';
 import TableBlock from '../../components/table/table';
 import { Menu, Row, Col, Tag } from 'antd';
-import { ReloadIcon } from '@modulz/radix-icons';
 import { useAuth } from '../../core/hooks/useAuth';
 import './users.scss';
 import { useNavigate } from "react-router-dom";
 import lib from './lib';
-import btc from '../../assets/images/icons/btc.png';
 import helpers from '../../core/func/Helpers';
 
 const Users = () => {
@@ -21,7 +18,7 @@ const Users = () => {
   useEffect(() => {
     (async () => {
       setLoader(true)
-      let reqData = await lib.get(user?.token);
+      let reqData = await lib.get(user?.token, 'user');
       
       if (reqData.status === "error") {
         helpers.sessionHasExpired(set, reqData.msg);
@@ -30,18 +27,11 @@ const Users = () => {
         setData(reqData.data)
       }
       setLoader(false);
+      console.log(reqData.data);
 
     })();
   }, [user?.token, set])
-
-
-  const menu = (
-    <Menu>
-      
-    </Menu>
-  );
-
-  
+ 
   const dataBundle = data?.map( (e, ind) => {
     return {
       key: e.auth_id,
@@ -51,9 +41,7 @@ const Users = () => {
       earnings: '',
       followers: 32,
       status: [e.account_status],
-      actions: [e.status_visibility_access],
     }
-  
   });
 
 
@@ -86,47 +74,24 @@ const Users = () => {
       key: 'earnings',
       sorter: (a, b) => a.earnings - b.earnings,
     },
-
+     
     {
-      title: 'Status',
+      title: 'Action',
       key: 'status',
       dataIndex: 'status',
       render: status => (
         <>
-          {status.map(stat => {
+          {status.map(statu => {
             let color = 'green'
-            if (stat === 0) {
+            if (statu === 0) {
               color = 'volcano';
             }
-            if (stat === 1) {
-              color = 'geekblue';
+            if (statu === 1) {
+              color = 'green';
             }
             return (
-              <Tag color={color} key={stat}>
-                {(stat == 0) ? 'OFFLINE': 'ONLINE'}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'actions',
-      dataIndex: 'actions',
-      render: actions => (
-        <>
-          {actions.map(action => {
-            let color = 'green'
-            if (action === 0) {
-              color = 'volcano';
-            }
-            if (action === 1) {
-              color = 'geekblue';
-            }
-            return (
-              <Tag color={color} key={action}>
-                {action == 0 ? 'SUSPENDED': 'ACTIVE'}
+              <Tag color={color} key={statu}>
+                {statu == 0 ? 'SUSPENDED': 'ACTIVE'}
               </Tag>
             );
           })}
@@ -134,7 +99,6 @@ const Users = () => {
       ),
     },
   ];
-
   const onRowSelected = (record) => {
     navigate('/user-posts', { state: {record: record}, replace: false })
   }
@@ -142,29 +106,7 @@ const Users = () => {
   return (
     <Structure className="users">
       <PageHeaderComp title="Users" />
-      <div className="users-top">
-        <Row>
-          <Col>
-            <AnalyticCard
-              textColor={{ "color": "#276AFF" }}
-              image={btc}
-              topLeft={"Your Earnings"}
-              bottomText={0.5989}
-              menu={menu}
-              topRight={"Today"}
-              icon={<ReloadIcon />}
-            />
-          </Col>
-          <Col>
-            <AnalyticCard
-              textColor={{ "color": "#276AFF" }}
-              image={btc}
-              topLeft={"Content Subscribers"}
-              bottomText={0.5989}
-            />
-          </Col>
-        </Row>
-      </div>
+      
       <div className="finance-data" style={{ "margin-top": "40px" }}>
         <Row>
           <Col flex={1}>
