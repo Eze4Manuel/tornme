@@ -3,11 +3,11 @@ import helpers from '../../core/func/Helpers';
 
 const lib = {}
 
-lib.get = async (token, user_type) => {
+lib.get = async (token) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7));
-            uri = `/users/admin-get-users?user_type=${user_type}`;
+            uri = `/users/admin-get-users`;
         return await (await Axios_users.get(uri, cfg)).data
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
@@ -38,20 +38,5 @@ lib.deleteUser = async (token, auth_id) => {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }
 }
-
-
-
-lib.resetUserPassword = async (data, token) => {
-    let uri = '';
-    try {
-        console.log(data);
-        let cfg = helpers.getHeaderConfig(String(token).substr(7));
-            uri = `/users/admin-change-user-password`;
-        return await (await Axios_users.delete(uri, data, cfg)).data
-    } catch (e) {
-        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
-    }
-}
-
 
 export default lib;

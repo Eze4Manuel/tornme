@@ -4,3 +4,54 @@
         margin-top: 30px;
     }
 }
+
+
+.support-top{
+    padding: 0px;
+    border-radius: 10px;
+    margin-top: 20px;
+    .profile-form{
+        padding-top: 40px;
+        padding-bottom: 10px;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding-left: 60px;
+        background-color: #fff;
+        margin-bottom: 90px;
+
+        .profile-image{
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 130px;
+            width: 130px;
+            border-radius: 10px;
+           margin-bottom: 10px;
+           
+       }
+
+        div.form-group{
+            display: flex;
+            input{
+                height: 40px;
+                border-radius: 5px;
+            }
+        }
+        div.profile-password{
+            margin-top: 40px;
+            h2{
+                color: #276AFF;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            
+        }
+        .profile-button{
+            margin-top: 40px;
+            button{
+                background-color: #276AFF;
+                columns: #fff;
+            }
+        }
+    }
+} 

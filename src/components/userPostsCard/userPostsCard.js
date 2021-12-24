@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { SendOutlined } from '@ant-design/icons';
 import './userPostsCard.scss';
 import { Button, Row, Col, Divider } from 'antd';
@@ -19,19 +19,22 @@ export const UsersPostCard = (props) => {
     const { TabPane } = Tabs;
     const navigate = useNavigate();
 
+
+
     const callback = (key) => {
         console.log(key);
     }
 
     const selectedPost = (record) => {
-        navigate('/user-post-detail', { state: { record: record }, replace: false })
+
+        navigate('/user-post-detail', { state: { record: props.data } });
     }
 
     return (
         <div className="userposts">
             <div className="post-cards" style={props.style} >
                 <div className="post-cards-top">
-                    <Button>{props.data?.account_status == 0 ? 'Not Active': 'Active'}</Button>
+                    <Button>{props.data?.account_status == 0 ? 'Not Active' : 'Active'}</Button>
                 </div>
                 <div className="post-cards-middle">
                     <Row >
@@ -99,9 +102,9 @@ export const UsersPostCard = (props) => {
                         <TabPane tab="Videos/photos" key="1" >
                             <Row >
                                 <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={video} typeImage={play} onClick={selectedPost} /> </Col>
-                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={livestream} typeImage={live} /> </Col>
-                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={image2} typeImage={live} /> </Col>
-                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={video2} typeImage={play} /> </Col>
+                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={livestream} typeImage={live} onClick={selectedPost} /> </Col>
+                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={image2} typeImage={live} onClick={selectedPost} /> </Col>
+                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={video2} typeImage={play} onClick={selectedPost} /> </Col>
                                 <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={livestream} typeImage={play} /> </Col>
                                 <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={video2} typeImage={play} /> </Col>
                                 <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={video4} typeImage={play} /> </Col>
@@ -152,14 +155,12 @@ export const UsersPostCard = (props) => {
 
 const Post = (props) => {
     return (
-        <Link to='#' onClick={props.onClick}>
-            <div className="post-single-card">
-                <div className='post-single-card-background' style={{ backgroundImage: `url(${props.img})` }} key={{shoe: "ede"}}>
-                </div>
-                <div className="post-single-card-image">
-                    {<img src={props.typeImage} /> ?? null}
-                </div>
+        <div className="post-single-card" onClick={props.onClick} style={{cursor: "pointer"}}>
+            <div className='post-single-card-background' style={{ backgroundImage: `url(${props.img})` }} key={{ shoe: "ede" }}>
             </div>
-        </Link>
+            <div className="post-single-card-image">
+                {<img src={props.typeImage} /> ?? null}
+            </div>
+        </div>
     )
 }

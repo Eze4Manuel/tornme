@@ -44,7 +44,7 @@ const App = () => {
           <Routes>
           <Route path='/' exact element={<UnAuthenticated />} />
           <Route path='/login' exact element={<UnAuthenticated />} />
-          <Route path='/forgot-password' exact element={<ResetPassword />} />
+          <Route path='/reset-password' exact element={<ResetPassword />} />
           <Route path='/change-password' exact element={<ChangePasswordPage />} />
           <Route path="*" element={<Navigate to ="/login" />}/>
 

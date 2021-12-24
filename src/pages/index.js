@@ -7,8 +7,10 @@ import {
 } from 'react-router-dom';
 
 import Dashboard from './dashboard/index';
+import Users from './users/index';
 import { routes } from './config';
 import config from '../assets/utils/config';
+import { useAuth } from '../core/hooks/useAuth';
 
 
 
@@ -24,6 +26,7 @@ export const isSuperAdmin = (user) => {
 }
 
 const App = (props) => {
+  const { set, user } = useAuth();
 
   const renderedRoutes = routes.map(AppRoute =>
     <Route key={AppRoute.link} path={AppRoute.link} element={<AppRoute.Component />}> </Route>
@@ -32,11 +35,24 @@ const App = (props) => {
     <Router>
       <Fragment>
         <Routes>
-        <Route path='/' exact element={<Dashboard />} />
-        <Route path='/overview' exact element={<Dashboard />} />
+          {user?.user_type === 'superadmin' ?
+            <>
+              <Route path='/' exact element={<Dashboard />} />
+              <Route path='/overview' exact element={<Dashboard />} />
+            </> :
+            <>
+              <Route path='/' exact element={<Users />} />
+              <Route path='/overview' exact element={<Users />} />
+
+            </>
+
+          }
+
           {renderedRoutes}
+          {/* <Route path="*" element={<Navigate to ="/overview" />}/> */}
+
         </Routes>
-        
+
       </Fragment>
     </Router>
   );

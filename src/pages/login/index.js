@@ -9,6 +9,8 @@ import { useAuth } from '../../core/hooks/useAuth';
 import Helpers from '../../core/func/Helpers';
 import formValidator from './formvalidation';
 import { Form, Input} from 'antd';
+import helpers from '../../core/func/Helpers';
+import { useNotifications } from '@mantine/notifications';
 
 import './login.scss';
 
@@ -20,6 +22,7 @@ const Login = () => {
     const [error, setError] = useState('')
     const { set, } = useAuth();
     let navigate = useNavigate();
+    const notify = useNotifications();
 
 
     const handleSubmit = async ()  => {
@@ -33,7 +36,9 @@ const Login = () => {
             let reqData = await (await request.post('/auth/admin-login', builder)).data
             setLoading(false)
             if (reqData.status === 'error') {
-                setError(reqData?.msg)
+                setError(reqData?.msg);
+                helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
+
             }
             if (reqData.status === 'ok' && ['admin', 'superadmin'].indexOf(reqData?.data?.user_type) === -1) {
                 setError("You do not have the right authorization for this resource")
@@ -73,12 +78,12 @@ const Login = () => {
                                                 <Input placeholder="example@email.com" onChange={e => setValues(d => ({...d, login: e.target.value}))} value={values.login}  style={{ padding: "10px", borderRadius: "6px"}}/>
                                             </Form.Item>
                                             <Form.Item label="Password" required tooltip="This is a required field">
-                                                <Input placeholder="password" onChange={e => setValues(d => ({...d, password: e.target.value}))} autoFocus value={values.password}  style={{ padding: "10px", borderRadius: "6px"}}/>
+                                                <Input type='password' placeholder="*******" onChange={e => setValues(d => ({...d, password: e.target.value}))} autoFocus value={values.password}  style={{ padding: "10px", borderRadius: "6px"}}/>
                                             </Form.Item>
                                             <Form.Item>
                                                 <ButtonComponent text="LOGIN" onClick={handleSubmit} />
                                                 <div className="" style={{marginTop: "30px"}}>
-                                                    <PageHeaderComp onClick={()=> navigate('/forgot-password')} title="forgot password" style={{ fontSize: "16px", color: "#276AFF", cursor: "pointer" }} />
+                                                    <PageHeaderComp onClick={()=> navigate('/reset-password')} title="forgot password" style={{ fontSize: "16px", color: "#276AFF", cursor: "pointer" }} />
                                                 </div>
                                             </Form.Item>
                                         </Form>

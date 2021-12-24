@@ -70,14 +70,6 @@ const Dashboard = () => {
     { img: newUser, userHandle: "@priewereer", followers: 335 },
     { img: onlineUser, userHandle: "@priewereer", followers: 2145 }
   ]
-  const supportSource = [
-    { img: btc, userHandle: "@priewereer", time: '23h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do Amet minim mollit non deserut uamc ersit aliqua dolor doAmet minim  " },
-    { img: onlineUser, userHandle: "@priewereer", time: '13h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-    { img: btc, userHandle: "@priewereer", time: '12h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-    { img: newUser, userHandle: "@priewereer", time: '10h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-    { img: btc, userHandle: "@priewereer", time: '20h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-    { img: newUser, userHandle: "@priewereer", time: '10h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " }
-  ]
 
   const data = [
     {
@@ -532,16 +524,6 @@ const Dashboard = () => {
                   topLeft={"Top Users"}
                   data={dataSource}
                   bottomText={0.5989}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col flex={1}>
-                <SupportCard
-                  textColor={{ "color": "#276AFF" }}
-                  image={btc}
-                  topLeft={"Support"}
-                  data={supportSource}
                 />
               </Col>
             </Row>
