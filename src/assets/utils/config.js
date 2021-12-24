@@ -9,7 +9,6 @@ const config = {
         userpostdetail: '/user-post-detail',
         support: '/support',
         logout: '/logout',
-        login: '/login',
         resetpassword: '/reset-password',
         changepassword: '/change-password',
         verifyphone: '/verify-phone',

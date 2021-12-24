@@ -44,10 +44,9 @@ lib.deleteUser = async (token, auth_id) => {
 lib.resetUserPassword = async (data, token) => {
     let uri = '';
     try {
-        console.log(data);
         let cfg = helpers.getHeaderConfig(String(token).substr(7));
             uri = `/users/admin-change-user-password`;
-        return await (await Axios_users.delete(uri, data, cfg)).data
+        return await (await Axios_users.put(uri, data, cfg)).data
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }

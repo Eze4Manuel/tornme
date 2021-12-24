@@ -16,6 +16,7 @@ import Authenticated from './pages/index';
 import Loading from './components/loading/Loading'
 import './App.css';
 import ChangePasswordPage from './pages/changePassword';
+import VerifyPhone from './pages/verifyPhone';
 
 const App = () => {
   const { user } = useAuth();
@@ -45,6 +46,7 @@ const App = () => {
           <Route path='/' exact element={<UnAuthenticated />} />
           <Route path='/login' exact element={<UnAuthenticated />} />
           <Route path='/reset-password' exact element={<ResetPassword />} />
+          <Route path='/verify-phone' exact element={<VerifyPhone />} />
           <Route path='/change-password' exact element={<ChangePasswordPage />} />
           <Route path="*" element={<Navigate to ="/login" />}/>
 

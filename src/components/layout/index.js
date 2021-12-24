@@ -20,13 +20,14 @@ const Structure = (props) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { set, user } = useAuth();
     const notify = useNotifications();
+    const [load,setLoading] = useState(false);
 
     const showModal = () => {
         setIsModalVisible(true);
     };
-
+ 
     const handleLogout = async () => {
-
+        setLoading(true);
         let reqData = await lib.logout(user?.token)
         if (reqData.status === "error") {
             helpers.sessionHasExpired(set, reqData.msg)
@@ -35,6 +36,7 @@ const Structure = (props) => {
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Logout Success' })
             helpers.logout(set);
         }
+        setLoading(false);
         setIsModalVisible(false);
     };
 
@@ -101,7 +103,7 @@ const Structure = (props) => {
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="account">
-                                    <LogoutModal isModalVisible={isModalVisible} handleOk={handleLogout} handleCancel={handleCancel} />
+                                    <LogoutModal isModalVisible={isModalVisible} handleOk={handleLogout} handleCancel={handleCancel} load={load}/>
                                     <a className="ant-dropdown-link" onClick={e => { e.preventDefault(); showModal() }} style={{ color: '#276AFF' }}>
                                         <img src={person} alt="logo" />
                                         Logout  <CaretDownFilled />
