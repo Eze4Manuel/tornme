@@ -26,7 +26,6 @@ const Login = () => {
 
 
     const handleSubmit = async ()  => {
-        
         setError('')
         setLoading(true)
         try {
@@ -43,11 +42,14 @@ const Login = () => {
             if (reqData.status === 'ok' && ['admin', 'superadmin'].indexOf(reqData?.data?.user_type) === -1) {
                 setError("You do not have the right authorization for this resource")
             } else {
+                helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Login Success' })
+
                 Helpers.loadUserInStore(reqData?.data)
                 set(reqData?.data);
                 navigate('/');
             }
-            setLoading(false)
+            setLoading(false);
+            console.log(reqData);
         } catch (err) {
             setLoading(false)
             setError(err?.response?.data?.msg || err?.message)

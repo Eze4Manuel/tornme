@@ -41,15 +41,18 @@ export const UsersCard = (props) => {
                 <div className="users-cards-middle-text" style={props.textColor} >
                     <DemoPie data = {props.data}/>
                 </div>
+                {console.log(props.data)}
                 <div className="users-cards-middle-bullets">
-                    <span>
-                        <h3>08</h3>
-                        <p>Active</p>
-                    </span>
-                    <span>
-                        <h3>70</h3>
-                        <p>Inactive</p>
-                    </span>
+                  {
+                    props.data.map(e => (
+                      <span>
+                      <h3>{e.value}</h3>
+                      <p>{e.type}</p>
+                  </span>
+                      ))
+                  }
+                    
+                     
                 </div>
             </div>
             

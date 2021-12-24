@@ -10,9 +10,7 @@ import ChangePassword from "./changePassword";
 import VerifyPhone from "./verifyPhone";
 import UsersPosts from './users/users_post';
 import UsersPostDetail from './users/users_post_detail';
-
-import SettingsPosts from './settings/settings_post';
-import SettingsPostDetail from './settings/settings_post_detail';
+ 
 import Profile from './profile/profile';
 
 // Access 1 - super admin, 2 - admin staff & support
@@ -29,7 +27,6 @@ export const routes = [
     {link: pages.changepassword, Component: ChangePassword },
     {link: pages.verifyphone, Component: VerifyPhone },
     {link: pages.profile, Component: Profile },
-    {link: pages.settings, Component: Settings },
-    {link: pages.settingspost, Component: SettingsPosts },
-    {link: pages.settingspostdetail, Component: SettingsPostDetail },
+    {link: pages.settings, Component: Settings }
+    
 ] 

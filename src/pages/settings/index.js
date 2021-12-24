@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 import Structure from "../../components/layout/index";
 import { AnalyticCard } from '../../components/analyticCard/analyticCard';
-import TableBlock from '../../components/table/table';
 import { Menu, Row, Col, Tag } from 'antd';
 import { ReloadIcon } from '@modulz/radix-icons';
 import { useAuth } from '../../core/hooks/useAuth';
@@ -55,86 +54,7 @@ const Settings = () => {
     }
   });
 
-
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Username',
-      dataIndex: 'username',
-      key: 'username',
-      sorter: (a, b) => a.username.length - b.username.length,
-    },
-    {
-      title: 'Phone Number',
-      dataIndex: 'phone_number',
-      key: 'phone_number',
-    },
-    {
-      title: 'Followers',
-      dataIndex: 'followers',
-      key: 'followers',
-      sorter: (a, b) => a.followers - b.followers,
-    },
-    {
-      title: 'Earnings',
-      dataIndex: 'earnings',
-      key: 'earnings',
-      sorter: (a, b) => a.earnings - b.earnings,
-    },
-    {
-      title: 'Status',
-      key: 'status',
-      dataIndex: 'status',
-      render: status => (
-        <>
-          {status.map(stat => {
-            let color = 'green'
-            if (stat === 0) {
-              color = 'volcano';
-            }
-            if (stat === 1) {
-              color = 'geekblue';
-            }
-            return (
-              <Tag color={color} key={stat}>
-                {(stat == 0) ? 'OFFLINE': 'ONLINE'}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'actions',
-      dataIndex: 'actions',
-      render: actions => (
-        <>
-          {actions.map(action => {
-            let color = 'green'
-            if (action === 0) {
-              color = 'volcano';
-            }
-            if (action === 1) {
-              color = 'geekblue';
-            }
-            return (
-              <Tag color={color} key={action}>
-                {action == 0 ? 'SUSPENDED': 'ACTIVE'}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-  ];
-  const onRowSelected = (record) => {
-    navigate('/settings-posts', { state: {record: record}, replace: false })
-  }
+ 
 
   return (
     <Structure className="settings">
@@ -145,7 +65,7 @@ const Settings = () => {
             <AnalyticCard
               textColor={{ "color": "#276AFF" }}
               image={btc}
-              topLeft={"Your Earnings"}
+              topLeft={"Wallet Percentage"}
               bottomText={0.5989}
               menu={menu}
               topRight={"Today"}
@@ -155,13 +75,7 @@ const Settings = () => {
           
         </Row>
       </div>
-      <div className="finance-data" style={{ "margin-top": "40px" }}>
-        <Row>
-          <Col flex={1}>
-            <TableBlock  onSelected={onRowSelected} data={dataBundle} columns={columns} title={""} export={false} />
-          </Col>
-        </Row>
-      </div>
+       
     </Structure>
   )
 }

@@ -96,7 +96,6 @@ const Profile = (props) => {
                 <PageHeaderComp title="Profile" />
                 <div className="profile-top" >
                     {user?.user_type !== 'superadmin' ?
-
                         <Row>
                             <Col>
                                 <div>

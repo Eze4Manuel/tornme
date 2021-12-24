@@ -11,6 +11,7 @@ import { Menu, Row, Col } from 'antd';
 import { ReloadIcon } from '@modulz/radix-icons';
 import { useAuth } from '../../core/hooks/useAuth';
 import helpers from '../../core/func/Helpers';
+import { fShortenNumber } from '../../assets/utils/formatNumber';
 
 import './dashboard.scss';
 
@@ -23,7 +24,9 @@ import lib from './lib'
 const Dashboard = () => {
   const { set, user} = useAuth();
   const [,setLoader] = useState(false);
-  const [datas,setDatas] = useState(false);
+  const [datas, setDatas] = useState([]);
+  const [userCount, setUserCount] = useState(0);
+  const [userStatus, setUserStatus] = useState([]);
 
   const menu = (
     <Menu>
@@ -44,17 +47,78 @@ const Dashboard = () => {
   useEffect(() => {
     (async () => {
       setLoader(true)
-      let reqData = await lib.get(user?.token)
+      let reqData = await lib.getType(user?.token, "type")
 
       if (reqData.status === "error") {
         helpers.sessionHasExpired(set, reqData.msg);
       }
       if (reqData.status === 'ok') {
-        setDatas(reqData.data)
+        setDatas(reqData?.data);
       }
       setLoader(false);
     })();
   }, [user?.token, set])
+
+  useEffect(() => {
+    (async () => {
+      setLoader(true)
+      let reqData = await lib.getType(user?.token, "count")
+
+      if (reqData.status === "error") {
+        helpers.sessionHasExpired(set, reqData.msg);
+      }
+      if (reqData.status === 'ok') {
+        setUserCount(reqData?.data);
+      }
+      setLoader(false);
+    })();
+  }, [user?.token, set])
+
+  useEffect(() => {
+    (async () => {
+      setLoader(true)
+      let reqData = await lib.getType(user?.token, "status")
+
+      if (reqData.status === "error") {
+        helpers.sessionHasExpired(set, reqData.msg);
+      }
+      if (reqData.status === 'ok') {
+        transformData(reqData?.data);
+      }
+      setLoader(false);
+    })();
+  }, [user?.token, set])
+
+
+  const transformData = (stats) => {
+    let status = [];
+
+    stats.forEach( (e, ind) => {
+      if(e._id == 0) {
+        let obj = {}
+        obj.type = "Inactive";
+        obj.value = e.total;
+        obj.index = ind;
+         status.push(obj)
+      }else
+      if(e._id == 1) {
+        let obj = {}
+        obj.type = "Active";
+        obj.value = e.total;
+        obj.index = ind;
+        status.push(obj)
+      }
+      if(e._id == 2) {
+        let obj = {}
+        obj.type = "Deactived";
+        obj.value = e.total;
+        obj.index = ind;
+        status.push(obj)
+      }
+     
+    })
+    setUserStatus(status);
+  }
 
   const dataSource = [
     { img: btc, userHandle: "@priewereer", followers: 2325 },
@@ -71,16 +135,16 @@ const Dashboard = () => {
     { img: onlineUser, userHandle: "@priewereer", followers: 2145 }
   ]
 
-  const data = [
-    {
-      type: 'Inactive',
-      value: 8,
-    },
-    {
-      type: 'Active',
-      value: 70,
-    }
-  ];
+  // const data = [
+  //   {
+  //     type: 'Inactive',
+  //     value: 8,
+  //   },
+  //   {
+  //     type: 'Active',
+  //     value: 70,
+  //   }
+  // ];
 
   const lineData = [
     {
@@ -431,6 +495,7 @@ const Dashboard = () => {
 
   return (
     <Structure>
+
       <PageHeaderComp title="Dashboard" />
       <div className="analytic-cards">
         <Row>
@@ -438,8 +503,8 @@ const Dashboard = () => {
             <AnalyticCard
               textColor={{ "color": "#276AFF" }}
               image={btc}
-              topLeft={"Your Earnings"}
-              bottomText={0.5989}
+              topLeft={"Total Users"}
+              bottomText={fShortenNumber(userCount?.total)}
               menu={menu}
               topRight={"Today"}
               icon={<ReloadIcon />}
@@ -449,8 +514,8 @@ const Dashboard = () => {
             <AnalyticCard
               textColor={{ "color": "#FFBD4F" }}
               image={newUser}
-              topLeft={"New Users"}
-              bottomText={372873}
+              topLeft={"Admin Users"}
+              bottomText={fShortenNumber(datas[0]?.total)}
               menu={menu}
               topRight={"Last 7 Days"}
               icon={<ReloadIcon />}
@@ -460,8 +525,8 @@ const Dashboard = () => {
             <AnalyticCard
               textColor={{ "color": "#09A479" }}
               image={onlineUser}
-              topLeft={"Online Users"}
-              bottomText={"7389k"}
+              topLeft={"Users"}
+              bottomText={fShortenNumber(datas[1]?.total)}
               menu={menu}
             />
           </Col>
@@ -497,7 +562,7 @@ const Dashboard = () => {
                   textColor={{ "color": "#276AFF" }}
                   image={btc}
                   topLeft={"Users"}
-                  data={data}
+                  data={userStatus}
                 />
               </Col>
             </Row>
