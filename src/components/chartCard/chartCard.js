@@ -15,7 +15,7 @@ export const ChartCard = (props) => {
                 <span className="chart-cards-top-title-right">
                     {props.icon}
                     <Dropdown overlay={props.menu}>
-                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                        <a href='/#' className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                             {props.topRight}
                             {props.topRight ?
                                 <CaretDownFilled /> :

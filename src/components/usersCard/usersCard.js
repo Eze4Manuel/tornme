@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
 import { Dropdown, } from 'antd';
 import { CaretDownFilled } from '@ant-design/icons';
 import './usersCard.scss';
@@ -16,7 +15,7 @@ export const UsersCard = (props) => {
                     <div>
                         {props.icon}
                         <Dropdown overlay={props.menu}>
-                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                            <a href='/#' className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                                 {props.topRightFirst}
                                 {props.topRightFirst ?
                                     <CaretDownFilled /> :
@@ -27,7 +26,7 @@ export const UsersCard = (props) => {
                     <div>
                         {props.icon}
                         <Dropdown overlay={props.menu}>
-                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                            <a href='/#' className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                                 {props.topRightSecond}
                                 {props.topRightSecond ?
                                     <CaretDownFilled /> :

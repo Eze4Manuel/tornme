@@ -1,22 +1,11 @@
 import { Table, Row, Col, Button } from 'antd';
-import { useEffect, useState } from 'react';
-import { render } from 'sass';
+import { useEffect, } from 'react';
 
 const TableBlock = (props) => {
-    const [selectedRowKeys, setSelectedRowKeys] = useState(props.data.filter(item => item.chosen).map(item => item.key))
-    
-    const onSelectChange = (selectedRowKeys) => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.setState({ selectedRowKeys });
-      };
-
-    const rowSelection = {
-        selectedRowKeys,
-        onChange: onSelectChange,
-      };
+    // const [, setSelectedRowKeys] = useState(props.data.filter(item => item.chosen).map(item => item.key))
 
       useEffect(()=>{
-        setSelectedRowKeys([])
+        // setSelectedRowKeys([])
       })
     
       

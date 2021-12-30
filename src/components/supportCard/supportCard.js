@@ -13,7 +13,7 @@ export const SupportCard = (props) => {
                 <span className="support-cards-top-title-right">
                     {props.icon}
                     <Dropdown overlay={props.menu}>
-                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                        <a href='/#' className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                             {props.topRight}
                             {props.topRight ?
                                 <CaretDownFilled /> :
@@ -23,7 +23,6 @@ export const SupportCard = (props) => {
                 </span>
             </div>
             <div className="support-cards-middle">
-
                 <div className="support-cards-middle-supporttile">
                     {props.data.map((data, ind) => (
                         <SupportTile data={data} key={ind} />

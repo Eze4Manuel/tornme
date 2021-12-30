@@ -98,13 +98,13 @@ const Structure = (props) => {
                         <Col xs={4} sm={4} md={6} lg={5} xl={6}>
                             <Menu mode="horizontal">
                                 <Menu.Item key="notification">
-                                    <Link to="/support">
+                                    <Link to="/notifications">
                                         <img src={notification} alt="logo" />
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="account">
                                     <LogoutModal isModalVisible={isModalVisible} handleOk={handleLogout} handleCancel={handleCancel} load={load}/>
-                                    <a className="ant-dropdown-link" onClick={e => { e.preventDefault(); showModal() }} style={{ color: '#276AFF' }}>
+                                    <a href='/#' className="ant-dropdown-link" onClick={e => { e.preventDefault(); showModal() }} style={{ color: '#276AFF' }}>
                                         <img src={person} alt="logo" />
                                         Logout  <CaretDownFilled />
                                     </a>

@@ -22,7 +22,7 @@ formValidator.changePassword = (values, builder, setError) => {
       setError('input your confirm password');
       return;
    } 
-   if (values.confirm_password != values.new_password) {
+   if (values.confirm_password !== values.new_password) {
       setError('confirm password does not match');
       return;
    } 

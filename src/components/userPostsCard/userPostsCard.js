@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { SendOutlined } from '@ant-design/icons';
 import './userPostsCard.scss';
 import { Button, Row, Col, Divider } from 'antd';
@@ -34,7 +33,7 @@ export const UsersPostCard = (props) => {
         <div className="userposts">
             <div className="post-cards" style={props.style} >
                 <div className="post-cards-top">
-                    <Button>{props.data?.account_status == 0 ? 'Not Active' : 'Active'}</Button>
+                    <Button>{props.data?.account_status === 0 ? 'Not Active' : 'Active'}</Button>
                 </div>
                 <div className="post-cards-middle">
                     <Row >
@@ -159,7 +158,7 @@ const Post = (props) => {
             <div className='post-single-card-background' style={{ backgroundImage: `url(${props.img})` }} key={{ shoe: "ede" }}>
             </div>
             <div className="post-single-card-image">
-                {<img src={props.typeImage} /> ?? null}
+                {<img alt='' src={props.typeImage} /> ?? null}
             </div>
         </div>
     )

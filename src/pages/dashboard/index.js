@@ -5,7 +5,6 @@ import { AnalyticCard } from '../../components/analyticCard/analyticCard';
 import { ChartCard } from '../../components/chartCard/chartCard';
 import { UsersCard } from '../../components/usersCard/usersCard';
 import { TopUserCard } from '../../components/topUserCard/topUserCard';
-import { SupportCard } from '../../components/supportCard/supportCard';
 import { UsersDistributionCard } from '../../components/usersDistributionCard/usersDistributionCard';
 import { Menu, Row, Col } from 'antd';
 import { ReloadIcon } from '@modulz/radix-icons';
@@ -85,21 +84,21 @@ const Dashboard = () => {
     let status = [];
 
     stats.forEach( (e, ind) => {
-      if(e._id == 0) {
+      if(e._id === 0) {
         let obj = {}
         obj.type = "Inactive";
         obj.value = e.total;
         obj.index = ind;
          status.push(obj)
       }else
-      if(e._id == 1) {
+      if(e._id === 1) {
         let obj = {}
         obj.type = "Active";
         obj.value = e.total;
         obj.index = ind;
         status.push(obj)
       }
-      if(e._id == 2) {
+      if(e._id === 2) {
         let obj = {}
         obj.type = "Deactived";
         obj.value = e.total;

@@ -2,8 +2,7 @@ import React, { Fragment } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
-  Route,
-  Navigate
+  Route
 } from 'react-router-dom';
 
 import Dashboard from './dashboard/index';
@@ -26,7 +25,7 @@ export const isSuperAdmin = (user) => {
 }
 
 const App = (props) => {
-  const { set, user } = useAuth();
+  const { user } = useAuth();
 
   const renderedRoutes = routes.map(AppRoute =>
     <Route key={AppRoute.link} path={AppRoute.link} element={<AppRoute.Component />}> </Route>
@@ -44,7 +43,6 @@ const App = (props) => {
               <Route path='/' exact element={<Users />} />
               <Route path='*' exact element={<Users />} />
             </>
-
           }
 
           {renderedRoutes}

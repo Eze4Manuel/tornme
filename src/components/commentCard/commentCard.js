@@ -1,5 +1,3 @@
-import { Dropdown, } from 'antd';
-import { CaretDownFilled } from '@ant-design/icons';
 import './commentCard.scss';
 
 export const CommentCard = (props) => {
@@ -33,8 +31,8 @@ const SupportTile = (props) => {
                         {props.data.text}
 
                     </span>
-                    <span style={{marginLeft: "10px"}}><a>Reply</a></span>
-                    <span style={{marginLeft: "10px"}}><a>Like</a></span>
+                    <span style={{marginLeft: "10px"}}><a  href='/#'>Reply</a></span>
+                    <span style={{marginLeft: "10px"}}><a href='/#' >Like</a></span>
                 </span>
             </span>
 

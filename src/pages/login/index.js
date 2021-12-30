@@ -80,8 +80,8 @@ const Login = () => {
                                                 layout: formLayout,
                                             }}
                                         >
-                                            <Form.Item label="Email" required tooltip="This is a required field" >
-                                                <Input placeholder="example@email.com" onChange={e => setValues(d => ({...d, login: e.target.value}))} value={values.login}  style={{ padding: "10px", borderRadius: "6px"}}/>
+                                            <Form.Item label="Username" required tooltip="This is a required field" >
+                                                <Input placeholder="example" onChange={e => setValues(d => ({...d, login: e.target.value}))} value={values.login}  style={{ padding: "10px", borderRadius: "6px"}}/>
                                             </Form.Item>
                                             <Form.Item label="Password" required tooltip="This is a required field">
                                                 <Input type='password' placeholder="*******" onChange={e => setValues(d => ({...d, password: e.target.value}))} autoFocus value={values.password}  style={{ padding: "10px", borderRadius: "6px"}}/>

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
-import { ButtonComponent, GoBackComponent } from '../../components/buttonComponent/buttonComponent';
+import { ButtonComponent,  } from '../../components/buttonComponent/buttonComponent';
 import Structure from "../../components/layout/index";
 import { CaretDownFilled } from '@ant-design/icons';
-import { Menu, Row, Col, Tag } from 'antd';
-import { Modal, Button } from 'antd';
+import { Row, Col,  } from 'antd';
+import { Modal, } from 'antd';
 import { useAuth } from '../../core/hooks/useAuth';
 import './settings.scss';
-import { useNavigate } from "react-router-dom";
 import lib from './lib';
 import btc from '../../assets/images/icons/btc.png';
 import helpers from '../../core/func/Helpers';
@@ -21,10 +20,8 @@ const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 
 const Settings = () => {
-  const navigate = useNavigate();
   const { set, user } = useAuth();
   const [load, setLoading] = useState(false);
-  const [, setLoader] = useState(false);
   const [data, setData] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -150,7 +147,7 @@ const AnalyticCardWallet = (props) => {
         </span>
         <span className="custom-cards-top-title-right" onClick={props.onClick}>
           {props.icon}
-          <a className="ant-dropdown-link" >
+          <a href='/#' className="ant-dropdown-link" >
             {props.topRight}
             {props.topRight ?
               <CaretDownFilled /> :
