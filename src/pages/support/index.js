@@ -11,10 +11,8 @@ import onlineUser from '../../assets/images/icons/online_users.png'; // Tell web
 import { ButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import { useAuth } from '../../core/hooks/useAuth';
 import person from '../../assets/images/person.png'; // Tell webpack this JS file uses this image
-import { useNavigate } from 'react-router';
 import { useNotifications } from '@mantine/notifications';
 import ErrorMessage from '../../components/error/ErrorMessage';
-import { Select } from 'antd';
 
 import { CreateAdminModal } from '../../components/modalComponents/modalComponents';
 
@@ -31,7 +29,6 @@ import '../profile/profile.scss';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-const { Option } = Select;
 
 const chatSource = [
   { img: btc, userHandle: "@priewereer", time: '23h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do Amet minim mollit non deserut uamc ersit aliqua dolor doAmet minim  " },
@@ -57,7 +54,6 @@ const Support = () => {
   const [, setLoader] = useState(false);
   const [load, setLoading] = useState(false);
   const [error, setError] = useState('')
-  let navigate = useNavigate();
 
 
   // data 
@@ -115,7 +111,7 @@ const Support = () => {
 
 
   const handleUpdate = async () => {
-    if (user?.user_type === 'superadmin' || user?.access_level == 3) {
+    if (user?.user_type === 'superadmin' || user?.access_level === 3) {
       let builder = formValidator.validateAdminUpdate(selectedAdmin, personnelData[personnelActive], {}, setError)
       if (!builder) {
         return
@@ -138,7 +134,7 @@ const Support = () => {
 
 
   const handleDelete = async () => {
-    if (user?.user_type === 'superadmin' || user?.access_level == 3) {
+    if (user?.user_type === 'superadmin' || user?.access_level === 3) {
       setLoading(true);
 
       let reqData = await lib.delete(user?.token, selectedAdmin.auth_id)
@@ -161,7 +157,7 @@ const Support = () => {
   };
 
   const handleAdminCreate = async (values) => {
-    if (user?.user_type === 'superadmin' || user?.access_level == 3) {
+    if (user?.user_type === 'superadmin' || user?.access_level === 3) {
       setError('');
       try {
         let builder = formValidator.validateCreateAdmin(values, {}, setError);
@@ -292,7 +288,7 @@ const Support = () => {
                         </Form.Item>
                       </div>
 
-                      <div className='form-group'>
+                      {/* <div className='form-group'>
                         <Form.Item label="Permission Level">
                           <Select defaultValue={selectedAdmin?.access_level} style={{ width: "350px" }} onChange={e => setSelectedAdmin(d => ({ ...d, access_level: e }))}>
                             <Option value="2">2</Option>
@@ -300,7 +296,7 @@ const Support = () => {
                           </Select>
                           
                         </Form.Item>
-                      </div>
+                      </div> */}
                     </div>
 
                     <div className="profile-password">

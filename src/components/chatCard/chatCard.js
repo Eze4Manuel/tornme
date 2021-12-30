@@ -7,7 +7,7 @@ export const ChatCard = (props) => {
             <div className="chat-cards" style={props.style} >
                 <div className="chat-cards-top">
                     <span className="chat-cards-top-title-left">
-                        Chat with <a>{props.data[0].userHandle}</a>
+                        Chat with <a  href='/#'>{props.data[0].userHandle}</a>
                     </span>
                 </div>
                 <div className="chat-cards-middle">

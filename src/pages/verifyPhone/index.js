@@ -3,7 +3,7 @@ import ErrorMessage from '../../components/error/ErrorMessage';
 import React, { useState, useRef } from 'react';
 import { ButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
-import Countdown, { zeroPad, calcTimeDelta, formatTimeDelta } from 'react-countdown';
+import Countdown from 'react-countdown';
 import { Link } from 'react-router-dom';
 
 import helpers from '../../core/func/Helpers';

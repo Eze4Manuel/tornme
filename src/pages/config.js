@@ -1,5 +1,4 @@
 import config from '../assets/utils/config';
-import Dashboard from "./dashboard";
 import Finance from "./finance";
 import Users from "./users";
 import Settings from "./settings";
@@ -10,6 +9,7 @@ import ChangePassword from "./changePassword";
 import VerifyPhone from "./verifyPhone";
 import UsersPosts from './users/users_post';
 import UsersPostDetail from './users/users_post_detail';
+import Notifications from './notifications/index';
  
 import Profile from './profile/profile';
 
@@ -27,6 +27,7 @@ export const routes = [
     {link: pages.changepassword, Component: ChangePassword },
     {link: pages.verifyphone, Component: VerifyPhone },
     {link: pages.profile, Component: Profile },
-    {link: pages.settings, Component: Settings }
+    {link: pages.settings, Component: Settings },
+    {link: pages.notifications, Component: Notifications }
     
 ] 

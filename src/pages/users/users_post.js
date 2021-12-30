@@ -7,7 +7,6 @@ import { UsersPostCard } from '../../components/userPostsCard/userPostsCard';
 import btc from '../../assets/images/icons/btc.png'; // Tell webpack this JS file uses this image
 import { useNavigate } from "react-router-dom";
 import { AnalyticCard } from '../../components/analyticCard/analyticCard';
-import { ChangePassword } from '../changePassword/index';
 import './users.scss';
 import { useLocation } from "react-router-dom";
 import newUser from '../../assets/images/icons/new_users.png'; // Tell webpack this JS file uses this image
@@ -54,7 +53,7 @@ const UsersPosts = (props, history) => {
       }
       setLoader(false);
     })()
-  }, [user?.token,]);
+  }, [user?.token, set, state?.record?.key]);
 
   const goBack = () => {
     navigate('/users')
@@ -156,7 +155,6 @@ const SideBarActions = (props) => {
 
   const { set, user } = useAuth();
   const [load, setLoading] = useState(false);
-  const [, setLoader] = useState(false);
   const notify = useNotifications();
   const navigate = useNavigate();
 
@@ -260,13 +258,7 @@ const SideBarActions = (props) => {
 const ChangeUserPassword = ({ isModalVisible, handleOk, handleCancel, error, load }) => {
   const [form] = Form.useForm();
   const [formLayout,] = useState('vertical');
-  const [loading, setLoading] = useState('vertical');
   const [values, setValues] = useState('');
-  const { set, user } = useAuth();
-  const notify = useNotifications();
-
-
-
 
   return (
     <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} style={{ textAlign: "center", borderRadius: "8px" }}>

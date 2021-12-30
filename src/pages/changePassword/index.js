@@ -36,7 +36,7 @@ export const ChangePassword = () => {
     const [error, setError ] = useState('')
     const [form] = Form.useForm();
     const [formLayout,] = useState('vertical');
-    const [loading, setLoading] = useState('vertical');
+    const [ ,setLoading] = useState('vertical');
     const [values, setValues] = useState('');
     const { set, user } = useAuth();
     const notify = useNotifications();

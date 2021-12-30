@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { ChoroplethMap } from '@ant-design/charts';
+import React from 'react';
 
 import { Dropdown, } from 'antd';
 import { CaretDownFilled } from '@ant-design/icons';
@@ -16,7 +15,7 @@ export const UsersDistributionCard = (props) => {
                 <span className="usersDistribution-cards-top-title-right">
                     {props.icon}
                     <Dropdown overlay={props.menu}>
-                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                        <a href='/#' className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                             {props.topRight}
                             {props.topRight ?
                                 <CaretDownFilled /> :

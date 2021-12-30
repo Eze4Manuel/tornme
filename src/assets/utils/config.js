@@ -16,6 +16,7 @@ const config = {
         settings: '/settings',
         settingspost: '/settings-posts',
         settingspostdetail: '/settings-post-detail',
+        notifications: '/notifications',
     },
     key: {
         user: '___@tornme_user',

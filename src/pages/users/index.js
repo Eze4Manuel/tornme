@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 import Structure from "../../components/layout/index";
 import TableBlock from '../../components/table/table';
-import { Menu, Row, Col, Tag } from 'antd';
+import { Row, Col, Tag } from 'antd';
 import { useAuth } from '../../core/hooks/useAuth';
 import './users.scss';
 import { useNavigate } from "react-router-dom";
@@ -91,7 +91,7 @@ const Users = () => {
             }
             return (
               <Tag color={color} key={statu}>
-                {statu == 0 ? 'SUSPENDED': 'ACTIVE'}
+                {statu === 0 ? 'SUSPENDED': 'ACTIVE'}
               </Tag>
             );
           })}

@@ -1,5 +1,4 @@
-import { Dropdown, } from 'antd';
-import { CaretDownFilled } from '@ant-design/icons';
+
 import './personnelCard.scss';
 import btc from '../../assets/images/icons/btc.png'; // Tell webpack this JS file uses this image
 
@@ -22,7 +21,7 @@ export const PersonnelCard = (props) => {
 
 const PersonnelTile = (props) => {
      return (
-        <div className='personnel-tile-card' onClick={()=> props.changeSelectedAdmin(props.id)} style={props.id == props.active ? {backgroundColor: "#b3bde6"} : {backgroundColor: "#EEF3FF"}}>
+        <div className='personnel-tile-card' onClick={()=> props.changeSelectedAdmin(props.id)} style={props.id === props.active ? {backgroundColor: "#b3bde6"} : {backgroundColor: "#EEF3FF"}}>
             <span>
                 <img src={btc} alt="logo" />
             </span>

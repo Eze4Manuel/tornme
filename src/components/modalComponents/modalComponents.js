@@ -1,20 +1,17 @@
 // Tell webpack this JS file uses this image
 import React, { useState } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, } from 'antd';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 import { } from '../../components/buttonComponent/buttonComponent';
 import { GoBackComponent, ButtonComponent, GoBackButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import btc from '../../assets/images/icons/logout.png'; // Tell webpack this JS file uses this image
-import { useAuth } from '../../core/hooks/useAuth';
 import ErrorMessage from '../../components/error/ErrorMessage';
 
-import { CaretDownFilled } from '@ant-design/icons';
 
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { Form, Input } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -24,7 +21,7 @@ export const LogoutModal = ({ isModalVisible, handleOk, handleCancel, load }) =>
             <Modal width={400} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
                 <div className="modal_block_logout" style={{ borderRadius: "10px" }}>
                     <PageHeaderComp title="Logout" />
-                    <img className="modal_block_img" src={btc} />
+                    <img alt="" className="modal_block_img" src={btc} />
                     <p>This action will log log you out of your account</p>
                     {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
                     <br />
@@ -48,7 +45,7 @@ export const DeleteAccountModal = ({ isModalVisible, handleOk, handleCancel, loa
                     <br />
                     {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
                     <br />
-                    <a onClick={handleOk}>
+                    <a href='/#' onClick={handleOk}>
                         <PageHeaderComp title={"YES, DELETE ACCOUNT"} style={{ color: "#747474" }} />
                     </a>
                 </div>
@@ -71,7 +68,7 @@ export const SuspendAccountModal = ({ isModalVisible, handleOk, handleCancel, lo
                     <br />
                     {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
                     <br />
-                    <a onClick={handleCancel}>
+                    <a href='/#' onClick={handleCancel}>
                         <PageHeaderComp title={"YES, SUSPEND ACCOUNT"} style={{ color: "#747474" }} />
                     </a>
                 </div>
@@ -84,20 +81,7 @@ export const SuspendAccountModal = ({ isModalVisible, handleOk, handleCancel, lo
 export const CreateAdminModal = (props) => {
     const [form] = Form.useForm();
     const [,] = useState('hidden');
-    const { set, user } = useAuth();
     const [values, setValues] = useState({});
-
-
-    const styles = {
-        color: "#276AFF",
-        background: "#ffffff",
-        fontWeight: "800",
-        border: "1px solid #276AFF",
-        paddingTop: "12px",
-        paddingBottom: "12px",
-        width: "100%",
-        borderRadius: "6px"
-    }
 
     return (
         <Modal width={800} footer={false} title="" visible={props.isModalVisible} >

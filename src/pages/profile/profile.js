@@ -23,7 +23,6 @@ const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const Profile = (props) => {
     const [form] = Form.useForm();
-    const [,] = useState('hidden');
     const { set, user } = useAuth();
     const [load, setLoading] = useState(false);
     const [loadPass, setLoadingPass] = useState(false);
@@ -50,7 +49,7 @@ const Profile = (props) => {
             }
             setLoader(false);
         })();
-    }, [user?.token, set])
+    }, [user?.token, set, user?.auth_id])
 
 
     const changePassword = async () => {
@@ -62,7 +61,7 @@ const Profile = (props) => {
         builder.auth_id = data?._id;
         setLoadingPass(true);
 
-        
+
         let reqData = await lib.updatePassword(builder, user?.token)
         if (reqData.status === "error") {
             helpers.sessionHasExpired(set, reqData.msg);
@@ -76,7 +75,6 @@ const Profile = (props) => {
 
 
     const updateProfile = async () => {
-
         let builder = formValidator.validateProfileUpdate(values, data, {}, setError)
         if (!builder) {
             return
@@ -102,6 +100,8 @@ const Profile = (props) => {
             <div style={{ width: "90%", margin: "auto" }}>
                 <PageHeaderComp title="Profile" />
                 <div className="profile-top" >
+
+                    {/* Displaying profile image if user is not super Admin */}
                     {user?.user_type !== 'superadmin' ?
                         <Row>
                             <Col>
@@ -116,6 +116,8 @@ const Profile = (props) => {
                         <Col>
                             <div className='profile-form'>
                                 <Form form={form} layout="vertical">
+
+                                    {/* Displaying admin profile update if user is  not admin*/}
                                     {user?.user_type !== 'superadmin' ?
                                         <div className="">
                                             {error ? <ErrorMessage message={error} /> : null}
@@ -124,7 +126,7 @@ const Profile = (props) => {
                                                     <Input onChange={e => setValues(d => ({ ...d, name: e.target.value }))} value={values?.name} placeholder="John" style={{ width: "350px", marginRight: "10px" }} />
                                                 </Form.Item>
 
-                                                <Form.Item  label="User Name" tooltip={{ title: 'Tooltip with customize icon', icon: <InfoCircleOutlined /> }} >
+                                                <Form.Item label="User Name" tooltip={{ title: 'Tooltip with customize icon', icon: <InfoCircleOutlined /> }} >
                                                     <Input onChange={e => setValues(d => ({ ...d, username: e.target.value }))} value={values?.username} placeholder="Doe" style={{ width: "350px", marginRight: "10px" }} />
                                                 </Form.Item>
                                             </div>
@@ -138,17 +140,16 @@ const Profile = (props) => {
                                                 </Form.Item>
                                             </div>
                                             <div className="profile-button">
-                                                
                                                 <Form.Item>
                                                     <ButtonComponent onClick={updateProfile} text="Save Update" />
-                                                    {load ? <Spin style={{marginLeft: "10px"}} indicator={antIcon} /> : null}
+                                                    {load ? <Spin style={{ marginLeft: "10px" }} indicator={antIcon} /> : null}
                                                 </Form.Item>
                                             </div>
                                         </div> :
-                                        null }
+                                        null}
                                     <div className="profile-password">
                                         <h2>Password</h2>
-                                        {errorPass ? <ErrorMessage message={errorPass} /> : null }
+                                        {errorPass ? <ErrorMessage message={errorPass} /> : null}
                                         <div className='form-group'>
                                             <Form.Item label="Old password" required tooltip="This is a required field">
                                                 <Input type="password" onChange={e => setProfilePass(d => ({ ...d, old_password: e.target.value }))} value={profilePass?.old_password} placeholder="*********" style={{ width: "350px", marginRight: "10px" }} />
@@ -167,15 +168,14 @@ const Profile = (props) => {
                                     </div>
                                     <div className="profile-button">
                                         <Form.Item>
-                                            <ButtonComponent onClick={changePassword} text="Change Password" />                                        
-                                            {loadPass ? <Spin style={{marginLeft: "10px"}}  indicator={antIcon}  /> : null}
+                                            <ButtonComponent onClick={changePassword} text="Change Password" />
+                                            {loadPass ? <Spin style={{ marginLeft: "10px" }} indicator={antIcon} /> : null}
                                         </Form.Item>
                                     </div>
                                 </Form>
                             </div>
                         </Col>
                     </Row>
-
                 </div>
             </div>
         </Structure>

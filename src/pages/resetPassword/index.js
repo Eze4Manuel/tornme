@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router';
 import formValidator from './formvalidation';
 import helpers from '../../core/func/Helpers';
 import { useAuth } from '../../core/hooks/useAuth';
-import notification from '../../assets/images/icons/notification.png'; 
 import { useNotifications } from '@mantine/notifications';
 import lib from './lib';
 
