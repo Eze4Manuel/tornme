@@ -484,8 +484,7 @@ const Dashboard = () => {
   ]
 
   return (
-    <Structure>
-
+      <Structure>
       <PageHeaderComp title="Dashboard" />
       <div className="analytic-cards">
         <Row>
@@ -585,9 +584,6 @@ const Dashboard = () => {
           </Col>
         </Row>
       </div>
-
-
-
 
 
       <div className="info-cards">

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import Structure from "../../components/layout/index";
-import { Row, Col, Menu, Modal } from 'antd';
-import { } from '../../components/supportCard/supportCard';
+import { Row, Col, Menu } from 'antd';
 import { UsersPostCard } from '../../components/userPostsCard/userPostsCard';
 import btc from '../../assets/images/icons/btc.png'; // Tell webpack this JS file uses this image
 import { useNavigate } from "react-router-dom";
@@ -13,23 +12,13 @@ import newUser from '../../assets/images/icons/new_users.png'; // Tell webpack t
 import onlineUser from '../../assets/images/icons/online_users.png'; // Tell webpack this JS file uses this image
 import person from '../../assets/images/icons/person.png'; // Tell webpack this JS file uses this image
 import { GoBackComponent, ActionButtonComponent } from '../../components/buttonComponent/buttonComponent';
-import { SuspendAccountModal, DeleteAccountModal } from '../../components/modalComponents/modalComponents';
+import { SuspendAccountModal, DeleteAccountModal, ChangeUserPasswordModal } from '../../components/modalComponents/modalComponents';
 import { useAuth } from '../../core/hooks/useAuth';
 import { useNotifications } from '@mantine/notifications';
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-
-import { ButtonComponent } from '../../components/buttonComponent/buttonComponent';
-import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
-import ErrorMessage from '../../components/error/ErrorMessage';
-
 import lib from './lib';
 import formValidator from './formvalidation';
 import helpers from '../../core/func/Helpers';
-import { Form, Input } from 'antd';
 
-import { Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
-const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 
 const UsersPosts = (props, history) => {
@@ -181,12 +170,13 @@ const SideBarActions = (props) => {
     }
     if (reqData.status === 'ok') {
       helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Deleted' })
+      setIsDeleteAccountModalVisible(false);
       navigate('/users')
     }
     setLoading(false);
-    setIsDeleteAccountModalVisible(false);
-
   }
+
+
   const handleSuspendedAccountOk = () => {
     setIsSuspendedAccountModalVisible(false);
   }
@@ -194,11 +184,11 @@ const SideBarActions = (props) => {
 
 
   const handleResetAccountOk = async (val) => {
-
+    console.log(val);
     let builder = formValidator.validateResetUserPassword(val, {}, setError)
     if (!builder) return
 
-    builder.auth_id = state?.record?.key;
+    builder.auth_id = state?.record?.key; 
     setLoading(true);
     
     let reqData = await lib.resetUserPassword(builder, user?.token)
@@ -208,9 +198,9 @@ const SideBarActions = (props) => {
     }
     if (reqData.status === 'ok') {
       helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Updated' })
+      setIsResetAccountModalVisible(false);
     }
     setLoading(false);
-    setIsResetAccountModalVisible(false);
   }
 
 
@@ -244,9 +234,7 @@ const SideBarActions = (props) => {
         <DeleteAccountModal load={load} isModalVisible={isDeleteAccountModalVisible} handleOk={handleDeleteAccountOk} handleCancel={handleDeleteAccountCancel} />
         <SuspendAccountModal load={load} isModalVisible={isSuspendedAccountModalVisible} handleOk={handleSuspendedAccountOk} handleCancel={handleSuspendedAccountCancel} />
 
-        <ChangeUserPassword load={load} isModalVisible={isResetAccountModalVisible} handleOk={handleResetAccountOk} handleCancel={handleResetAccountCancel} error={error} />
-
-
+        <ChangeUserPasswordModal load={load} isModalVisible={isResetAccountModalVisible} handleOk={handleResetAccountOk} handleCancel={handleResetAccountCancel} error={error} />
       </div>
     </>
   )
@@ -254,56 +242,3 @@ const SideBarActions = (props) => {
 
 
 
-
-const ChangeUserPassword = ({ isModalVisible, handleOk, handleCancel, error, load }) => {
-  const [form] = Form.useForm();
-  const [formLayout,] = useState('vertical');
-  const [values, setValues] = useState('');
-
-  return (
-    <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} style={{ textAlign: "center", borderRadius: "8px" }}>
-      <div className="app-login__content" style={{ textAlign: "center", borderRadius: "12px" }}>
-        <PageHeaderComp title="Change Password" />
-        <div className="app-login__error">
-          {error ? <ErrorMessage message={error} /> : null}
-        </div>
-        <div className="p-fluid p-formgrid p-grid p-mx-5">
-          <div style={{ width: '100%', marginTop: "35px" }} className="container">
-            <div className="row">
-              <Form layout={"vertical"} form={form} initialValues={{ layout: formLayout, }}>
-                {/* <Form.Item label="Old password" required tooltip="This is a required field" >
-                      <Input.Password style={{ padding: "10px", borderRadius: "6px" }}
-                        placeholder="input password"
-                        onChange={e => setValues(d => ({ ...d, old_password: e.target.value }))}
-                        value={values.old_password}
-                        iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                      />
-                    </Form.Item> */}
-                <Form.Item label="New password" required tooltip="This is a required field" >
-                  <Input.Password style={{ padding: "10px", borderRadius: "6px" }}
-                    placeholder="input password"
-                    onChange={e => setValues(d => ({ ...d, new_password: e.target.value }))}
-                    value={values.new_password}
-                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                  />
-                </Form.Item>
-                <Form.Item label="Confirm new password" required tooltip="This is a required field" >
-                  <Input.Password style={{ padding: "10px", borderRadius: "6px" }}
-                    placeholder="input password"
-                    onChange={e => setValues(d => ({ ...d, confirm_password: e.target.value }))}
-                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                  />
-                </Form.Item>
-                <Form.Item>
-                  {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
-                  <br />
-                  <ButtonComponent onClick={() => handleOk(values)} text="UPDATE PASSWORD" />
-                </Form.Item>
-              </Form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Modal>
-  )
-}
