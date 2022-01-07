@@ -1,53 +1,73 @@
 const valuesValidator = {}
- 
+
 
 // validate Partner values
 valuesValidator.validateCreateAdmin = (values, builder, setError) => {
-   setError("")
-
-
+   setError("");
    // check name
-   if (!values.name) {
-      setError(' name is required')
+   if (!values.first_name || !values.middle_name || !values.last_name) {
+      setError('Name is required')
       return
    }
-   builder.name = values.name;
+   builder.name = values.first_name + " " + values.middle_name + " " + values.last_name;
 
-   // check username
-   if (!values.username) {
-      setError('Username is required');
-      return
+   if (values.user_type === 'admin') {
+      // check username
+      if (!values.username) {
+         setError('Username is required');
+         return
+      }
+      if (values.username === 'tornme') {
+         setError('Username cannot be tornme');
+         return
+      }
+      builder.username = values.username;
+   } else {
+      builder.username = values.username;
    }
-   if (values.username === 'tornme'){
-      setError('Username cannot be tornme');
-      return
-   }
-   builder.username = values.username;
-
-   // check email
-   if (!values.email) {
-      setError('Email is required')
-      return
-   }
-   builder.email = values.email;
 
 
-    //validate the phone
-    if (!values.phone_number) {
-      return setError("phone number is required")
-   }
-   if (!/^[0-9]+$/.test(values.phone_number)) {
-      return setError("Phone number should be digits only")
-   }
-   if (!/^0/.test(values.phone_number)) {
-      return setError("Phone number must start with zero. e.g (070........)")
-   }
-   if (values.phone_number.length !== 11) {
-      return setError("Invalid phone number. Phone number expects 11 digits")
-   }
-   builder.phone_number = values.phone_number
+   if (values.user_type === 'user' || values.user_type === 'anonymous') {
+      // check email
+      //validate the phone
+      if (!values.phone_number && !values.email) {
+         return setError("Either Email or Phone number is required")
+      }
+      if (!/^[0-9]+$/.test(values.phone_number)) {
+         return setError("Phone number should be digits only")
+      }
+      if (!/^0/.test(values.phone_number)) {
+         return setError("Phone number must start with zero. e.g (070........)")
+      }
+      if (values.phone_number.length !== 11) {
+         return setError("Invalid phone number. Phone number expects 11 digits")
+      }
 
+      if (values.email) {
+         builder.email = values.email;
+      } else {
+         builder.phone_number = values.phone_number
+      }
+   } else {
+      // check email
+      if (!values.email) {
+         setError('Email is required')
+         return
+      }
+      builder.email = values.email;
 
+      if (!/^[0-9]+$/.test(values.phone_number)) {
+         return setError("Phone number should be digits only")
+      }
+      if (!/^0/.test(values.phone_number)) {
+         return setError("Phone number must start with zero. e.g (070........)")
+      }
+      if (values.phone_number.length !== 11) {
+         return setError("Invalid phone number. Phone number expects 11 digits")
+      }
+      builder.phone_number = values.phone_number
+
+   }
 
    //check the password
    if (!values.password) {
@@ -76,7 +96,13 @@ valuesValidator.validateCreateAdmin = (values, builder, setError) => {
    builder.password = values.password
 
 
-   builder.user_type = 'admin'
+
+   //check the password
+   if (!values.user_type) {
+      return setError("User Type is required")
+   }
+
+   builder.user_type = values.user_type
 
    // return payload
    return builder
@@ -86,7 +112,7 @@ valuesValidator.validateCreateAdmin = (values, builder, setError) => {
 // validate Partner form
 valuesValidator.validateAdminUpdate = (form, values, builder, setError) => {
    setError("");
- 
+
 
    //validate the first_name
    if (form.name !== values.name) {
@@ -96,8 +122,8 @@ valuesValidator.validateAdminUpdate = (form, values, builder, setError) => {
       builder.name = form.name
    }
 
-    //validate the last_name
-    if (form.username !== values.username) {
+   //validate the last_name
+   if (form.username !== values.username) {
       if (!form.username) {
          return setError("Username is required")
       }
@@ -132,8 +158,8 @@ valuesValidator.validateAdminUpdate = (form, values, builder, setError) => {
       builder.email = form.email
    }
 
-    //validate the email
-    if (form.access_level !== values.access_level) {
+   //validate the email
+   if (form.access_level !== values.access_level) {
       if (!form.access_level) {
          return setError("Access level is required")
       }
@@ -147,7 +173,7 @@ valuesValidator.validateAdminUpdate = (form, values, builder, setError) => {
    return builder
 }
 
- 
+
 // validate Partner values
 valuesValidator.validateResetUserPassword = (values, builder, setError) => {
    setError("");
@@ -182,7 +208,7 @@ valuesValidator.validateResetUserPassword = (values, builder, setError) => {
    //check if there's number
    if (!/[0-9]/.test(values.new_password)) {
       return setError("Password must have atleast one capital letter, one small letter and one number")
-   }   
+   }
    builder.new_password = values.new_password
 
    // return payload
@@ -209,7 +235,7 @@ valuesValidator.validateSupportCreate = (values, builder, setError) => {
       return
    }
    builder.description = values.description;
-  
+
    // return payload
    return builder
 }
@@ -218,7 +244,7 @@ valuesValidator.validateSupportCreate = (values, builder, setError) => {
 // validate Support Update/Edit form
 valuesValidator.validateSupportUpdate = (form, values, builder, setError) => {
    setError("");
- 
+
 
    //validate the first_name
    if (form.subject !== values.subject) {
@@ -227,7 +253,7 @@ valuesValidator.validateSupportUpdate = (form, values, builder, setError) => {
       }
       builder.subject = form.subject
    }
- 
+
    //validate the description
    if (form.description !== values.description) {
       if (!form.description) {

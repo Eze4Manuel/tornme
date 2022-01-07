@@ -1,18 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Row, Col, Button } from 'antd';
 import formValidator from './formvalidation';
-import { EditSupportModal, DeleteSupportModal } from '../../components/modalComponents/modalComponents';
-import './supportTab.scss';
-
+import { EditSupportModal, DeleteSupportModal, AssignAdminSupportModal } from '../../components/modalComponents/modalComponents';
 import { useAuth } from '../../core/hooks/useAuth';
 import { useNotifications } from '@mantine/notifications';
-
 import helpers from '../../core/func/Helpers';
 import lib from './lib';
+import './supportTab.scss';
 
 const SupportTab = (props) => {
     const { set, user } = useAuth();
-
 
     // Getting support data
     useEffect(() => {
@@ -24,9 +21,8 @@ const SupportTab = (props) => {
             if (reqData.status === 'ok') {
                 props.setSupportData(reqData.data);
             }
-            //   console.log(reqData);
         })();
-    }, [user?.token, set, props])
+    }, [user?.token, set])
 
     return (
         <Row>
@@ -35,7 +31,7 @@ const SupportTab = (props) => {
                     <div className="support-admin-top">
                         {
                             props.supportData?.map(item => (
-                                <SupportTabTile data={item} />
+                                <SupportTabTile data={item} personnelData={props.personnelData} />
                             ))
                         }
                     </div>
@@ -54,8 +50,7 @@ const SupportTabTile = (props) => {
     const { set, user } = useAuth();
     const [isSupportEditModalVisible, setIsSupportEditModalVisible] = useState(false);
     const [isSupportDeleteModalVisible, setIsSupportDeleteModalVisible] = useState(false);
-
-
+    const [isAssignAdminSupportModalVisible, setIsAssignAdminSupportModalVisible] = useState(false);
 
     // Closes Edit Modal
     const supportEditCancel = () => {
@@ -73,7 +68,6 @@ const SupportTabTile = (props) => {
             if (!builder) {
                 return
             }
-
             builder.setting_id = props.data?._id
             setLoading(true);
             let reqData = await lib.updateSupport(builder, user?.token)
@@ -114,12 +108,39 @@ const SupportTabTile = (props) => {
     const supportDeleteCancel = () => {
         setIsSupportDeleteModalVisible(false)
     }
-
     // Toggles delete Support modal
     const showDeleteSupportModal = () => {
         setIsSupportDeleteModalVisible(true);
     };
 
+
+    // Toggles Support admin assign modal
+    const showAssignAdminSupportModal = () => {
+        setIsAssignAdminSupportModalVisible(true);
+    };
+    // Closes Delete Modal
+    const supportAssignAdminCancel = () => {
+        setIsAssignAdminSupportModalVisible(false)
+    };
+    // Assign Support
+    const handleAssignAdminSupport = async (admin_id, support_id) => {
+        if (user?.user_type === 'superadmin' || user?.access_level === 3) {
+            setLoading(true);
+            let reqData = await lib.assignSupport(admin_id, support_id, user?.token)
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg);
+                helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
+            }
+            if (reqData.status === 'ok') {
+                helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Support Assigned' })
+                setIsAssignAdminSupportModalVisible(false)
+            }
+            setLoading(false);
+            console.log(reqData);
+        } else {
+            helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'Insufficient Access on this Operation' })
+        }
+    };
 
     return (
         <div className='support-admin-card' style={{ backgroundColor: "#EEF3FF" }}>
@@ -131,14 +152,13 @@ const SupportTabTile = (props) => {
             </div>
             <div>
                 <Button style={{ margin: "0px 10px" }} type="dashed">Chat </Button>
-                <Button style={{ margin: "0px 10px" }} type="dashed">Assign</Button>
+                <Button onClick={showAssignAdminSupportModal} style={{ margin: "0px 10px" }} type="dashed">Assign</Button>
                 <Button onClick={showEditSupportModal} style={{ margin: "0px 10px" }} type="dashed">Edit</Button>
                 <Button onClick={showDeleteSupportModal} style={{ margin: "0px 10px" }} type="dashed">Delete</Button>
             </div>
-
             <EditSupportModal data={props.data} load={load} error={error} handleOk={handleSuppoortEdit} handleCancel={supportEditCancel} isSupportModalVisible={isSupportEditModalVisible} />
             <DeleteSupportModal data={props.data} load={load} error={error} handleOk={handleSuppoortDelete} handleCancel={supportDeleteCancel} isSupportModalVisible={isSupportDeleteModalVisible} />
-
+            <AssignAdminSupportModal data={props.personnelData} support_id={props.data._id} load={load} error={error} handleOk={handleAssignAdminSupport} handleCancel={supportAssignAdminCancel} isAssignAdminSupportModalVisible={isAssignAdminSupportModalVisible} />
         </div>
     )
 }

@@ -1,18 +1,18 @@
 // Tell webpack this JS file uses this image
-import React, { useState } from 'react';
-import { Modal, } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Modal, Button } from 'antd';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 import { } from '../../components/buttonComponent/buttonComponent';
 import { GoBackComponent, ButtonComponent, GoBackButtonComponent } from '../../components/buttonComponent/buttonComponent';
 import btc from '../../assets/images/icons/logout.png'; // Tell webpack this JS file uses this image
 import ErrorMessage from '../../components/error/ErrorMessage';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-
-
+import { List, Select } from 'antd';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-
 import { Form, Input } from 'antd';
+
+const { Option } = Select;
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const { TextArea } = Input;
@@ -84,21 +84,43 @@ export const CreateAdminModal = (props) => {
     const [form] = Form.useForm();
     const [,] = useState('hidden');
     const [values, setValues] = useState({});
+    const [info, setInfo] = useState('');
 
+    function handleChange(value) {
+        if (value === 'user' || value === 'anonymous') setInfo('Email will be used if phone number is supplied')
+        else setInfo('');
+        setValues(d => ({ ...d, user_type: value }))
+        console.log(`selected ${value}`);
+    }
     return (
         <Modal width={800} footer={false} title="" visible={props.isModalVisible} >
             <div className='profile-form'>
-                <PageHeaderComp title="Create Admin" />
-                <Form
-                    form={form}
-                    layout="vertical"
-                >
+                <PageHeaderComp title="Create Account" />
+                <Form form={form} layout="vertical">
                     <div className="" >
                         {props.error ? <ErrorMessage message={props.error} /> : null}
 
+                        <div className='form-group' style={{ display: "flex", justifyContent: 'start', paddingLeft: "15px" }}>
+                            <Form.Item label="Account Type">
+                                <Select defaultValue="Select" style={{ width: 120 }} onChange={handleChange} style={{ width: "350px", marginRight: "10px" }} >
+                                    <Option value="admin">Admin</Option>
+                                    <Option value="anonymous">Anonymous</Option>
+                                    <Option value="user">User</Option>
+                                </Select>
+                            </Form.Item>
+                        </div>
                         <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
-                            <Form.Item label="Name">
-                                <Input placeholder="John" onChange={e => setValues(d => ({ ...d, name: e.target.value }))} value={values.name} style={{ width: "350px", marginRight: "10px" }} />
+                            <Form.Item label="First Name">
+                                <Input placeholder="John" onChange={e => setValues(d => ({ ...d, first_name: e.target.value }))} value={values.first_name} style={{ width: "350px", marginRight: "10px" }} />
+                            </Form.Item>
+
+                            <Form.Item label="Middle Name">
+                                <Input placeholder="Doe" onChange={e => setValues(d => ({ ...d, middle_name: e.target.value }))} value={values.middle_name} style={{ width: "350px", marginRight: "10px" }} />
+                            </Form.Item>
+                        </div>
+                        <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
+                            <Form.Item label="Last Name">
+                                <Input placeholder="Mole" onChange={e => setValues(d => ({ ...d, last_name: e.target.value }))} value={values.last_name} style={{ width: "350px", marginRight: "10px" }} />
                             </Form.Item>
 
                             <Form.Item label="Username">
@@ -108,6 +130,7 @@ export const CreateAdminModal = (props) => {
                         <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
                             <Form.Item label="Email">
                                 <Input placeholder="example@gmail.com" onChange={e => setValues(d => ({ ...d, email: e.target.value }))} value={values.email} style={{ width: "350px", marginRight: "10px" }} />
+                                {info.length > 0 ? <p style={{ color: "blue", fontSize: "12px" }}>{info}</p> : null}
                             </Form.Item>
 
                             <Form.Item label="Phone Number" >
@@ -117,22 +140,16 @@ export const CreateAdminModal = (props) => {
 
                         <div className='form-group' style={{ marginLeft: "10px" }}>
                             <Form.Item label="Password">
-                                <Input placeholder="*********" onChange={e => setValues(d => ({ ...d, password: e.target.value }))} value={values.password} style={{ width: "350px", marginRight: "10px" }} />
+                                <Input placeholder="*********" type="password" onChange={e => setValues(d => ({ ...d, password: e.target.value }))} value={values.password} style={{ width: "350px", marginRight: "10px" }} />
                             </Form.Item>
-
                         </div>
-
                     </div>
-
                     <div className="profile-password">
-
                         <div className='form-group' style={{ display: "flex", justifyContent: "space-around" }}>
-
                             <Form.Item style={{ marginRight: "10px", marginTop: "18px" }}>
-                                <ButtonComponent onClick={() => props.handleOk(values)} text="CREATE ADMIN" />
+                                <ButtonComponent onClick={() => props.handleOk(values)} text="CREATE ACCOUNT" />
                                 {props.load ? <Spin style={{ marginLeft: "10px" }} indicator={antIcon} /> : null}
                             </Form.Item>
-
                             <Form.Item style={{ marginRight: "10px" }}>
                                 <GoBackComponent text="Go Back" onClick={props.handleCancel} />
                             </Form.Item>
@@ -213,7 +230,6 @@ export const CreateFaqModal = (props) => {
 }
 
 
-
 export const CreateSupportModal = (props) => {
     const [form] = Form.useForm();
     const [,] = useState('hidden');
@@ -222,8 +238,8 @@ export const CreateSupportModal = (props) => {
     return (
         <Modal width={800} footer={false} title="" visible={props.isSupportModalVisible} >
             <div className='profile-form'>
-                <div style={{textAlign: 'center'}}>
-                <PageHeaderComp title="Create Support" />
+                <div style={{ textAlign: 'center' }}>
+                    <PageHeaderComp title="Create Support" />
                 </div>
                 <Form form={form} layout="vertical" >
                     <div className="" >
@@ -235,7 +251,7 @@ export const CreateSupportModal = (props) => {
                         </div>
                         <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
                             <Form.Item label="Description">
-                            <TextArea placeholder="description" onChange={e => setValues(d => ({ ...d, description: e.target.value }))} value={values.description} rows={6} style={{ width: "350px", marginRight: "10px" }} />
+                                <TextArea placeholder="description" onChange={e => setValues(d => ({ ...d, description: e.target.value }))} value={values.description} rows={6} style={{ width: "350px", marginRight: "10px" }} />
                             </Form.Item>
                         </div>
                     </div>
@@ -266,13 +282,11 @@ export const EditSupportModal = (props) => {
     const [form] = Form.useForm();
     const [,] = useState('hidden');
     const [values, setValues] = useState(props.data);
- 
-
     return (
         <Modal width={800} footer={false} title="" visible={props.isSupportModalVisible} >
             <div className='profile-form'>
-                <div style={{textAlign: 'center'}}>
-                <PageHeaderComp title="Update Support" />
+                <div style={{ textAlign: 'center' }}>
+                    <PageHeaderComp title="Update Support" />
                 </div>
                 <Form form={form} layout="vertical" >
                     <div className="" >
@@ -284,20 +298,16 @@ export const EditSupportModal = (props) => {
                         </div>
                         <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
                             <Form.Item label="Description">
-                            <TextArea placeholder="description" onChange={e => setValues(d => ({ ...d, description: e.target.value }))} value={values.description} rows={6} style={{ width: "350px", marginRight: "10px" }} />
+                                <TextArea placeholder="description" onChange={e => setValues(d => ({ ...d, description: e.target.value }))} value={values.description} rows={6} style={{ width: "350px", marginRight: "10px" }} />
                             </Form.Item>
                         </div>
                     </div>
-
                     <div className="profile-password">
-
                         <div className='form-group' style={{ display: "flex", justifyContent: "space-around" }}>
-
                             <Form.Item style={{ marginRight: "10px", marginTop: "18px" }}>
                                 <ButtonComponent onClick={() => props.handleOk(values)} text="UPDATE SUPPORT" />
                                 {props.load ? <Spin style={{ marginLeft: "10px" }} indicator={antIcon} /> : null}
                             </Form.Item>
-
                             <Form.Item style={{ marginRight: "10px" }}>
                                 <GoBackComponent text="Go Back" onClick={props.handleCancel} />
                             </Form.Item>
@@ -306,9 +316,42 @@ export const EditSupportModal = (props) => {
                 </Form>
             </div>
         </Modal>
-
     )
 }
+
+
+export const AssignAdminSupportModal = (props) => {
+
+    return (
+        <Modal width={800} height={300} footer={false} title="" visible={props.isAssignAdminSupportModalVisible} >
+            <div className='profile-form'>
+                <div style={{ textAlign: 'left', display: "flex", flexDirection: "space-between" }}>
+                    <PageHeaderComp title="Assign Support" />
+                    {props.load ? <Spin style={{ marginLeft: "10px" }} indicator={antIcon} /> : null}
+                </div>
+
+
+                <List
+                    itemLayout="horizontal"
+                    dataSource={props.data}
+                    renderItem={(item, ind) => (
+                        <List.Item
+                            actions={[<a onClick={() => props.handleOk(props.data[ind]?.auth_id, props.support_id)} key="list-loadmore-more">Assign</a>]}>
+                            <List.Item.Meta
+                                title={<a href="https://ant.design">{item.name}</a>}
+                                description={`Access Level ${item.access_level}`}
+                            />
+                        </List.Item>
+                    )}
+                />
+                <br />
+                <Button onClick={props.handleCancel} type="primary">Cancel</Button>
+            </div>
+        </Modal>
+    )
+}
+
+
 
 
 export const DeleteSupportModal = ({ isSupportModalVisible, handleOk, handleCancel, load }) => {
@@ -322,7 +365,7 @@ export const DeleteSupportModal = ({ isSupportModalVisible, handleOk, handleCanc
                     <br />
                     {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
                     <br />
-                    <span  onClick={handleOk}>
+                    <span onClick={handleOk}>
                         <PageHeaderComp title={"YES, DELETE SUPPORT"} style={{ color: "#747474" }} />
                     </span>
                 </div>
