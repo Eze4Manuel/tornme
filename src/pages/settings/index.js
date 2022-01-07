@@ -13,7 +13,6 @@ import helpers from '../../core/func/Helpers';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import { Form, Input } from 'antd';
 import { useNotifications } from '@mantine/notifications';
-
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -24,10 +23,8 @@ const Settings = () => {
   const [load, setLoading] = useState(false);
   const [data, setData] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [form] = Form.useForm();
-  const [values, setValues] = useState({});
-  const [error, setError] = useState('')
   const notify = useNotifications();
+  const [error, setError] = useState('');
 
   // data 
   useEffect(() => {
@@ -82,8 +79,6 @@ const Settings = () => {
   };
 
 
-
-
   return (
     <Structure className="settings">
       <PageHeaderComp title="Settings" />
@@ -102,34 +97,7 @@ const Settings = () => {
         </Row>
       </div>
 
-
-      <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={false}>
-        <div className="modal_block_logout" style={{ display: "flex", flexDirection: "column", alignItems: 'center' }}>
-          <PageHeaderComp title="Update Wallet" />
-
-          <Form form={form} layout="vertical" >
-            <div className="" >
-              {error ? <ErrorMessage message={error} /> : null}
-
-              <div className='form-group' >
-                <Form.Item label="Set Percentage">
-                  <Input placeholder="10" onChange={e => setValues(d => ({ ...d, percentage: e.target.value }))} value={values.percentage} style={{ width: "350px", marginRight: "10px" }} />
-                </Form.Item>
-              </div>
-            </div>
-
-            <div className="profile-password">
-              <div className='form-group' style={{ display: "flex", justifyContent: "space-around" }}>
-                <Form.Item style={{ marginRight: "10px", marginTop: "18px" }}>
-                  <ButtonComponent onClick={() => handleOk(values)} text="UPDATE" />
-                  {load ? <Spin style={{marginLeft: "10px"}} indicator={antIcon} /> : null}
-                </Form.Item>
-              </div>
-            </div>
-          </Form>
-          <br />
-        </div>
-      </Modal>
+      <UpdateWalletModal load={load} error={error} isModalVisible={isModalVisible} handleOk={handleOk} handleCancel={handleCancel} />
     </Structure>
   )
 }
@@ -147,7 +115,7 @@ const AnalyticCardWallet = (props) => {
         </span>
         <span className="custom-cards-top-title-right" onClick={props.onClick}>
           {props.icon}
-          <a href='/#' className="ant-dropdown-link" >
+          <a href='javascriot:void(0)' className="ant-dropdown-link" >
             {props.topRight}
             {props.topRight ?
               <CaretDownFilled /> :
@@ -162,5 +130,42 @@ const AnalyticCardWallet = (props) => {
         </b>
       </div>
     </div>
+  )
+}
+
+
+const UpdateWalletModal = (props) =>{
+  const [form] = Form.useForm();
+  const [values, setValues] = useState({});
+
+  return (
+    <Modal visible={props.isModalVisible} onOk={props.handleOk} onCancel={props.handleCancel} footer={false} style={{borderRadius: "6px"}}>
+    <div className="modal_block_logout" style={{ display: "flex", flexDirection: "column", alignItems: 'center' }}>
+      <PageHeaderComp title="Update Wallet" />
+
+      <Form form={form} layout="vertical" >
+        <div className="" >
+          {props.error ? <ErrorMessage message={props.error} /> : null}
+
+          <div className='form-group' >
+            <Form.Item label="Set Percentage">
+              <Input placeholder="10" onChange={e => setValues(d => ({ ...d, percentage: e.target.value }))} value={values.percentage} style={{ width: "350px", marginRight: "10px" }} />
+            </Form.Item>
+          </div>
+        </div>
+
+        <div className="profile-password">
+          <div className='form-group' style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            {props.load ? <Spin style={{margin: "auto"}} indicator={antIcon} /> : null}
+
+            <Form.Item style={{margin: "auto", marginTop: "18px" }}>
+              <ButtonComponent onClick={() => props.handleOk(values)} text="UPDATE" />
+            </Form.Item>
+          </div>
+        </div>
+      </Form>
+      <br />
+    </div>
+  </Modal>
   )
 }

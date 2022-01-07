@@ -60,7 +60,7 @@ const Profile = (props) => {
         }
         builder.auth_id = data?._id;
         setLoadingPass(true);
-
+        
 
         let reqData = await lib.updatePassword(builder, user?.token)
         if (reqData.status === "error") {

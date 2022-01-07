@@ -27,22 +27,20 @@ const Login = () => {
     const { set, } = useAuth();
     let navigate = useNavigate();
     const notify = useNotifications();
-
-
+    
     const handleSubmit = async ()  => {
         setError('')
         try {
             let builder = formValidator.validatelogin(values, {}, setError);
             if(!builder) return;
-            setLoading(true)
+            setLoading(true);
 
+            console.log(builder);
             let reqData = await (await request.post('/auth/admin-login', builder)).data
             if (reqData.status === 'error') {
                 setError(reqData?.msg);
                 helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
-
             }
-            
             if(reqData.status === 'ok' ) {
                 if (['admin', 'superadmin'].indexOf(reqData?.data?.user_type) === -1) {
                     setError("You do not have the right authorization for this resource");
@@ -53,6 +51,7 @@ const Login = () => {
                 helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Login Success' })   
                 navigate('/')
             }
+            console.log(reqData);
             setLoading(false);
         } catch (err) {
             setLoading(false)
@@ -73,13 +72,7 @@ const Login = () => {
                             <div className="p-fluid p-formgrid p-grid p-mx-5">
                                 <div style={{ width: '100%', marginTop: "35px" }} className="container">
                                     <div className="row">
-                                        <Form
-                                            layout={"vertical"}
-                                            form={form}
-                                            initialValues={{
-                                                layout: formLayout,
-                                            }}
-                                        >
+                                        <Form layout={"vertical"} form={form} initialValues={{ layout: formLayout, }}>
                                             <Form.Item label="Username" required tooltip="This is a required field" >
                                                 <Input placeholder="example" onChange={e => setValues(d => ({...d, login: e.target.value}))} value={values.login}  style={{ padding: "10px", borderRadius: "6px"}}/>
                                             </Form.Item>

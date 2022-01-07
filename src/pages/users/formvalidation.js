@@ -3,10 +3,7 @@ const valuesValidator = {}
 
 // validate Partner values
 valuesValidator.validateResetUserPassword = (values, builder, setError) => {
-   setError("")
-
-  
-
+   setError("");
 
    // check email
    if (!values.confirm_password) {
@@ -14,8 +11,6 @@ valuesValidator.validateResetUserPassword = (values, builder, setError) => {
       return
    }
    builder.confirm_password = values.confirm_password;
-
- 
 
    //check the new_password
    if (!values.new_password) {
