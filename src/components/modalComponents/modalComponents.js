@@ -92,6 +92,7 @@ export const CreateAdminModal = (props) => {
         setValues(d => ({ ...d, user_type: value }))
         console.log(`selected ${value}`);
     }
+
     return (
         <Modal width={800} footer={false} title="" visible={props.isModalVisible} >
             <div className='profile-form'>
@@ -132,12 +133,10 @@ export const CreateAdminModal = (props) => {
                                 <Input placeholder="example@gmail.com" onChange={e => setValues(d => ({ ...d, email: e.target.value }))} value={values.email} style={{ width: "350px", marginRight: "10px" }} />
                                 {info.length > 0 ? <p style={{ color: "blue", fontSize: "12px" }}>{info}</p> : null}
                             </Form.Item>
-
                             <Form.Item label="Phone Number" >
                                 <Input placeholder="0801 234 5678" onChange={e => setValues(d => ({ ...d, phone_number: e.target.value }))} value={values.phone_number} style={{ width: "350px", marginRight: "10px" }} />
                             </Form.Item>
                         </div>
-
                         <div className='form-group' style={{ marginLeft: "10px" }}>
                             <Form.Item label="Password">
                                 <Input placeholder="*********" type="password" onChange={e => setValues(d => ({ ...d, password: e.target.value }))} value={values.password} style={{ width: "350px", marginRight: "10px" }} />
@@ -158,7 +157,6 @@ export const CreateAdminModal = (props) => {
                 </Form>
             </div>
         </Modal>
-
     )
 }
 
@@ -172,76 +170,10 @@ export const CreateFaqModal = (props) => {
     return (
         <Modal width={800} footer={false} title="" visible={props.isFaqModalVisible} >
             <div className='profile-form'>
-                <PageHeaderComp title="Create FAQ" />
-                <Form
-                    form={form}
-                    layout="vertical"
-                >
-                    <div className="" >
-                        {props.error ? <ErrorMessage message={props.error} /> : null}
-
-                        <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
-                            <Form.Item label="Name">
-                                <Input placeholder="John" onChange={e => setValues(d => ({ ...d, name: e.target.value }))} value={values.name} style={{ width: "350px", marginRight: "10px" }} />
-                            </Form.Item>
-
-                            <Form.Item label="Username">
-                                <Input placeholder="Doe" onChange={e => setValues(d => ({ ...d, username: e.target.value }))} value={values.username} style={{ width: "350px", marginRight: "10px" }} />
-                            </Form.Item>
-                        </div>
-                        <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
-                            <Form.Item label="Email">
-                                <Input placeholder="example@gmail.com" onChange={e => setValues(d => ({ ...d, email: e.target.value }))} value={values.email} style={{ width: "350px", marginRight: "10px" }} />
-                            </Form.Item>
-
-                            <Form.Item label="Phone Number" >
-                                <Input placeholder="0801 234 5678" onChange={e => setValues(d => ({ ...d, phone_number: e.target.value }))} value={values.phone_number} style={{ width: "350px", marginRight: "10px" }} />
-                            </Form.Item>
-                        </div>
-
-                        <div className='form-group' style={{ marginLeft: "10px" }}>
-                            <Form.Item label="Password">
-                                <Input placeholder="*********" onChange={e => setValues(d => ({ ...d, password: e.target.value }))} value={values.password} style={{ width: "350px", marginRight: "10px" }} />
-                            </Form.Item>
-
-                        </div>
-
-                    </div>
-
-                    <div className="profile-password">
-
-                        <div className='form-group' style={{ display: "flex", justifyContent: "space-around" }}>
-
-                            <Form.Item style={{ marginRight: "10px", marginTop: "18px" }}>
-                                <ButtonComponent onClick={() => props.handleOk(values)} text="CREATE FAQ" />
-                                {props.load ? <Spin style={{ marginLeft: "10px" }} indicator={antIcon} /> : null}
-                            </Form.Item>
-
-                            <Form.Item style={{ marginRight: "10px" }}>
-                                <GoBackComponent text="Go Back" onClick={props.handleCancel} />
-                            </Form.Item>
-                        </div>
-                    </div>
-                </Form>
-            </div>
-        </Modal>
-
-    )
-}
-
-
-export const CreateSupportModal = (props) => {
-    const [form] = Form.useForm();
-    const [,] = useState('hidden');
-    const [values, setValues] = useState({});
-
-    return (
-        <Modal width={800} footer={false} title="" visible={props.isSupportModalVisible} >
-            <div className='profile-form'>
                 <div style={{ textAlign: 'center' }}>
                     <PageHeaderComp title="Create Support" />
                 </div>
-                <Form form={form} layout="vertical" >
+                <Form form={form} layout="vertical">
                     <div className="" >
                         {props.error ? <ErrorMessage message={props.error} /> : null}
                         <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
@@ -255,16 +187,12 @@ export const CreateSupportModal = (props) => {
                             </Form.Item>
                         </div>
                     </div>
-
                     <div className="profile-password">
-
                         <div className='form-group' style={{ display: "flex", justifyContent: "space-around" }}>
-
                             <Form.Item style={{ marginRight: "10px", marginTop: "18px" }}>
                                 <ButtonComponent onClick={() => props.handleOk(values)} text="CREATE SUPPORT" />
                                 {props.load ? <Spin style={{ marginLeft: "10px" }} indicator={antIcon} /> : null}
                             </Form.Item>
-
                             <Form.Item style={{ marginRight: "10px" }}>
                                 <GoBackComponent text="Go Back" onClick={props.handleCancel} />
                             </Form.Item>
@@ -273,12 +201,59 @@ export const CreateSupportModal = (props) => {
                 </Form>
             </div>
         </Modal>
-
     )
 }
 
 
-export const EditSupportModal = (props) => {
+// export const CreateSupportModal = (props) => {
+//     const [form] = Form.useForm();
+//     const [,] = useState('hidden');
+//     const [values, setValues] = useState({});
+
+//     return (
+//         <Modal width={800} footer={false} title="" visible={props.isSupportModalVisible} >
+//             <div className='profile-form'>
+//                 <div style={{ textAlign: 'center' }}>
+//                     <PageHeaderComp title="Create Support" />
+//                 </div>
+//                 <Form form={form} layout="vertical" >
+//                     <div className="" >
+//                         {props.error ? <ErrorMessage message={props.error} /> : null}
+//                         <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
+//                             <Form.Item label="Subject">
+//                                 <Input placeholder="subject" onChange={e => setValues(d => ({ ...d, subject: e.target.value }))} value={values.subject} style={{ width: "350px", marginRight: "10px" }} />
+//                             </Form.Item>
+//                         </div>
+//                         <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
+//                             <Form.Item label="Description">
+//                                 <TextArea placeholder="description" onChange={e => setValues(d => ({ ...d, description: e.target.value }))} value={values.description} rows={6} style={{ width: "350px", marginRight: "10px" }} />
+//                             </Form.Item>
+//                         </div>
+//                     </div>
+
+//                     <div className="profile-password">
+
+//                         <div className='form-group' style={{ display: "flex", justifyContent: "space-around" }}>
+
+//                             <Form.Item style={{ marginRight: "10px", marginTop: "18px" }}>
+//                                 <ButtonComponent onClick={() => props.handleOk(values)} text="CREATE SUPPORT" />
+//                                 {props.load ? <Spin style={{ marginLeft: "10px" }} indicator={antIcon} /> : null}
+//                             </Form.Item>
+
+//                             <Form.Item style={{ marginRight: "10px" }}>
+//                                 <GoBackComponent text="Go Back" onClick={props.handleCancel} />
+//                             </Form.Item>
+//                         </div>
+//                     </div>
+//                 </Form>
+//             </div>
+//         </Modal>
+
+//     )
+// }
+
+
+export const EditFaqModal = (props) => {
     const [form] = Form.useForm();
     const [,] = useState('hidden');
     const [values, setValues] = useState(props.data);
@@ -323,7 +298,7 @@ export const EditSupportModal = (props) => {
 export const AssignAdminSupportModal = (props) => {
 
     return (
-        <Modal width={800} height={300} footer={false} title="" visible={props.isAssignAdminSupportModalVisible} >
+        <Modal bodyStyle={{height: "500px", overflow: "scroll"}} width={800} footer={[<Button type='primary' key="back" onClick={props.handleCancel}> Close </Button>,]} title="" visible={props.isAssignAdminSupportModalVisible} >
             <div className='profile-form'>
                 <div style={{ textAlign: 'left', display: "flex", flexDirection: "space-between" }}>
                     <PageHeaderComp title="Assign Support" />
@@ -345,7 +320,6 @@ export const AssignAdminSupportModal = (props) => {
                     )}
                 />
                 <br />
-                <Button onClick={props.handleCancel} type="primary">Cancel</Button>
             </div>
         </Modal>
     )
@@ -353,8 +327,7 @@ export const AssignAdminSupportModal = (props) => {
 
 
 
-
-export const DeleteSupportModal = ({ isSupportModalVisible, handleOk, handleCancel, load }) => {
+export const DeleteFaqModal = ({ isSupportModalVisible, handleOk, handleCancel, load }) => {
     return (
         <>
             <Modal width={400} visible={isSupportModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>

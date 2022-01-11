@@ -220,7 +220,7 @@ valuesValidator.validateResetUserPassword = (values, builder, setError) => {
 
 
 // validate Support creations 
-valuesValidator.validateSupportCreate = (values, builder, setError) => {
+valuesValidator.validateFaqCreate = (values, builder, setError) => {
    setError("")
    // check name
    if (!values.subject) {

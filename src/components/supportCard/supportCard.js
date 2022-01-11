@@ -3,6 +3,7 @@ import { CaretDownFilled } from '@ant-design/icons';
 import './supportCard.scss';
 
 export const SupportCard = (props) => {
+    console.log(props.data);
     return (
         <div className="support-cards" style={props.style} >
             <div className="support-cards-top">
@@ -53,3 +54,4 @@ export const SupportTile = (props) => {
         </div>
     )
 }
+

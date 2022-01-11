@@ -59,8 +59,9 @@ lib.resetUserPassword = async (data, token) => {
     }
 }
 
-// Sends request to create support
-lib.createSupport = async (values, token) => {
+
+// Sends request to create Faq setting
+lib.createFaq = async (values, token) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7));
@@ -72,7 +73,7 @@ lib.createSupport = async (values, token) => {
 }
 
 // Sends request to get supports
-lib.getSupports = async (token, search) => {
+lib.getFaq = async (token, search) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
@@ -88,7 +89,7 @@ lib.getSupports = async (token, search) => {
 }
 
 // Sends request to update supports
-lib.updateSupport = async (data, token) => {
+lib.updateFaq = async (data, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         return await (await Axios_support.put(`/supports`, data, cfg)).data
@@ -99,7 +100,7 @@ lib.updateSupport = async (data, token) => {
 
 
 // Sends request to update supports
-lib.deleteSupport = async (_id, token) => {
+lib.deleteFaq = async (_id, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         return await (await Axios_support.delete(`/supports/${_id}`, cfg)).data
@@ -107,6 +108,11 @@ lib.deleteSupport = async (_id, token) => {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }
 }
+
+
+
+
+
 
 // Assign Support
 lib.assignSupport = async (admin_id, support_id, token) => {
@@ -121,15 +127,60 @@ lib.assignSupport = async (admin_id, support_id, token) => {
 }
 
 
+// Sends request to get supports
+lib.getSupport = async (token, auth_id, search) => {
+    let uri = '';
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        if (search) {
+            uri = `/supports/admin-get-supports`
+        } else {
+            uri = `/supports/admin-get-supports`;
+        }
+        return await (await Axios_support.get(uri, cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
 // Get chats
-lib.getChats = async (id, token) => {
+lib.getAdminChats = async (admin_id, token) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
          
-            uri = `supports/admin-get-support-messages/{id}`;
+            uri = `supports/admin-get-supports?admin_id=${admin_id}`;
         
-        return await (await Axios_users.get(uri, cfg)).data
+        return await (await Axios_support.get(uri, cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
+
+// Get chats
+lib.getUserSupportChats = async (admin_id, token) => {
+    let uri = '';
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+         
+            uri = `supports/admin-get-support-messages/${admin_id}`;
+        
+        return await (await Axios_support.get(uri, cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
+
+//  
+lib.sendSupportMessages = async (token, message) => {
+    let uri = '';
+    try {
+        console.log(message);
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+            uri = `supports/admin-send-support-message`;
+        return await (await Axios_support.post(uri, message, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }

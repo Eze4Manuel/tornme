@@ -14,7 +14,7 @@ const SupportTab = (props) => {
     // Getting support data
     useEffect(() => {
         (async () => {
-            let reqData = await lib.getSupports(user?.token)
+            let reqData = await lib.getSupport(user?.token, user?.auth_id)
             if (reqData.status === "error") {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
@@ -23,7 +23,6 @@ const SupportTab = (props) => {
             }
         })();
     }, [user?.token, set])
-
     return (
         <Row>
             <Col flex={1}>
@@ -48,71 +47,7 @@ const SupportTabTile = (props) => {
     const [error, setError] = useState('')
     const notify = useNotifications();
     const { set, user } = useAuth();
-    const [isSupportEditModalVisible, setIsSupportEditModalVisible] = useState(false);
-    const [isSupportDeleteModalVisible, setIsSupportDeleteModalVisible] = useState(false);
     const [isAssignAdminSupportModalVisible, setIsAssignAdminSupportModalVisible] = useState(false);
-
-    // Closes Edit Modal
-    const supportEditCancel = () => {
-        setIsSupportEditModalVisible(false)
-    }
-    // Toggles edit Support modal
-    const showEditSupportModal = () => {
-        setIsSupportEditModalVisible(true);
-    };
-
-    // Handles edit success cLick
-    const handleSuppoortEdit = async (value) => {
-        if (user?.user_type === 'superadmin' || user?.access_level === 3) {
-            let builder = formValidator.validateSupportUpdate(value, props.data, {}, setError)
-            if (!builder) {
-                return
-            }
-            builder.setting_id = props.data?._id
-            setLoading(true);
-            let reqData = await lib.updateSupport(builder, user?.token)
-            if (reqData.status === "error") {
-                helpers.sessionHasExpired(set, reqData.msg)
-            }
-            if (reqData.status === 'ok') {
-                helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Support Updated' })
-                setIsSupportEditModalVisible(false)
-            }
-            setLoading(false);
-            console.log(reqData);
-        } else {
-            helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'Insufficient Access on this Operation' })
-        }
-    }
-
-    // Handles delete success cLick
-    const handleSuppoortDelete = async () => {
-        if (user?.user_type === 'superadmin' || user?.access_level === 3) {
-            setLoading(true);
-            let reqData = await lib.deleteSupport(props.data?._id, user?.token)
-            if (reqData.status === "error") {
-                helpers.sessionHasExpired(set, reqData.msg)
-            }
-            if (reqData.status === 'ok') {
-                helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Support Deleted' })
-                setIsSupportDeleteModalVisible(false)
-            }
-            setLoading(false);
-            console.log(reqData);
-        } else {
-            helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'Insufficient Access on this Operation' })
-        }
-    }
-
-    // Closes Delete Modal
-    const supportDeleteCancel = () => {
-        setIsSupportDeleteModalVisible(false)
-    }
-    // Toggles delete Support modal
-    const showDeleteSupportModal = () => {
-        setIsSupportDeleteModalVisible(true);
-    };
-
 
     // Toggles Support admin assign modal
     const showAssignAdminSupportModal = () => {
@@ -136,7 +71,6 @@ const SupportTabTile = (props) => {
                 setIsAssignAdminSupportModalVisible(false)
             }
             setLoading(false);
-            console.log(reqData);
         } else {
             helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'Insufficient Access on this Operation' })
         }
@@ -152,12 +86,9 @@ const SupportTabTile = (props) => {
             </div>
             <div>
                 <Button style={{ margin: "0px 10px" }} type="dashed">Chat </Button>
-                <Button onClick={showAssignAdminSupportModal} style={{ margin: "0px 10px" }} type="dashed">Assign</Button>
-                <Button onClick={showEditSupportModal} style={{ margin: "0px 10px" }} type="dashed">Edit</Button>
-                <Button onClick={showDeleteSupportModal} style={{ margin: "0px 10px" }} type="dashed">Delete</Button>
-            </div>
-            <EditSupportModal data={props.data} load={load} error={error} handleOk={handleSuppoortEdit} handleCancel={supportEditCancel} isSupportModalVisible={isSupportEditModalVisible} />
-            <DeleteSupportModal data={props.data} load={load} error={error} handleOk={handleSuppoortDelete} handleCancel={supportDeleteCancel} isSupportModalVisible={isSupportDeleteModalVisible} />
+                {console.log(props.data?.assigned_to)}
+                <Button onClick={showAssignAdminSupportModal} style={{ margin: "0px 10px" }} type= { props.data?.assigned_to == undefined ? 'dashed' : 'primary' } ghost ={ props.data?.assigned_to != undefined ? true : false }>{ props.data?.assigned_to == undefined ? "Assign" : "Re-assign" }</Button>                
+            </div>           
             <AssignAdminSupportModal data={props.personnelData} support_id={props.data._id} load={load} error={error} handleOk={handleAssignAdminSupport} handleCancel={supportAssignAdminCancel} isAssignAdminSupportModalVisible={isAssignAdminSupportModalVisible} />
         </div>
     )

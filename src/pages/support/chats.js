@@ -1,55 +1,50 @@
-import { useEffect, useState } from 'react';
-import { SupportCard } from '../../components/supportCard/supportCard';
-import { ChatCard } from '../../components/chatCard/chatCard';
+import { useState, useEffect } from 'react';
+import { ChatCard, ChatListCard } from '../../components/chatCard/chatCard';
 import { Row, Col } from 'antd';
 import btc from '../../assets/images/icons/btc.png'; // Tell webpack this JS file uses this image
-import newUser from '../../assets/images/icons/new_users.png'; // Tell webpack this JS file uses this image
-import onlineUser from '../../assets/images/icons/online_users.png';
-
 import { useAuth } from '../../core/hooks/useAuth';
-import { useNotifications } from '@mantine/notifications';
 import helpers from '../../core/func/Helpers';
 import lib from './lib';
-import { StretchHorizontallyIcon } from '@modulz/radix-icons';
 
-
-const chatSource = [
-  { img: btc, userHandle: "@priewereer", time: '23h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do Amet minim mollit non deserut uamc ersit aliqua dolor doAmet minim  " },
-  { img: onlineUser, userHandle: "@priewereer", time: '13h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-  { img: btc, userHandle: "@priewereer", time: '12h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-  { img: newUser, userHandle: "@priewereer", time: '10h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-  { img: btc, userHandle: "@priewereer", time: '20h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " },
-  { img: newUser, userHandle: "@priewereer", time: '10h', text: "Amet minim mollit non deserut uamc ersit aliqua dolor do " }
-]
 
 export const Chats = (props) => {
   const { set, user } = useAuth();
-  const [chatMessages, setChatMessages] = useState([])
+  const [chatActive, setChatActive] = useState(0);
+  const [load, setLoading] = useState(false);
+  const [messages, setMessages] = useState([]);
 
-  // Getting support data
-  useEffect(() => {
-    (async () => {
-      let reqData = await lib.getChats(null, user?.token)
+ 
+
+
+  // This gets called when admin switches between support assigned to him
+  const changeSelectedChat = async (selected) => {
+    props.setSelectedChat(props.chatMessages[selected]);
+    setChatActive(selected);
+    setLoading(true);
+    
+      // Fetching support chats for specific support message
+      let reqData = await lib.getUserSupportChats(props.selectedChat?._id, user?.token)
       if (reqData.status === "error") {
         helpers.sessionHasExpired(set, reqData.msg)
       }
       if (reqData.status === 'ok') {
-        setChatMessages(reqData.data)
-        console.log(reqData);
+        setMessages(reqData.data)
       }
-    })();
-  }, [user?.token, set])
-
+      console.log(reqData);
+      setLoading(false);
+  }
 
   return (
     <Row>
       <Col>
-        <SupportCard
+        <ChatListCard
           style={{ "height": "500px" }}
           textColor={{ "color": "#276AFF" }}
           image={btc}
+          active={chatActive}
+          changeSelectedChat={changeSelectedChat}
           topLeft={"Chats"}
-          data={chatSource}
+          data={props.chatMessages}
         />
       </Col>
       <Col flex={1}>
@@ -57,8 +52,9 @@ export const Chats = (props) => {
           style={{ "height": "500px", maxWidth: "100%" }}
           textColor={{ "color": "#276AFF" }}
           image={btc}
+          changeSelectedChat={changeSelectedChat}
           topLeft={"Support"}
-          data={chatSource}
+          data={messages}
         />
       </Col>
     </Row>
