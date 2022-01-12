@@ -10,9 +10,7 @@ import Users from './users/index';
 import { routes } from './config';
 import config from '../assets/utils/config';
 import { useAuth } from '../core/hooks/useAuth';
-
-
-
+import helpers from '../core/func/Helpers'
 export const getInitialRoutePage = (user) => {
   return user?.user_type === 'superadmin'
     ? config.pages.dashboard
@@ -21,15 +19,18 @@ export const getInitialRoutePage = (user) => {
 
 export const isSuperAdmin = (user) => {
   return user?.user_type === 'superadmin'
-
 }
 
 const App = (props) => {
-  const { user } = useAuth();
+  const { set, user } = useAuth();
+
 
   const renderedRoutes = routes.map(AppRoute =>
     <Route key={AppRoute.link} path={AppRoute.link} element={<AppRoute.Component />}> </Route>
   )
+
+
+
   return (
     <Router>
       <Fragment>
@@ -44,12 +45,9 @@ const App = (props) => {
               <Route path='*' exact element={<Users />} />
             </>
           }
-
           {renderedRoutes}
           {/* <Route path="*" element={<Navigate to ="/overview" />}/> */}
-
         </Routes>
-
       </Fragment>
     </Router>
   );

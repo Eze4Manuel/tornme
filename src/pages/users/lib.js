@@ -58,4 +58,17 @@ lib.resetUserPassword = async (data, token) => {
 }
 
 
+lib.verifyUserAccount = async (data, token) => {
+    console.log(data);
+    let uri = '';
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7));
+        uri = `/users/admin-verify-user-mark?auth_id=${data.auth_id}&verified_user_status=${data.verified_user_status}`;
+        return await (await Axios_users.get(uri, cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
+
 export default lib;

@@ -11,7 +11,7 @@ import Faq from './faq';
 import SupportTab from './supportTab';
 import Personnel from './personnel';
 import { CreateAdminModal } from '../../components/modalComponents/modalComponents';
-import { CreateFaqModal, CreateSupportModal } from '../../components/modalComponents/modalComponents';
+import { CreateFaqModal, } from '../../components/modalComponents/modalComponents';
 import helpers from '../../core/func/Helpers';
 import formValidator from './formvalidation';
 import lib from './lib';
@@ -25,7 +25,7 @@ const Support = () => {
   const { set, user } = useAuth();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isFaqModalVisible, setIsFaqModalVisible] = useState(false);
-  const [isSupportModalVisible, setIsSupportModalVisible] = useState(false);
+  const [, setIsSupportModalVisible] = useState(false);
   const notify = useNotifications();
   const [personnelData, setPersonnelData] = useState([]);
   const [selectedAdmin, setSelectedAdmin] = useState({});
@@ -33,8 +33,11 @@ const Support = () => {
   const [load, setLoading] = useState(false);
   const [error, setError] = useState('')
   const [supportData, setSupportData] = useState([]);
+  const [faqData, setFaqData] = useState([]);
+  const [selectedChat, setSelectedChat] = useState([])
+  const [chatMessages, setChatMessages] = useState([])
 
-  // data 
+  // Fetching Personnel data 
   useEffect(() => {
     (async () => {
       setLoader(true)
@@ -46,12 +49,25 @@ const Support = () => {
         setPersonnelData(reqData.data)
         setSelectedAdmin(reqData.data[0])
       }
+      console.log(personnelData);
       setLoader(false);
-      
     })();
   }, [user?.token, set])
 
 
+  // Getting Chat data
+  useEffect(() => {
+    (async () => {
+      let reqData = await lib.getAdminChats(user?.auth_id, user?.token)
+      if (reqData.status === "error") {
+        helpers.sessionHasExpired(set, reqData.msg)
+      }
+      if (reqData.status === 'ok') {
+        setChatMessages(reqData.data)
+        setSelectedChat(reqData.data[0]);
+      }
+    })();
+  }, [user?.token, set])
 
   const styleActive = {
     color: "#ffffff",
@@ -75,12 +91,11 @@ const Support = () => {
   }
 
 
-  // Switches tabs 
+
+  // Switches tabs
   const handleFlip = (tab) => {
     SetActive(tab)
   }
-
-
 
   // Toggles create admin modal
   const showModal = () => {
@@ -91,33 +106,13 @@ const Support = () => {
   const showFaqModal = () => {
     setIsFaqModalVisible(true);
   };
-
-
-  // Toggles create Support modal
-  const showSupportModal = () => {
-    setIsSupportModalVisible(true);
-  };
-
-  const faqCreate = () => {
-    return(
-      <></>
-
-    )
-  }
-  const faqCancel = () => {
-      setIsFaqModalVisible(false)
-    
-  }
-
-
-  // Creates a new support
-  const supportCreate = async (value) => {
-    console.log(value);
-    let builder = formValidator.validateSupportCreate(value, {}, setError)
+ 
+  const faqCreate = async (value) => {
+    let builder = formValidator.validateFaqCreate(value, {}, setError)
     if (!builder) return
     setLoading(true);
-  
-    let reqData = await lib.createSupport(builder, user?.token)
+
+    let reqData = await lib.createFaq(builder, user?.token)
     if (reqData.status === "error") {
       helpers.sessionHasExpired(set, reqData.msg)
       helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
@@ -126,25 +121,23 @@ const Support = () => {
       helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Support Created' })
       setIsSupportModalVisible(false);
     }
-    
     setLoading(false);
+  };
 
-  }
-
-
-
-  const supportCancel = () => {
-      setIsSupportModalVisible(false)
-  }
-
+  const faqCancel = () => {
+    setIsFaqModalVisible(false)
+  }; 
 
   const handleAdminCreate = async (values) => {
-    if (user?.user_type === 'superadmin' || user?.access_level === 3) {
+
+    // Only superadmin and admin with access level 3
+    if (user?.access_level === 3 || user?.user_type === 'superadmin') {
       setError('');
       try {
         let builder = formValidator.validateCreateAdmin(values, {}, setError);
         if (!builder) return;
         setLoading(true);
+        console.log(builder);
 
         let reqData = await lib.createAdmin(builder, user?.token);
 
@@ -153,7 +146,7 @@ const Support = () => {
           helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
         }
         if (reqData.status === 'ok') {
-          helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Admin account created' })
+          helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account created' })
         }
         setLoading(false);
 
@@ -161,7 +154,7 @@ const Support = () => {
         setLoading(false);
         setError(err?.response?.data?.msg || err?.message)
       }
-      setIsModalVisible(false);
+      // setIsModalVisible(false);
     } else {
       helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'Insufficient Access on this Operation' })
     }
@@ -175,19 +168,13 @@ const Support = () => {
     <Structure className="support">
       <Row justify="space-between">
         <PageHeaderComp title="Support" />
-        {active === 'personnel' ? <ButtonComponent onClick={showModal} style={{ ...styleActive, borderRadius: "6px", width: "200px" }} text="CREATE ADMIN" /> : null}
+        {active === 'personnel' ? <ButtonComponent onClick={showModal} style={{ ...styleActive, borderRadius: "6px", width: "200px" }} text="CREATE ACCOUNT" /> : null}
         {active === 'faq' ?
-            <ButtonComponent onClick={showFaqModal} style={{ ...styleActive, borderRadius: "6px", width: "200px" }} text="CREATE FAQ" />
+          <ButtonComponent onClick={showFaqModal} style={{ ...styleActive, borderRadius: "6px", width: "200px" }} text="CREATE FAQ" />
           : null
         }
-        {active === 'support' ?
-            <ButtonComponent onClick={showSupportModal} style={{ ...styleActive, borderRadius: "6px", width: "200px" }} text="CREATE SUPPORT" />
-          : null
-        }
-        
         <CreateAdminModal load={load} error={error} handleOk={handleAdminCreate} handleCancel={handleCancel} isModalVisible={isModalVisible} />
         <CreateFaqModal load={load} error={error} handleOk={faqCreate} handleCancel={faqCancel} isFaqModalVisible={isFaqModalVisible} />
-        <CreateSupportModal load={load} error={error} handleOk={supportCreate} handleCancel={supportCancel} isSupportModalVisible={isSupportModalVisible} />
       </Row>
       <div className="support-top">
         <Row>
@@ -201,20 +188,20 @@ const Support = () => {
             <ButtonComponent onClick={() => handleFlip('faq')} text="Faq" style={active === 'faq' ? styleActive : styleInactive} />
           </Col>
           <Col flex={2}>
-            <ButtonComponent onClick={() => handleFlip('personnel')} text="Personel" style={active === 'personnel' ? styleActive : styleInactive} />
+            <ButtonComponent onClick={() => handleFlip('personnel')} text="Personnel" style={active === 'personnel' ? styleActive : styleInactive} />
           </Col>
         </Row>
         <>
           {
-            // Conditionally rendering module blocks
-            active === 'chats' ? 
-            <Chats /> 
-            : active === 'support' ? 
-            <SupportTab  setSupportData={setSupportData} supportData={supportData} /> 
-            : active === 'faq' ? 
-            <Faq /> 
-            : 
-            <Personnel personnelData={personnelData} selectedAdmin = {selectedAdmin} setSelectedAdmin = {setSelectedAdmin} />
+            // Conditionally rendering module blocks 
+            active === 'chats' ?
+              <Chats chatMessages={chatMessages} setSelectedChat={setSelectedChat} selectedChat={selectedChat} />
+              : active === 'support' ?
+                <SupportTab setSupportData={setSupportData} supportData={supportData} personnelData={personnelData} />
+                : active === 'faq' ?
+                  <Faq setFaqData={setFaqData} faqData={faqData} personnelData={personnelData} />
+                  :
+                  <Personnel personnelData={personnelData} selectedAdmin={selectedAdmin} setSelectedAdmin={setSelectedAdmin} />
           }
         </>
       </div>

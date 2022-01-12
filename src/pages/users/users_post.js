@@ -12,14 +12,12 @@ import newUser from '../../assets/images/icons/new_users.png'; // Tell webpack t
 import onlineUser from '../../assets/images/icons/online_users.png'; // Tell webpack this JS file uses this image
 import person from '../../assets/images/icons/person.png'; // Tell webpack this JS file uses this image
 import { GoBackComponent, ActionButtonComponent } from '../../components/buttonComponent/buttonComponent';
-import { SuspendAccountModal, DeleteAccountModal, ChangeUserPasswordModal } from '../../components/modalComponents/modalComponents';
+import { SuspendAccountModal, DeleteAccountModal, ChangeUserPasswordModal, VerifyAccountModal } from '../../components/modalComponents/modalComponents';
 import { useAuth } from '../../core/hooks/useAuth';
 import { useNotifications } from '@mantine/notifications';
 import lib from './lib';
 import formValidator from './formvalidation';
 import helpers from '../../core/func/Helpers';
-
-
 
 const UsersPosts = (props, history) => {
   const navigate = useNavigate();
@@ -27,7 +25,6 @@ const UsersPosts = (props, history) => {
   const [, setLoader] = useState(false);
   const [userData, setuserData] = useState({});
   const { set, user } = useAuth();
-
 
   useEffect(() => {
     (async () => {
@@ -61,7 +58,7 @@ const UsersPosts = (props, history) => {
           <Col flex={1}>
             <div className="sidebar">
               <SideBarFeatures />
-              <SideBarActions user_id={userData?._id} />
+              <SideBarActions data={userData} />
             </div>
           </Col>
         </Row>
@@ -139,6 +136,9 @@ const SideBarActions = (props) => {
   const [isDeleteAccountModalVisible, setIsDeleteAccountModalVisible] = useState(false);
   const [isSuspendedAccountModalVisible, setIsSuspendedAccountModalVisible] = useState(false);
   const [isResetAccountModalVisible, setIsResetAccountModalVisible] = useState(false);
+  const [isVerifyAccountModalVisible, setIsVerifyAccountModalVisible] = useState(false);
+
+  
   const [error, setError] = useState('')
   const { state } = useLocation();
 
@@ -156,17 +156,18 @@ const SideBarActions = (props) => {
   const showResetAccountModal = () => {
     setIsResetAccountModalVisible(true);
   };
-
-
+  const showVerifyAccountModal = () => {
+    setIsVerifyAccountModalVisible(true);
+  };
+ 
 
   const handleDeleteAccountOk = async () => {
     setLoading(true)
-    let reqData = await lib.deleteUser(user?.token, props.user_id);
+    let reqData = await lib.deleteUser(user?.token, props.data?._id);
 
     if (reqData.status === "error") {
-      helpers.sessionHasExpired(set, reqData.msg);
       helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData?.data?.msg })
-
+      helpers.sessionHasExpired(set, reqData.msg);
     }
     if (reqData.status === 'ok') {
       helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Deleted' })
@@ -176,21 +177,41 @@ const SideBarActions = (props) => {
     setLoading(false);
   }
 
-
   const handleSuspendedAccountOk = () => {
     setIsSuspendedAccountModalVisible(false);
+  }
+
+  const handleVerifyAccountOk = async () => {
+    if(user?.user_type === 'superadmin' || user?.access_level !== 3 ){
+      let payload = {
+        auth_id:  props.data?._id,
+        verified_user_status: 1
+      };
+      setLoading(true);
+      let reqData = await lib.verifyUserAccount( payload, user?.token)
+      if (reqData.status === "error") {
+        helpers.sessionHasExpired(set, reqData.msg)
+        helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
+      }
+      if (reqData.status === 'ok') {
+        helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Updated' })
+        // setIsVerifyAccountModalVisible(false);
+      }
+      setLoading(false);
+    }else{
+      helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'You are not authorized to perform this action' })
+
+    }
   }
 
 
 
   const handleResetAccountOk = async (val) => {
-    console.log(val);
     let builder = formValidator.validateResetUserPassword(val, {}, setError)
     if (!builder) return
 
     builder.auth_id = state?.record?.key; 
     setLoading(true);
-    
     let reqData = await lib.resetUserPassword(builder, user?.token)
     if (reqData.status === "error") {
       helpers.sessionHasExpired(set, reqData.msg)
@@ -214,6 +235,9 @@ const SideBarActions = (props) => {
   const handleResetAccountCancel = () => {
     setIsResetAccountModalVisible(false);
   }
+  const handleVerifyAccountCancel = () => {
+    setIsVerifyAccountModalVisible(false);
+  }
 
   return (
     <>
@@ -226,6 +250,9 @@ const SideBarActions = (props) => {
         <div className='sidebar-action-button'>
           <ActionButtonComponent text={"RESET PASSWORD"} color="#276AFF" bgColor="#ECF2FF" onClick={showResetAccountModal} />
         </div>
+        <div className='sidebar-action-button'>
+          <ActionButtonComponent text={"MAKE VERIFIED"} color="#276AFF" bgColor="#ECF2FF" onClick={showVerifyAccountModal} />
+        </div>
 
         <div className='sidebar-action-button'>
           <ActionButtonComponent text={"DELETE ACCOUNT"} onClick={showDeleteAccountModal} />
@@ -233,7 +260,7 @@ const SideBarActions = (props) => {
 
         <DeleteAccountModal load={load} isModalVisible={isDeleteAccountModalVisible} handleOk={handleDeleteAccountOk} handleCancel={handleDeleteAccountCancel} />
         <SuspendAccountModal load={load} isModalVisible={isSuspendedAccountModalVisible} handleOk={handleSuspendedAccountOk} handleCancel={handleSuspendedAccountCancel} />
-
+        <VerifyAccountModal load={load} isModalVisible={isVerifyAccountModalVisible} handleOk={handleVerifyAccountOk} handleCancel={handleVerifyAccountCancel} />
         <ChangeUserPasswordModal load={load} isModalVisible={isResetAccountModalVisible} handleOk={handleResetAccountOk} handleCancel={handleResetAccountCancel} error={error} />
       </div>
     </>

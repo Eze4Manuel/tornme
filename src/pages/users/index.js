@@ -10,18 +10,18 @@ import lib from './lib';
 import helpers from '../../core/func/Helpers';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
+import Loading from '../../components/loading/Loading'
 
 const { Search } = Input;
 
 const Users = () => {
   const navigate = useNavigate();
   const { set, user} = useAuth();
-  const [,setLoader] = useState(false);
+  const [loader,setLoader] = useState(false);
   const [data,setData] = useState([]);
   const [searchedColumn, setSearchedColumn] = useState(false);
   const [searchText, setSearchText] = useState(false);
  
-  
   // data 
   useEffect(() => {
     (async () => {
@@ -35,8 +35,6 @@ const Users = () => {
         setData(reqData.data)
       }
       setLoader(false);
-      console.log(reqData.data);
-
     })();
   }, [user?.token, set])
  
@@ -51,7 +49,6 @@ const Users = () => {
       status: [e.account_status],
     }
   });
-
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -78,13 +75,7 @@ const Users = () => {
             style={{ marginBottom: 8, display: 'block' }}
           />
           <Space>
-            <Button
-              type="primary"
-              onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-              icon={<SearchOutlined />}
-              size="small"
-              style={{ width: 90 }}
-            >
+            <Button type="primary" onClick={() => handleSearch(selectedKeys, confirm, dataIndex)} icon={<SearchOutlined />} size="small" style={{ width: 90 }}>
               Search
             </Button>
             <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
@@ -96,10 +87,7 @@ const Users = () => {
               onClick={() => {
                 confirm({ closeDropdown: false });
                 setSearchText(selectedKeys[0])
-                setSearchedColumn(dataIndex)
-                
-              }}
-            >
+                setSearchedColumn(dataIndex)}}>
               Filter
             </Button>
           </Space>
@@ -210,10 +198,9 @@ const Users = () => {
 }
 
 
-
-
   return (
     <Structure className="users">
+      {loader ? <Loading /> : null}
       <PageHeaderComp title="Users" />
       <Search placeholder="input search text" size="large" onSearch={onSearch} style={{ width: "40%" }} />
       <div className="finance-data" style={{ "margin-top": "0px" }}>
