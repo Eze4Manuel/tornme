@@ -47,8 +47,8 @@ export const DeleteAccountModal = ({ isModalVisible, handleOk, handleCancel, loa
                     <br />
                     {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
                     <br />
-                    <a href='/#' onClick={handleOk}>
-                        <PageHeaderComp title={"YES, DELETE ACCOUNT"} style={{ color: "#747474" }} />
+                    <a href='javascript:void(0)' onClick={handleOk}>
+                        <PageHeaderComp title={"DELETE ACCOUNT"} style={{ color: "#747474" }} />
                     </a>
                 </div>
             </Modal>
@@ -70,8 +70,31 @@ export const SuspendAccountModal = ({ isModalVisible, handleOk, handleCancel, lo
                     <br />
                     {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
                     <br />
-                    <a href='/#' onClick={handleCancel}>
+                    <a href='javascript:void(0)' onClick={handleCancel}>
                         <PageHeaderComp title={"YES, SUSPEND ACCOUNT"} style={{ color: "#747474" }} />
+                    </a>
+                </div>
+            </Modal>
+        </>
+    )
+}
+
+
+export const VerifyAccountModal = ({ isModalVisible, handleOk, handleCancel, load }) => {
+    return (
+        <>
+            <Modal width={400} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
+                <div className="modal_block_logout">
+                    <PageHeaderComp title="Verify Account?" />
+
+                    <p>This action would suspend this account and user would not be able to access account</p>
+
+                    <GoBackButtonComponent text="No, Go Back" onClick={handleCancel} />
+                    <br />
+                    {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
+                    <br />
+                    <a href='javascript:void(0)' onClick={handleOk}>
+                        <PageHeaderComp title={"VERIFY ACCOUNT"} style={{ color: "#747474" }} />
                     </a>
                 </div>
             </Modal>

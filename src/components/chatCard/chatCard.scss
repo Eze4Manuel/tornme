@@ -63,7 +63,6 @@
                 padding: 10px;
                 display: inline-block;
                 position: relative;
-                width: 100%;
                 height: auto;
                 border-radius: 4px;
                 background-color: #ECF2FF;
@@ -93,6 +92,35 @@
                 border: 22px solid;
                 border-color: #ECF2FF transparent transparent transparent;
             }
+
+            /* Left triangle placed top right flush. */
+            .tri-left.border.right-top:before {
+                content: ' ';
+                position: absolute;
+                width: 0;
+                height: 0;
+
+            right: -40px;
+                left: auto;
+            top: -8px;
+                bottom: auto;
+                border: 32px solid;
+                border-color: #666 transparent transparent transparent;
+            }
+            .tri-left.right-top:after{
+                content: ' ';
+                position: absolute;
+                width: 0;
+                height: 0;
+                right: -20px;
+                left: auto;
+                top: 0px;
+                bottom: auto;
+                border: 22px solid;
+                border-color: #ECF2FF transparent transparent transparent;
+            }
+
+
             .chats-cards-middle-text{
                 padding: 2px 15px;
                 height: 25px;

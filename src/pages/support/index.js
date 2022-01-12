@@ -49,6 +49,7 @@ const Support = () => {
         setPersonnelData(reqData.data)
         setSelectedAdmin(reqData.data[0])
       }
+      console.log(personnelData);
       setLoader(false);
     })();
   }, [user?.token, set])

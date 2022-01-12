@@ -143,7 +143,7 @@ lib.getSupport = async (token, auth_id, search) => {
     }
 }
 
-// Get chats
+// Get chats assigned to a particular admin. This function is called by the Admin
 lib.getAdminChats = async (admin_id, token) => {
     let uri = '';
     try {

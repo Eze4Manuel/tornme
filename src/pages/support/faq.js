@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Spin, Button } from 'antd';
 import formValidator from './formvalidation';
 import { EditFaqModal, DeleteFaqModal } from '../../components/modalComponents/modalComponents';
 import { useAuth } from '../../core/hooks/useAuth';
@@ -30,9 +30,14 @@ const Faq = (props) => {
                 <div className="support-admin-cards"  >
                     <div className="support-admin-top">
                         {
-                            props.faqData?.map(item => (
-                                <FaqTabTile data={item} personnelData={props.personnelData} />
-                            ))
+                            props.faqData.length > 0 ?
+                                props.faqData?.map(item => (
+                                    <FaqTabTile data={item} personnelData={props.personnelData} />
+                                ))
+                                :
+                                <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", height: "500px" }}>
+                                    <Spin size="large" />
+                                </div>
                         }
                     </div>
                 </div>
@@ -116,7 +121,7 @@ const FaqTabTile = (props) => {
         setIsFaqDeleteModalVisible(true);
     };
 
-   
+
     return (
         <div className='support-admin-card' style={{ backgroundColor: "#EEF3FF" }}>
             <div>
@@ -125,7 +130,7 @@ const FaqTabTile = (props) => {
                     {props.data.description}
                 </p>
             </div>
-            <div>                
+            <div>
                 <Button onClick={showEditFaqModal} style={{ margin: "0px 10px" }} type="dashed">Edit</Button>
                 <Button onClick={showDeleteFaqModal} style={{ margin: "0px 10px" }} type="dashed">Delete</Button>
             </div>

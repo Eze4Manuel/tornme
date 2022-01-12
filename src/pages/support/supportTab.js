@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Row, Col, Button } from 'antd';
-import formValidator from './formvalidation';
-import { EditSupportModal, DeleteSupportModal, AssignAdminSupportModal } from '../../components/modalComponents/modalComponents';
+import { Row, Col, Spin, Button } from 'antd';
+import { AssignAdminSupportModal } from '../../components/modalComponents/modalComponents';
 import { useAuth } from '../../core/hooks/useAuth';
 import { useNotifications } from '@mantine/notifications';
 import helpers from '../../core/func/Helpers';
@@ -10,7 +9,6 @@ import './supportTab.scss';
 
 const SupportTab = (props) => {
     const { set, user } = useAuth();
-
     // Getting support data
     useEffect(() => {
         (async () => {
@@ -29,9 +27,14 @@ const SupportTab = (props) => {
                 <div className="support-admin-cards"  >
                     <div className="support-admin-top">
                         {
-                            props.supportData?.map(item => (
-                                <SupportTabTile data={item} personnelData={props.personnelData} />
-                            ))
+                            props.supportData.length > 0 ?
+                                props.supportData?.map(item => (
+                                    <SupportTabTile data={item} personnelData={props.personnelData} />
+                                ))
+                                :
+                                <div style={{display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", height: "500px"}}>
+                                    <Spin size="large" />
+                                </div>
                         }
                     </div>
                 </div>
@@ -86,9 +89,8 @@ const SupportTabTile = (props) => {
             </div>
             <div>
                 <Button style={{ margin: "0px 10px" }} type="dashed">Chat </Button>
-                {console.log(props.data?.assigned_to)}
-                <Button onClick={showAssignAdminSupportModal} style={{ margin: "0px 10px" }} type= { props.data?.assigned_to == undefined ? 'dashed' : 'primary' } ghost ={ props.data?.assigned_to != undefined ? true : false }>{ props.data?.assigned_to == undefined ? "Assign" : "Re-assign" }</Button>                
-            </div>           
+                <Button onClick={showAssignAdminSupportModal} style={{ margin: "0px 10px" }} type={props.data?.assigned_to === undefined ? 'dashed' : 'primary'} ghost={props.data?.assigned_to !== undefined ? true : false}>{props.data?.assigned_to === undefined ? "Assign" : "Re-assign"}</Button>
+            </div>
             <AssignAdminSupportModal data={props.personnelData} support_id={props.data._id} load={load} error={error} handleOk={handleAssignAdminSupport} handleCancel={supportAssignAdminCancel} isAssignAdminSupportModalVisible={isAssignAdminSupportModalVisible} />
         </div>
     )
