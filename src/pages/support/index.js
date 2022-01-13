@@ -21,7 +21,7 @@ import '../profile/profile.scss';
 
 
 const Support = () => {
-  const [active, SetActive] = useState('chats');
+  const [active, setActive] = useState('chats');
   const { set, user } = useAuth();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isFaqModalVisible, setIsFaqModalVisible] = useState(false);
@@ -36,6 +36,8 @@ const Support = () => {
   const [faqData, setFaqData] = useState([]);
   const [selectedChat, setSelectedChat] = useState([])
   const [chatMessages, setChatMessages] = useState([])
+  const [chatActive, setChatActive] = useState();
+  const [messages, setMessages] = useState([]);
 
   // Fetching Personnel data 
   useEffect(() => {
@@ -49,7 +51,6 @@ const Support = () => {
         setPersonnelData(reqData.data)
         setSelectedAdmin(reqData.data[0])
       }
-      console.log(personnelData);
       setLoader(false);
     })();
   }, [user?.token, set])
@@ -57,17 +58,37 @@ const Support = () => {
 
   // Getting Chat data
   useEffect(() => {
-    (async () => {
-      let reqData = await lib.getAdminChats(user?.auth_id, user?.token)
-      if (reqData.status === "error") {
-        helpers.sessionHasExpired(set, reqData.msg)
-      }
-      if (reqData.status === 'ok') {
-        setChatMessages(reqData.data)
-        setSelectedChat(reqData.data[0]);
-      }
-    })();
+    if(user?.user_type === 'admin' || user?.user_type === 'admin'){
+      (async () => {
+        let reqData = await lib.getAdminChats(user?.auth_id, user?.token)
+        if (reqData.status === "error") {
+          helpers.sessionHasExpired(set, reqData.msg)
+        }
+        if (reqData.status === 'ok') {
+          setChatMessages(reqData.data)
+          setSelectedChat(reqData.data[0]);
+        }
+      })();
+    }
   }, [user?.token, set])
+
+  
+    // Getting Chat data
+    useEffect(() => {
+      if (user?.user_type === 'superadmin') {
+      (async () => {
+        let reqData = await lib.getSupport( user?.token)
+        if (reqData.status === "error") {
+          helpers.sessionHasExpired(set, reqData.msg)
+        }
+        if (reqData.status === 'ok') {
+          setChatMessages(reqData.data)
+          setSelectedChat(reqData.data[0]);
+        }
+      })();
+    }
+    }, [user?.token, set])
+  
 
   const styleActive = {
     color: "#ffffff",
@@ -94,7 +115,7 @@ const Support = () => {
 
   // Switches tabs
   const handleFlip = (tab) => {
-    SetActive(tab)
+    setActive(tab)
   }
 
   // Toggles create admin modal
@@ -106,7 +127,7 @@ const Support = () => {
   const showFaqModal = () => {
     setIsFaqModalVisible(true);
   };
- 
+
   const faqCreate = async (value) => {
     let builder = formValidator.validateFaqCreate(value, {}, setError)
     if (!builder) return
@@ -126,7 +147,7 @@ const Support = () => {
 
   const faqCancel = () => {
     setIsFaqModalVisible(false)
-  }; 
+  };
 
   const handleAdminCreate = async (values) => {
 
@@ -164,6 +185,23 @@ const Support = () => {
     setIsModalVisible(false);
   };
 
+  // This gets called when admin switches between support assigned to him
+  const changeSelectedChat = async (selected) => {
+    setSelectedChat(chatMessages[selected]);
+    setChatActive(selected);
+    setLoading(true);
+
+    // Fetching support chats for specific support message
+    let reqData = await lib.getUserSupportChats(chatMessages[selected]?._id, user?.token)
+    if (reqData.status === "error") {
+      helpers.sessionHasExpired(set, reqData.msg)
+    }
+    if (reqData.status === 'ok') {
+      setMessages(reqData.data)
+    }
+    setLoading(false);
+  }
+
   return (
     <Structure className="support">
       <Row justify="space-between">
@@ -195,9 +233,9 @@ const Support = () => {
           {
             // Conditionally rendering module blocks 
             active === 'chats' ?
-              <Chats chatMessages={chatMessages} setSelectedChat={setSelectedChat} selectedChat={selectedChat} />
+              <Chats changeSelectedChat={changeSelectedChat} messages={messages} setMessages={setMessages} chatActive={chatActive} setChatActive={setChatActive} chatMessages={chatMessages} setSelectedChat={setSelectedChat} selectedChat={selectedChat} />
               : active === 'support' ?
-                <SupportTab setSupportData={setSupportData} supportData={supportData} personnelData={personnelData} />
+                <SupportTab changeSelectedChat={changeSelectedChat} setChatActive={setChatActive} setSupportData={setSupportData} supportData={supportData} personnelData={personnelData} setActive={setActive}/>
                 : active === 'faq' ?
                   <Faq setFaqData={setFaqData} faqData={faqData} personnelData={personnelData} />
                   :

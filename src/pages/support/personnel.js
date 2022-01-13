@@ -113,7 +113,6 @@ const Personnel = (props) => {
         setIsChangePasswordModalVisible(false)
     }
 
-    console.log(props.personnelData);
     return (
         <>
             <Row>

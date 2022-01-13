@@ -80,12 +80,12 @@ export const SuspendAccountModal = ({ isModalVisible, handleOk, handleCancel, lo
 }
 
 
-export const VerifyAccountModal = ({ isModalVisible, handleOk, handleCancel, load }) => {
+export const VerifyAccountModal = ({ verification_status, isModalVisible, handleOk, handleCancel, load }) => {
     return (
         <>
             <Modal width={400} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
                 <div className="modal_block_logout">
-                    <PageHeaderComp title="Verify Account?" />
+                    <PageHeaderComp title={verification_status === 0 ? "Verify Account?" : "Unverify Account"} />
 
                     <p>This action would suspend this account and user would not be able to access account</p>
 
@@ -93,8 +93,8 @@ export const VerifyAccountModal = ({ isModalVisible, handleOk, handleCancel, loa
                     <br />
                     {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
                     <br />
-                    <a href='javascript:void(0)' onClick={handleOk}>
-                        <PageHeaderComp title={"VERIFY ACCOUNT"} style={{ color: "#747474" }} />
+                    <a href='javascript:void(0)' onClick={()=>handleOk(verification_status)}>
+                        <PageHeaderComp title={verification_status === 0 ? "VERIFY ACCOUNT" : "UNVERIFY ACCOUNT" } style={{ color: "#747474" }} />
                     </a>
                 </div>
             </Modal>
@@ -227,55 +227,7 @@ export const CreateFaqModal = (props) => {
     )
 }
 
-
-// export const CreateSupportModal = (props) => {
-//     const [form] = Form.useForm();
-//     const [,] = useState('hidden');
-//     const [values, setValues] = useState({});
-
-//     return (
-//         <Modal width={800} footer={false} title="" visible={props.isSupportModalVisible} >
-//             <div className='profile-form'>
-//                 <div style={{ textAlign: 'center' }}>
-//                     <PageHeaderComp title="Create Support" />
-//                 </div>
-//                 <Form form={form} layout="vertical" >
-//                     <div className="" >
-//                         {props.error ? <ErrorMessage message={props.error} /> : null}
-//                         <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
-//                             <Form.Item label="Subject">
-//                                 <Input placeholder="subject" onChange={e => setValues(d => ({ ...d, subject: e.target.value }))} value={values.subject} style={{ width: "350px", marginRight: "10px" }} />
-//                             </Form.Item>
-//                         </div>
-//                         <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
-//                             <Form.Item label="Description">
-//                                 <TextArea placeholder="description" onChange={e => setValues(d => ({ ...d, description: e.target.value }))} value={values.description} rows={6} style={{ width: "350px", marginRight: "10px" }} />
-//                             </Form.Item>
-//                         </div>
-//                     </div>
-
-//                     <div className="profile-password">
-
-//                         <div className='form-group' style={{ display: "flex", justifyContent: "space-around" }}>
-
-//                             <Form.Item style={{ marginRight: "10px", marginTop: "18px" }}>
-//                                 <ButtonComponent onClick={() => props.handleOk(values)} text="CREATE SUPPORT" />
-//                                 {props.load ? <Spin style={{ marginLeft: "10px" }} indicator={antIcon} /> : null}
-//                             </Form.Item>
-
-//                             <Form.Item style={{ marginRight: "10px" }}>
-//                                 <GoBackComponent text="Go Back" onClick={props.handleCancel} />
-//                             </Form.Item>
-//                         </div>
-//                     </div>
-//                 </Form>
-//             </div>
-//         </Modal>
-
-//     )
-// }
-
-
+ 
 export const EditFaqModal = (props) => {
     const [form] = Form.useForm();
     const [,] = useState('hidden');
@@ -350,10 +302,11 @@ export const AssignAdminSupportModal = (props) => {
 
 
 
-export const DeleteFaqModal = ({ isSupportModalVisible, handleOk, handleCancel, load }) => {
+export const DeleteFaqModal = ({ isFaqModalVisible, handleOk, handleCancel, load }) => {
+    console.log();
     return (
         <>
-            <Modal width={400} visible={isSupportModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
+            <Modal width={400} visible={isFaqModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
                 <div className="modal_block_logout">
                     <PageHeaderComp title="Delete Support?" />
                     <p>This action would delete this support and remove it from the system</p>

@@ -30,8 +30,6 @@ lib.getUserDetail = async (token, auth_id) => {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }
 }
-
-
 lib.deleteUser = async (token, auth_id) => {
     let uri = '';
     try {
@@ -43,9 +41,6 @@ lib.deleteUser = async (token, auth_id) => {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }
 }
-
-
-
 lib.resetUserPassword = async (data, token) => {
     let uri = '';
     try {
@@ -57,14 +52,12 @@ lib.resetUserPassword = async (data, token) => {
     }
 }
 
-
 lib.verifyUserAccount = async (data, token) => {
-    console.log(data);
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7));
-        uri = `/users/admin-verify-user-mark?auth_id=${data.auth_id}&verified_user_status=${data.verified_user_status}`;
-        return await (await Axios_users.get(uri, cfg)).data
+        uri = `/users/admin-verify-user-mark`;
+        return await (await Axios_users.put(uri, data, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }
