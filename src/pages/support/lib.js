@@ -128,29 +128,42 @@ lib.assignSupport = async (admin_id, support_id, token) => {
 
 
 // Sends request to get supports
-lib.getSupport = async (token, auth_id, search) => {
+lib.getSupport = async (token, auth_id) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        if (search) {
-            uri = `/supports/admin-get-supports`
-        } else {
-            uri = `/supports/admin-get-supports`;
-        }
+
+        uri = `/supports/admin-get-supports`;
+
         return await (await Axios_support.get(uri, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }
 }
 
+// // Get chats assigned to a particular admin. This function is called by the Admin
+// lib.getSuperAdminChats = async (admin_id, token) => {
+//     let uri = '';
+//     try {
+//         let cfg = helpers.getHeaderConfig(String(token).substr(7))
+
+//             uri = `supports/admin-get-supports?admin_id=${admin_id}`;
+
+//         return await (await Axios_support.get(uri, cfg)).data
+//     } catch (e) {
+//         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+//     }
+// }
+
+
 // Get chats assigned to a particular admin. This function is called by the Admin
 lib.getAdminChats = async (admin_id, token) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-         
-            uri = `supports/admin-get-supports?admin_id=${admin_id}`;
-        
+
+        uri = `supports/admin-get-supports?admin_id=${admin_id}`;
+
         return await (await Axios_support.get(uri, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
@@ -163,9 +176,9 @@ lib.getUserSupportChats = async (admin_id, token) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-         
-            uri = `supports/admin-get-support-messages/${admin_id}`;
-        
+
+        uri = `supports/admin-get-support-messages/${admin_id}`;
+
         return await (await Axios_support.get(uri, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
@@ -179,7 +192,7 @@ lib.sendSupportMessages = async (token, message) => {
     try {
         console.log(message);
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-            uri = `supports/admin-send-support-message`;
+        uri = `supports/admin-send-support-message`;
         return await (await Axios_support.post(uri, message, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }

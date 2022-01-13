@@ -18,14 +18,11 @@ export const UsersPostCard = (props) => {
     const { TabPane } = Tabs;
     const navigate = useNavigate();
 
-
-
     const callback = (key) => {
-        console.log(key);
+
     }
 
     const selectedPost = (record) => {
-
         navigate('/user-post-detail', { state: { record: props.data } });
     }
 
@@ -34,6 +31,7 @@ export const UsersPostCard = (props) => {
             <div className="post-cards" style={props.style} >
                 <div className="post-cards-top">
                     <Button>{props.data?.account_status === 0 ? 'Not Active' : 'Active'}</Button>
+                    <Button style={props.data?.verified_user_status === 0 ? {marginLeft: "6px"} : {background: 'palegreen', color: "#000", marginLeft: "6px"}}>{props.data?.verified_user_status === 0 ? 'Not Verified' : 'Verified'}</Button>
                 </div>
                 <div className="post-cards-middle">
                     <Row >
@@ -154,7 +152,7 @@ export const UsersPostCard = (props) => {
 
 const Post = (props) => {
     return (
-        <div className="post-single-card" onClick={props.onClick} style={{cursor: "pointer"}}>
+        <div className="post-single-card" onClick={props.onClick} style={{ cursor: "pointer" }}>
             <div className='post-single-card-background' style={{ backgroundImage: `url(${props.img})` }} key={{ shoe: "ede" }}>
             </div>
             <div className="post-single-card-image">

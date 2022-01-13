@@ -181,26 +181,27 @@ const SideBarActions = (props) => {
     setIsSuspendedAccountModalVisible(false);
   }
 
-  const handleVerifyAccountOk = async () => {
+  const handleVerifyAccountOk = async (value) => {
+    console.log(value);
+    value = value === 0 ? 1 : 0
     if(user?.user_type === 'superadmin' || user?.access_level !== 3 ){
       let payload = {
         auth_id:  props.data?._id,
-        verified_user_status: 1
+        verified_user_status: value + ""
       };
       setLoading(true);
       let reqData = await lib.verifyUserAccount( payload, user?.token)
       if (reqData.status === "error") {
-        helpers.sessionHasExpired(set, reqData.msg)
+        // helpers.sessionHasExpired(set, reqData.msg)
         helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
       }
       if (reqData.status === 'ok') {
-        helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Updated' })
-        // setIsVerifyAccountModalVisible(false);
+        helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Account Verified' })
+        setIsVerifyAccountModalVisible(false);
       }
       setLoading(false);
     }else{
       helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'You are not authorized to perform this action' })
-
     }
   }
 
@@ -251,7 +252,7 @@ const SideBarActions = (props) => {
           <ActionButtonComponent text={"RESET PASSWORD"} color="#276AFF" bgColor="#ECF2FF" onClick={showResetAccountModal} />
         </div>
         <div className='sidebar-action-button'>
-          <ActionButtonComponent text={"MAKE VERIFIED"} color="#276AFF" bgColor="#ECF2FF" onClick={showVerifyAccountModal} />
+          <ActionButtonComponent text={"SET VERIFICATION"} color="#276AFF" bgColor="#ECF2FF" onClick={showVerifyAccountModal} />
         </div>
 
         <div className='sidebar-action-button'>
@@ -260,7 +261,7 @@ const SideBarActions = (props) => {
 
         <DeleteAccountModal load={load} isModalVisible={isDeleteAccountModalVisible} handleOk={handleDeleteAccountOk} handleCancel={handleDeleteAccountCancel} />
         <SuspendAccountModal load={load} isModalVisible={isSuspendedAccountModalVisible} handleOk={handleSuspendedAccountOk} handleCancel={handleSuspendedAccountCancel} />
-        <VerifyAccountModal load={load} isModalVisible={isVerifyAccountModalVisible} handleOk={handleVerifyAccountOk} handleCancel={handleVerifyAccountCancel} />
+        <VerifyAccountModal verification_status={props.data?.verified_user_status} load={load} isModalVisible={isVerifyAccountModalVisible} handleOk={handleVerifyAccountOk} handleCancel={handleVerifyAccountCancel} />
         <ChangeUserPasswordModal load={load} isModalVisible={isResetAccountModalVisible} handleOk={handleResetAccountOk} handleCancel={handleResetAccountCancel} error={error} />
       </div>
     </>

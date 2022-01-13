@@ -28,8 +28,8 @@ const SupportTab = (props) => {
                     <div className="support-admin-top">
                         {
                             props.supportData.length > 0 ?
-                                props.supportData?.map(item => (
-                                    <SupportTabTile data={item} personnelData={props.personnelData} />
+                                props.supportData?.map( (item, ind) => (
+                                    <SupportTabTile data={item} personnelData={props.personnelData} setActive = {props.setActive} ind = {ind}  setChatActive = {props.setChatActive} changeSelectedChat={props.changeSelectedChat} />
                                 ))
                                 :
                                 <div style={{display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", height: "500px"}}>
@@ -60,6 +60,8 @@ const SupportTabTile = (props) => {
     const supportAssignAdminCancel = () => {
         setIsAssignAdminSupportModalVisible(false)
     };
+
+
     // Assign Support
     const handleAssignAdminSupport = async (admin_id, support_id) => {
         if (user?.user_type === 'superadmin' || user?.access_level === 3) {
@@ -88,7 +90,7 @@ const SupportTabTile = (props) => {
                 </p>
             </div>
             <div>
-                <Button style={{ margin: "0px 10px" }} type="dashed">Chat </Button>
+                <Button onClick={()=> { props.setChatActive(props.ind); props.changeSelectedChat(props.ind); props.setActive('chats')}} style={{ margin: "0px 10px" }} type="dashed">Chat </Button>
                 <Button onClick={showAssignAdminSupportModal} style={{ margin: "0px 10px" }} type={props.data?.assigned_to === undefined ? 'dashed' : 'primary'} ghost={props.data?.assigned_to !== undefined ? true : false}>{props.data?.assigned_to === undefined ? "Assign" : "Re-assign"}</Button>
             </div>
             <AssignAdminSupportModal data={props.personnelData} support_id={props.data._id} load={load} error={error} handleOk={handleAssignAdminSupport} handleCancel={supportAssignAdminCancel} isAssignAdminSupportModalVisible={isAssignAdminSupportModalVisible} />

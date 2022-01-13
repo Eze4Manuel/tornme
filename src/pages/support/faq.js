@@ -118,6 +118,7 @@ const FaqTabTile = (props) => {
     }
     // Toggles delete Support modal
     const showDeleteFaqModal = () => {
+        console.log('dele');
         setIsFaqDeleteModalVisible(true);
     };
 
