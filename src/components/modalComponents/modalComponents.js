@@ -85,7 +85,7 @@ export const VerifyAccountModal = ({ verification_status, isModalVisible, handle
         <>
             <Modal width={400} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
                 <div className="modal_block_logout">
-                    <PageHeaderComp title={verification_status === 0 ? "Verify Account?" : "Unverify Account"} />
+                    <PageHeaderComp title={(verification_status === 0 || verification_status === undefined ) ? "Verify Account?" : "Unverify Account"} />
 
                     <p>This action would suspend this account and user would not be able to access account</p>
 
@@ -93,8 +93,8 @@ export const VerifyAccountModal = ({ verification_status, isModalVisible, handle
                     <br />
                     {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
                     <br />
-                    <a href='javascript:void(0)' onClick={() => handleOk(verification_status)}>
-                        <PageHeaderComp title={verification_status === 0 ? "VERIFY ACCOUNT" : "UNVERIFY ACCOUNT"} style={{ color: "#747474" }} />
+                    <a href='javascript:void(0)' onClick={() => handleOk(verification_status ?? 0)}>
+                        <PageHeaderComp title={(verification_status === 0 || verification_status === undefined ) ? "VERIFY ACCOUNT" : "UNVERIFY ACCOUNT"} style={{ color: "#747474" }} />
                     </a>
                 </div>
             </Modal>

@@ -283,7 +283,6 @@ const TextPost = (props) => {
             if (reqData.status === "error") {
                 helpers.sessionHasExpired(set, reqData.msg)
                 helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
-
             }
             if (reqData.status === 'ok') {
                 helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Content Deleted' })
@@ -291,7 +290,6 @@ const TextPost = (props) => {
             }
             setLoading(false);
             console.log(reqData);
-         
     }
 
     // Closes Delete Modal

@@ -61,6 +61,8 @@ const UsersPosts = (props, history) => {
         setContentAudio(filterContents(reqData.data, 2));
         setContentVideo(filterContents(reqData.data, 3));
       }
+      console.log(reqData.data);
+
     })()
   }, [])
 
