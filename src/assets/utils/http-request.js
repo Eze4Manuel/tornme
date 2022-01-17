@@ -17,5 +17,10 @@ export const Axios_wallet = axios.create({baseURL: uri_wallet});
 const uri_support = 'https://tornme-support-service.apiservices.xyz/v1' // staging
 export const Axios_support = axios.create({baseURL: uri_support});
 
+
+// base_url for user services
+const uri_content = 'https://tornme-content-service.apiservices.xyz/v1' // staging
+export const Axios_content = axios.create({baseURL: uri_content});
+
 export default Axios;
 
