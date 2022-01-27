@@ -4,7 +4,7 @@ import { PersonnelCard } from '../../components/personnelCard/personnelCard';
 import person from '../../assets/images/person.png'; // Tell webpack this JS file uses this image
 import ErrorMessage from '../../components/error/ErrorMessage';
 import { ButtonComponent } from '../../components/buttonComponent/buttonComponent';
-import { ChangeUserPasswordModal } from '../../components/modalComponents/modalComponents';
+import { ChangeUserPasswordModal, DeleteAdminModal } from '../../components/modalComponents/modalComponents';
 import { useAuth } from '../../core/hooks/useAuth';
 import { useNotifications } from '@mantine/notifications';
 import btc from '../../assets/images/icons/btc.png';
@@ -27,6 +27,7 @@ const Personnel = (props) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] = useState(false);
+    const [isDeleteAdminModalVisible, setIsDeleteAdminModalVisible] = useState(false);
 
     const styles = {
         color: "#276AFF",
@@ -38,7 +39,7 @@ const Personnel = (props) => {
         width: "100%",
         borderRadius: "6px"
     }
-
+ 
     const changeSelectedAdmin = (e) => {
         props.setSelectedAdmin(props.personnelData[e]);
         setPersonnelActive(e)
@@ -65,8 +66,15 @@ const Personnel = (props) => {
             helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'Insufficient Access on this Operation' })
         }
     }
+    const handleDelete = () => {
+        setIsDeleteAdminModalVisible(true);
+    }
 
-    const handleDelete = async () => {
+
+    const handleDeleteAdminCancel = () => {
+        setIsDeleteAdminModalVisible(false);
+    }
+    const handleDeleteAdminOk = async () => {
         if (user?.user_type === 'superadmin' || user?.access_level === 3) {
             setLoading(true);
 
@@ -78,6 +86,7 @@ const Personnel = (props) => {
                 helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Admin Account Deleted' })
             }
             setLoading(false);
+            setIsDeleteAdminModalVisible(false);
         } else {
             helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'Insufficient Access on this Operation' })
         }
@@ -169,6 +178,7 @@ const Personnel = (props) => {
                                         <ButtonComponent style={styles} onClick={showChangePassword} text="CHANGE PASSWORD" />
                                     </Form.Item>
                                     <ChangeUserPasswordModal load={load} isModalVisible={isChangePasswordModalVisible} handleOk={handlePasswordChangeOk} handleCancel={handlePasswordChangeCancel} error={error} />
+                                    <DeleteAdminModal load={load} isDeleteAdminModalVisible={isDeleteAdminModalVisible} handleOk={handleDeleteAdminOk} handleCancel={handleDeleteAdminCancel} error={error} />
                                 </div>
                             </div>
                         </Form>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Layout, Menu, Row, Col } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Layout, Menu, Row, Col, Badge, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import './layout.scss';
 import { CaretDownFilled } from '@ant-design/icons';
@@ -20,12 +20,25 @@ const Structure = (props) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { set, user } = useAuth();
     const notify = useNotifications();
-    const [load,setLoading] = useState(false);
+    const [load, setLoading] = useState(false);
+    const [notific, setNotific] = useState(0);
+    const [notifics, setNotifics] = useState(0);
 
     const showModal = () => {
         setIsModalVisible(true);
     };
- 
+
+    // Getting Chat data
+    useEffect(() => {
+        (async () => {
+            let reqData = await lib.getNotifications(user?.auth_id, user?.token)
+            if (reqData.status === 'ok') {
+                setNotifics(reqData.data);
+                setNotific(reqData.data?.filter(elem => (elem.status === 0)).length);
+            }
+        })();
+    }, [user?.token, set])
+
     const handleLogout = async () => {
         setLoading(true);
         let reqData = await lib.logout(user?.token)
@@ -98,12 +111,17 @@ const Structure = (props) => {
                         <Col xs={4} sm={4} md={6} lg={5} xl={6}>
                             <Menu mode="horizontal">
                                 <Menu.Item key="notification">
-                                    <Link to="/notifications">
-                                        <img src={notification} alt="logo" />
-                                    </Link>
+                                    <Badge count={notific} showZero>
+                                        <Link
+                                            to={`/notifications`}
+                                            state= {{notifics: notifics}}
+                                        >
+                                            <img src={notification} alt="logo" />
+                                        </Link>
+                                    </Badge>
                                 </Menu.Item>
                                 <Menu.Item key="account">
-                                    <LogoutModal isModalVisible={isModalVisible} handleOk={handleLogout} handleCancel={handleCancel} load={load}/>
+                                    <LogoutModal isModalVisible={isModalVisible} handleOk={handleLogout} handleCancel={handleCancel} load={load} />
                                     <a href='/#' className="ant-dropdown-link" onClick={e => { e.preventDefault(); showModal() }} style={{ color: '#276AFF' }}>
                                         <img src={person} alt="logo" />
                                         Logout  <CaretDownFilled />

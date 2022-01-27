@@ -42,6 +42,7 @@ const UsersPosts = (props, history) => {
       if (reqData.status === 'ok') {
         setuserData(reqData.data)
       }
+      console.log(reqData);
       setLoader(false);
     })()
   }, [user?.token, set, state?.record?.key]);
@@ -218,7 +219,6 @@ const SideBarActions = (props) => {
   }
 
   const handleVerifyAccountOk = async (value) => {
-    console.log(value);
     value = value === 0 ? 1 : 0
     if (user?.user_type === 'superadmin' || user?.access_level !== 3) {
       let payload = {

@@ -85,7 +85,7 @@ export const VerifyAccountModal = ({ verification_status, isModalVisible, handle
         <>
             <Modal width={400} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
                 <div className="modal_block_logout">
-                    <PageHeaderComp title={(verification_status === 0 || verification_status === undefined ) ? "Verify Account?" : "Unverify Account"} />
+                    <PageHeaderComp title={(verification_status === 0 || verification_status === undefined) ? "Verify Account?" : "Unverify Account"} />
 
                     <p>This action would suspend this account and user would not be able to access account</p>
 
@@ -94,7 +94,7 @@ export const VerifyAccountModal = ({ verification_status, isModalVisible, handle
                     {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
                     <br />
                     <a href='javascript:void(0)' onClick={() => handleOk(verification_status ?? 0)}>
-                        <PageHeaderComp title={(verification_status === 0 || verification_status === undefined ) ? "VERIFY ACCOUNT" : "UNVERIFY ACCOUNT"} style={{ color: "#747474" }} />
+                        <PageHeaderComp title={(verification_status === 0 || verification_status === undefined) ? "VERIFY ACCOUNT" : "UNVERIFY ACCOUNT"} style={{ color: "#747474" }} />
                     </a>
                 </div>
             </Modal>
@@ -386,14 +386,14 @@ export const EditTextModal = (props) => {
 
 
     const handleChange = (value, name) => {
-        console.log({[name]: value});
+        console.log({ [name]: value });
         console.log(value);
-        if(name === 'post_tag'){
+        if (name === 'post_tag') {
             setValues(d => ({ ...d, [name]: value.join(',') }))
-        }else{
+        } else {
             setValues(d => ({ ...d, [name]: value }))
         }
-        
+
     }
 
     const postTag = [
@@ -472,7 +472,7 @@ export const EditTextModal = (props) => {
                                 </Select>
                             </Form.Item>
                             <Form.Item label="">
-                                <Input placeholder="John"   style={{ width: "310px", visibility: "hidden" }} />
+                                <Input placeholder="John" style={{ width: "310px", visibility: "hidden" }} />
                             </Form.Item>
                         </div>
                     </div>
@@ -507,6 +507,48 @@ export const DeleteTextModal = ({ isTextModalVisible, handleOk, handleCancel, lo
                     <span onClick={handleOk}>
                         <PageHeaderComp title={"YES, DELETE CONTENT"} style={{ color: "#747474" }} />
                     </span>
+                </div>
+            </Modal>
+        </>
+    )
+}
+
+
+export const DeleteAdminModal = ({ isDeleteAdminModalVisible, handleOk, handleCancel, load }) => {
+    return (
+        <>
+            <Modal width={400} visible={isDeleteAdminModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
+                <div className="modal_block_logout">
+                    <PageHeaderComp title="Delete Content?" />
+                    <p>This action would delete this content and remove it from the system</p>
+                    <GoBackButtonComponent text="No, Go Back" onClick={handleCancel} />
+                    <br />
+                    {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
+                    <br />
+                    <span onClick={handleOk}>
+                        <PageHeaderComp title={"YES, DELETE CONTENT"} style={{ color: "#747474", cursor: 'pointer' }} />
+                    </span>
+                </div>
+            </Modal>
+        </>
+    )
+}
+
+
+export const NotificationModal = ({ data, isNotificationModalVisible, handleOk, handleCancel, load }) => {
+    return (
+        <>
+            <Modal visible={isNotificationModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
+                <div className="modal_block_logout">
+                    <PageHeaderComp title={data?.title} />
+                    <p>{data?.message}</p>
+                    <br />
+                    {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
+                    <br />
+                    <div>
+                        <Button onClick={  handleCancel} style={{ margin: "0px 10px" }} type="dashed">Chat </Button>
+                        <Button onClick={(e) => handleOk(data?._id)} style={{ margin: "0px 10px" }} type={'danger'} >Delete</Button>
+                    </div>
                 </div>
             </Modal>
         </>

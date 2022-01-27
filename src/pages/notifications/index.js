@@ -1,19 +1,16 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { PageHeaderComp } from '../../components/pageHeader/pageHeader';
 import Structure from "../../components/layout/index";
-import { Row, Col } from 'antd';
-// import { SupportCard } from '../../components/supportCard/supportCard';
+import { Row, Col, Empty } from 'antd';
+import { useLocation } from "react-router"
 import btc from '../../assets/images/icons/btc.png'; // Tell webpack this JS file uses this image
 import newUser from '../../assets/images/icons/new_users.png'; // Tell webpack this JS file uses this image
 import onlineUser from '../../assets/images/icons/online_users.png'; // Tell webpack this JS file uses this image
-
-
-// import { useAuth } from '../../core/hooks/useAuth';
-// import { Select } from 'antd';
-
-// import helpers from '../../core/func/Helpers';
-// import lib from './lib';
-
+import { NotificationModal } from '../../components/modalComponents/modalComponents';
+import { useAuth } from '../../core/hooks/useAuth';
+import { useNotifications } from '@mantine/notifications';
+import helpers from '../../core/func/Helpers';
+import lib from './lib';
 import './notifications.scss';
 import '../profile/profile.scss';
 
@@ -28,9 +25,16 @@ const chatSource = [
 ]
 
 
-const Notifications = () => {
+const Notifications = (props) => {
   const [,] = useState('hidden');
-  // const { set, user } = useAuth();
+  const location = useLocation();
+  const notify = useNotifications();
+  const [elem, setElem] = useState({});
+  const [load, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [isNotificationModalVisible, setIsNotificationModalVisible] = useState(false);
+
+  const { set, user } = useAuth();
   // const [, setLoader] = useState(false);
 
   // // data 
@@ -48,20 +52,56 @@ const Notifications = () => {
   //   })();
   // }, [user?.token, set])
 
+  const handleNotifiactionOk = async (notification_id) => {
+
+    setLoading(true);
+    let reqData = await lib.deleteNotification(notification_id, user?.token);
+    if (reqData.status === "error") {
+      helpers.sessionHasExpired(set, reqData.msg)
+    }
+    if (reqData.status === 'ok') {
+      helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Notification Deleted' })
+    }
+    setLoading(false);
+    console.log(reqData);
+    setIsNotificationModalVisible(false);
+  }
+  const handleNotifiactionCancel = () => {
+    setIsNotificationModalVisible(false);
+  }
+
+
+  const handleNotificationClick = (elem) => {
+    setElem(elem)
+    setIsNotificationModalVisible(true);
+  }
+
+
   return (
     <Structure className="support" >
       <div style={{ width: "70%", margin: "auto" }}>
         <Row justify="space-between">
           <PageHeaderComp title="Notifications" />
         </Row>
-
         <div className="support-top">
           <Row>
             <Col flex={1}>
               <div style={{ background: "#fff", padding: "20px" }}>
-                {chatSource.map(elem => (
-                  <SupportTile data={elem} />
-                ))}
+                {
+                  location?.state.notifics?.length > 0 ?
+                  <>
+                  {location?.state.notifics?.map((elem, ind) => (
+                    <SupportTile data={elem} key={ind} handleNotificationClick={handleNotificationClick} />
+                  ))}
+                  <NotificationModal data={elem} handleOk={handleNotifiactionOk} handleCancel={handleNotifiactionCancel} setIsNotificationModalVisible={setIsNotificationModalVisible} load={load} isNotificationModalVisible={isNotificationModalVisible} error={error} />
+                  </>                  
+                  :
+                    <Empty description = {
+                      <span>
+                        No Notification
+                      </span>
+                    } />
+                }                
               </div>
             </Col>
           </Row>
@@ -76,17 +116,11 @@ export default Notifications;
 
 const SupportTile = (props) => {
   return (
-    <div className='support-tile-card' style={{ display: "flex", backgroundColor: "#EEF3FF", marginBottom: "10px", padding: "10px", borderRadius: "6px" }}>
-      <span style={{ marginRight: "30px" }}>
-        <img src={props.data.img} alt="logo" />
-      </span>
+    <div onClick={() => props.handleNotificationClick(props.data)} className='support-tile-card' style={{ display: "flex", backgroundColor: "#EEF3FF", marginBottom: "10px", padding: "10px", borderRadius: "6px" }}>
       <span>
-        <p><b>{props.data.userHandle}</b></p>
-        <p>{props.data.userHandle}</p>
-
+        <p><b>{props.data.title}</b></p>
+        <p>{props.data.message}</p>
       </span>
-
-
     </div>
   )
 }
