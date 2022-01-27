@@ -1,4 +1,4 @@
-import { Axios_users } from '../../assets/utils/http-request';
+import { Axios_users, Axios_content } from '../../assets/utils/http-request';
 import helpers from '../../core/func/Helpers';
 
 const lib = {}
@@ -58,6 +58,41 @@ lib.verifyUserAccount = async (data, token) => {
         let cfg = helpers.getHeaderConfig(String(token).substr(7));
         uri = `/users/admin-verify-user-mark`;
         return await (await Axios_users.put(uri, data, cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
+
+lib.getContents = async (token, auth_id) => {
+    let uri = '';
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7));
+        uri = `/contents/get-user-posts?auth_id=${auth_id}`;
+        return await (await Axios_content.get(uri, cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
+
+
+// Sends request to update supports
+lib.updateContent = async (data, token) => {
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        return await (await Axios_content.put(`/contents/put-user-post`, data, cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
+lib.deleteContent = async (_id, token) => {
+    let uri = '';
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7));
+        uri = `/contents/${_id}`;
+        return await (await Axios_content.delete(uri, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }

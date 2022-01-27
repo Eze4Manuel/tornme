@@ -24,6 +24,11 @@ const UsersPosts = (props, history) => {
   const { state } = useLocation();
   const [, setLoader] = useState(false);
   const [userData, setuserData] = useState({});
+  const [userContent, setUserContent] = useState([]);
+  const [contentText, setContentText] = useState([]);
+  const [contentImage, setContentImage] = useState([]);
+  const [contentAudio, setContentAudio] = useState([]);
+  const [contentVideo, setContentVideo] = useState([]);
   const { set, user } = useAuth();
 
   useEffect(() => {
@@ -37,12 +42,37 @@ const UsersPosts = (props, history) => {
       if (reqData.status === 'ok') {
         setuserData(reqData.data)
       }
+      console.log(reqData);
       setLoader(false);
     })()
   }, [user?.token, set, state?.record?.key]);
 
+  // Gets Selected User Post Content
+  useEffect(() => {
+    (async () => {
+      let reqData = await lib.getContents(user?.token, state?.record?.key);
+
+      if (reqData.status === "error") {
+        helpers.sessionHasExpired(set, reqData.msg);
+      }
+      if (reqData.status === 'ok') {
+        setUserContent(reqData.data);
+        setContentText(filterContents(reqData.data, 0));
+        setContentImage(filterContents(reqData.data, 1));
+        setContentAudio(filterContents(reqData.data, 2));
+        setContentVideo(filterContents(reqData.data, 3));
+      }
+      console.log(reqData.data);
+
+    })()
+  }, [])
+
   const goBack = () => {
     navigate('/users')
+  }
+
+  const filterContents = (contents, type) => {
+      return contents.filter( elem  => elem.media_type === type )
   }
 
   return (
@@ -52,10 +82,17 @@ const UsersPosts = (props, history) => {
       </div>
       <div className="users-top">
         <Row>
-          <Col flex={20}>
-            <UsersPostCard data={userData} />
+          <Col xs={24} sm={18} md={18} lg={18} xl={18}>
+            <UsersPostCard
+              data={userData} 
+              contents={userContent} 
+              contentText={contentText} 
+              contentImage={contentImage} 
+              contentAudio={contentAudio} 
+              contentVideo={contentVideo} 
+            />
           </Col>
-          <Col flex={1}>
+          <Col xs={24} sm={6} md={6} lg={6} xl={6}>
             <div className="sidebar">
               <SideBarFeatures />
               <SideBarActions data={userData} />
@@ -138,7 +175,7 @@ const SideBarActions = (props) => {
   const [isResetAccountModalVisible, setIsResetAccountModalVisible] = useState(false);
   const [isVerifyAccountModalVisible, setIsVerifyAccountModalVisible] = useState(false);
 
-  
+
   const [error, setError] = useState('')
   const { state } = useLocation();
 
@@ -159,7 +196,7 @@ const SideBarActions = (props) => {
   const showVerifyAccountModal = () => {
     setIsVerifyAccountModalVisible(true);
   };
- 
+
 
   const handleDeleteAccountOk = async () => {
     setLoading(true)
@@ -182,15 +219,14 @@ const SideBarActions = (props) => {
   }
 
   const handleVerifyAccountOk = async (value) => {
-    console.log(value);
     value = value === 0 ? 1 : 0
-    if(user?.user_type === 'superadmin' || user?.access_level !== 3 ){
+    if (user?.user_type === 'superadmin' || user?.access_level !== 3) {
       let payload = {
-        auth_id:  props.data?._id,
+        auth_id: props.data?._id,
         verified_user_status: value + ""
       };
       setLoading(true);
-      let reqData = await lib.verifyUserAccount( payload, user?.token)
+      let reqData = await lib.verifyUserAccount(payload, user?.token)
       if (reqData.status === "error") {
         // helpers.sessionHasExpired(set, reqData.msg)
         helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
@@ -200,7 +236,7 @@ const SideBarActions = (props) => {
         setIsVerifyAccountModalVisible(false);
       }
       setLoading(false);
-    }else{
+    } else {
       helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: 'You are not authorized to perform this action' })
     }
   }
@@ -211,7 +247,7 @@ const SideBarActions = (props) => {
     let builder = formValidator.validateResetUserPassword(val, {}, setError)
     if (!builder) return
 
-    builder.auth_id = state?.record?.key; 
+    builder.auth_id = state?.record?.key;
     setLoading(true);
     let reqData = await lib.resetUserPassword(builder, user?.token)
     if (reqData.status === "error") {

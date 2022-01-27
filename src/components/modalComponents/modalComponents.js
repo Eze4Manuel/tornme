@@ -85,7 +85,7 @@ export const VerifyAccountModal = ({ verification_status, isModalVisible, handle
         <>
             <Modal width={400} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
                 <div className="modal_block_logout">
-                    <PageHeaderComp title={verification_status === 0 ? "Verify Account?" : "Unverify Account"} />
+                    <PageHeaderComp title={(verification_status === 0 || verification_status === undefined) ? "Verify Account?" : "Unverify Account"} />
 
                     <p>This action would suspend this account and user would not be able to access account</p>
 
@@ -93,8 +93,8 @@ export const VerifyAccountModal = ({ verification_status, isModalVisible, handle
                     <br />
                     {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
                     <br />
-                    <a href='javascript:void(0)' onClick={()=>handleOk(verification_status)}>
-                        <PageHeaderComp title={verification_status === 0 ? "VERIFY ACCOUNT" : "UNVERIFY ACCOUNT" } style={{ color: "#747474" }} />
+                    <a href='javascript:void(0)' onClick={() => handleOk(verification_status ?? 0)}>
+                        <PageHeaderComp title={(verification_status === 0 || verification_status === undefined) ? "VERIFY ACCOUNT" : "UNVERIFY ACCOUNT"} style={{ color: "#747474" }} />
                     </a>
                 </div>
             </Modal>
@@ -227,7 +227,7 @@ export const CreateFaqModal = (props) => {
     )
 }
 
- 
+
 export const EditFaqModal = (props) => {
     const [form] = Form.useForm();
     const [,] = useState('hidden');
@@ -273,7 +273,7 @@ export const EditFaqModal = (props) => {
 export const AssignAdminSupportModal = (props) => {
 
     return (
-        <Modal bodyStyle={{height: "500px", overflow: "scroll"}} width={800} footer={[<Button type='primary' key="back" onClick={props.handleCancel}> Close </Button>,]} title="" visible={props.isAssignAdminSupportModalVisible} >
+        <Modal bodyStyle={{ height: "500px", overflow: "scroll" }} width={800} footer={[<Button type='primary' key="back" onClick={props.handleCancel}> Close </Button>,]} title="" visible={props.isAssignAdminSupportModalVisible} >
             <div className='profile-form'>
                 <div style={{ textAlign: 'left', display: "flex", flexDirection: "space-between" }}>
                     <PageHeaderComp title="Assign Support" />
@@ -375,5 +375,182 @@ export const ChangeUserPasswordModal = ({ isModalVisible, handleOk, handleCancel
                 </div>
             </div>
         </Modal>
+    )
+}
+
+
+export const EditTextModal = (props) => {
+    const [form] = Form.useForm();
+    const [,] = useState('hidden');
+    const [values, setValues] = useState(props.data);
+
+
+    const handleChange = (value, name) => {
+        console.log({ [name]: value });
+        console.log(value);
+        if (name === 'post_tag') {
+            setValues(d => ({ ...d, [name]: value.join(',') }))
+        } else {
+            setValues(d => ({ ...d, [name]: value }))
+        }
+
+    }
+
+    const postTag = [
+        'Food',
+        'Music',
+        'Fitness'
+    ]
+    const children = []
+    for (let i = 0; i < postTag.length; i++) {
+        children.push(<Option key={i + i} value={postTag[i].toLowerCase()}>{postTag[i]}</Option>);
+    }
+    return (
+        <Modal width={800} footer={false} title="" visible={props.isTextModalVisible} >
+            <div className='profile-form'>
+                <div style={{ textAlign: 'center' }}>
+                    <PageHeaderComp title="Update Content" />
+                </div>
+                <Form form={form} layout="vertical" >
+                    <div className="">
+                        {props.error ? <ErrorMessage message={props.error} /> : null}
+                        <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
+                            <Form.Item label="Content Text">
+                                <TextArea placeholder="text" onChange={e => setValues(d => ({ ...d, text: e.target.value }))} value={values.text} rows={6} style={{ width: "600px", marginRight: "10px" }} />
+                            </Form.Item>
+                        </div>
+                        {console.log(values.post_tag)}
+                        <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
+                            <Form.Item label="Post Tag">
+                                <Select
+                                    mode="multiple"
+                                    allowClear
+                                    style={{ width: '100%' }}
+                                    placeholder="Please select"
+                                    defaultValue={values.post_tag.length !== 0 ? values.post_tag?.split(",").toString() : []}
+                                    onChange={e => handleChange(e, 'post_tag')}
+                                    style={{ width: "300px", marginRight: "10px" }}
+                                >
+                                    {children}
+                                </Select>
+                            </Form.Item>
+
+                            <Form.Item label="Access Status">
+                                <Select defaultValue={values.access_status == 0 ? "Free" : "Paid" ?? "Free"} style={{ width: 120 }} onChange={e => handleChange(e, 'access_status')} style={{ width: "300px", marginRight: "10px" }}>
+                                    <Option value="0">Free</Option>
+                                    <Option value="1">Paid</Option>
+                                </Select>
+                            </Form.Item>
+                        </div>
+                        <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
+                            <Form.Item label="Status">
+                                <Select defaultValue={values.comment_status == 0 ? "Active" : "Archive" ?? "Select Status"} style={{ width: 120 }} onChange={e => handleChange(e, 'status')} style={{ width: "300px", marginRight: "10px" }}>
+                                    <Option value="0">Active</Option>
+                                    <Option value="1">Archive</Option>
+                                </Select>
+                            </Form.Item>
+                            <Form.Item label="Comment Status">
+                                <Select defaultValue={values.comment_status == 0 ? "Disable" : "Enable" ?? "Select Comment Status"} style={{ width: 120 }} onChange={e => handleChange(e, 'comment_status')} style={{ width: "300px", marginRight: "10px" }}>
+                                    <Option value="0">Disable</Option>
+                                    <Option value="1">Enable</Option>
+                                </Select>
+                            </Form.Item>
+                        </div>
+                        <div className='form-group' style={{ display: "flex", justifyContent: 'center' }}>
+                            <Form.Item label="Text Card Color">
+                                <Select defaultValue={values.text_card_color ?? "White"} style={{ width: 120 }} onChange={e => handleChange(e, 'text_card_color')} style={{ width: "300px", marginRight: "10px" }}>
+                                    <Option value="white">White</Option>
+                                    <Option value="black">Black</Option>
+                                    <Option value="blue">Blue</Option>
+                                    <Option value="green">Green</Option>
+                                    <Option value="red">Red</Option>
+                                    <Option value="orange">Orange</Option>
+                                    <Option value="yellow">Yellow</Option>
+                                    <Option value="pink">Pink</Option>
+                                    <Option value="azure">Azure</Option>
+                                    <Option value="purple">Purple</Option>
+                                </Select>
+                            </Form.Item>
+                            <Form.Item label="">
+                                <Input placeholder="John" style={{ width: "310px", visibility: "hidden" }} />
+                            </Form.Item>
+                        </div>
+                    </div>
+                    <div className="profile-password">
+                        <div className='form-group' style={{ display: "flex", justifyContent: "space-around" }}>
+                            <Form.Item style={{ marginRight: "10px", marginTop: "18px" }}>
+                                <ButtonComponent onClick={() => props.handleOk(values)} text="UPDATE CONTENT" />
+                                {props.load ? <Spin style={{ marginLeft: "10px" }} indicator={antIcon} /> : null}
+                            </Form.Item>
+                            <Form.Item style={{ marginRight: "10px" }}>
+                                <GoBackComponent text="Go Back" onClick={props.handleCancel} />
+                            </Form.Item>
+                        </div>
+                    </div>
+                </Form>
+            </div>
+        </Modal>
+    )
+}
+
+export const DeleteTextModal = ({ isTextModalVisible, handleOk, handleCancel, load }) => {
+    return (
+        <>
+            <Modal width={400} visible={isTextModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
+                <div className="modal_block_logout">
+                    <PageHeaderComp title="Delete Content?" />
+                    <p>This action would delete this content and remove it from the system</p>
+                    <GoBackButtonComponent text="No, Go Back" onClick={handleCancel} />
+                    <br />
+                    {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
+                    <br />
+                    <span onClick={handleOk}>
+                        <PageHeaderComp title={"YES, DELETE CONTENT"} style={{ color: "#747474" }} />
+                    </span>
+                </div>
+            </Modal>
+        </>
+    )
+}
+
+
+export const DeleteAdminModal = ({ isDeleteAdminModalVisible, handleOk, handleCancel, load }) => {
+    return (
+        <>
+            <Modal width={400} visible={isDeleteAdminModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
+                <div className="modal_block_logout">
+                    <PageHeaderComp title="Delete Content?" />
+                    <p>This action would delete this content and remove it from the system</p>
+                    <GoBackButtonComponent text="No, Go Back" onClick={handleCancel} />
+                    <br />
+                    {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
+                    <br />
+                    <span onClick={handleOk}>
+                        <PageHeaderComp title={"YES, DELETE CONTENT"} style={{ color: "#747474", cursor: 'pointer' }} />
+                    </span>
+                </div>
+            </Modal>
+        </>
+    )
+}
+
+
+export const NotificationModal = ({ data, isNotificationModalVisible, handleOk, handleCancel, load }) => {
+    return (
+        <>
+            <Modal visible={isNotificationModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={{ textAlign: "center", borderRadius: "20px" }}>
+                <div className="modal_block_logout">
+                    <PageHeaderComp title={data?.title} />
+                    <p>{data?.message}</p>
+                    <br />
+                    {load ? <Spin style={{ marginBottom: "10px" }} indicator={antIcon} /> : null}
+                    <br />
+                    <div>
+                        <Button onClick={  handleCancel} style={{ margin: "0px 10px" }} type="dashed">Chat </Button>
+                        <Button onClick={(e) => handleOk(data?._id)} style={{ margin: "0px 10px" }} type={'danger'} >Delete</Button>
+                    </div>
+                </div>
+            </Modal>
+        </>
     )
 }

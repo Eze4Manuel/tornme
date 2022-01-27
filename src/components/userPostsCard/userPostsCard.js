@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import { SendOutlined } from '@ant-design/icons';
 import './userPostsCard.scss';
-import { Button, Row, Col, Divider } from 'antd';
+import { Button, Row, Col, Divider, Empty, Collapse } from 'antd';
 import person from '../../assets/images/person.png'; // Tell webpack this JS file uses this image
 import livestream from '../../assets/images/livestream.png'; // Tell webpack this JS file uses this image
 import image from '../../assets/images/image.png'; // Tell webpack this JS file uses this image
@@ -13,6 +14,16 @@ import play from '../../assets/images/icons/playicon.png'; // Tell webpack this 
 import live from '../../assets/images/icons/livestreamicon.png'; // Tell webpack this JS file uses this image
 import { Tabs } from 'antd';
 import { useNavigate } from "react-router-dom";
+import { LikeOutlined, ShareAltOutlined, FolderViewOutlined } from '@ant-design/icons';
+import formValidator from '../../pages/users/formvalidation';
+import { EditTextModal, DeleteTextModal } from '../../components/modalComponents/modalComponents';
+
+import { useAuth } from '../../core/hooks/useAuth';
+import { useNotifications } from '@mantine/notifications';
+import helpers from '../../core/func/Helpers';
+import lib from '../../pages/users/lib';
+
+const { Panel } = Collapse;
 
 export const UsersPostCard = (props) => {
     const { TabPane } = Tabs;
@@ -31,7 +42,7 @@ export const UsersPostCard = (props) => {
             <div className="post-cards" style={props.style} >
                 <div className="post-cards-top">
                     <Button>{props.data?.account_status === 0 ? 'Not Active' : 'Active'}</Button>
-                    <Button style={props.data?.verified_user_status === 0 ? {marginLeft: "6px"} : {background: 'palegreen', color: "#000", marginLeft: "6px"}}>{props.data?.verified_user_status === 0 ? 'Not Verified' : 'Verified'}</Button>
+                    <Button style={(props.data?.verified_user_status === 0 || props.data?.verified_user_status === undefined) ? { marginLeft: "6px" } : { background: 'palegreen', color: "#000", marginLeft: "6px" }}>{(props.data?.verified_user_status === 0 || props.data?.verified_user_status === undefined) ? 'Not Verified' : 'Verified'}</Button>
                 </div>
                 <div className="post-cards-middle">
                     <Row >
@@ -60,10 +71,42 @@ export const UsersPostCard = (props) => {
                                 </li>
                                 <li>
                                     <span>
+                                        Email:
+                                    </span>
+                                    <span>
+                                        {props.data?.email}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span>
                                         Phone number:
                                     </span>
                                     <span>
                                         {props.data?.phone_number}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span>
+                                        City:
+                                    </span>
+                                    <span>
+                                        {props.data?.city}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span>
+                                        Country:
+                                    </span>
+                                    <span>
+                                        {props.data?.country}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span>
+                                        Gender:
+                                    </span>
+                                    <span>
+                                        {props.data?.gender}
                                     </span>
                                 </li>
                                 <li>
@@ -87,9 +130,9 @@ export const UsersPostCard = (props) => {
                         <Col flex={3} style={{ maxWidth: "fit-content" }}>
                             <div className="post-cards-bottom">
                                 <h2>@{props.data?.username}</h2>
-                                <h6>Fitness coach</h6>
+                                {/* <h6>Fitness coach</h6> */}
                                 <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. e fermentum. Auctor mi laoreet purient aliquet mi sed. see moreLorem ipsum dolor sit amet, consectetur adipiscing elit. e fermentum. Auctor mi laoreet parturient aliquet mi sed. see moreLorem ipsum dolor sit amet, consectetur adipiscing elit. e fermentum. Auctor mi laoreet parturient aliquet mi sed. see more
+                                    {props.data?.bio}
                                 </p>
                             </div>
                         </Col>
@@ -133,13 +176,41 @@ export const UsersPostCard = (props) => {
                             </Row>
                         </TabPane>
                         <TabPane tab="Text" key="4">
-                            <Row >
-                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={video4} typeImage={play} /> </Col>
-                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={livestream} typeImage={live} /> </Col>
-                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={image2} typeImage={null} /> </Col>
-                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={video3} typeImage={play} /> </Col>
-                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={image} typeImage={null} /> </Col>
-                                <Col xs={2} sm={4} md={6} lg={8} xl={8}><Post img={image} typeImage={play} /> </Col>
+                            <Row style={{height: "600px", overflow: "scroll"}}>
+                                {props.contentText.length > 0 ?
+                                    props.contentText?.map((elem, ind) => (
+                                        <Col style={{ margin: "5px", borderRadius: "5px" }} xs={24} sm={24} md={24} lg={24} xl={24}>
+                                            <Collapse bordered={false} defaultActiveKey={['0']} >
+                                                <Panel header={
+                                                    <div style={{ "display": "flex", justifyContent: "space-between", width: "100%" }}>
+                                                        <span><b>{elem.text.substring(0, 40)} ...</b></span>
+                                                        <span>
+                                                            <div>
+                                                                <Button style={{ margin: "0px 10px" }} type="text" icon={<LikeOutlined />}>Likes {elem.likes}</Button>
+                                                                <Button style={{ margin: "0px 10px" }} type="text" icon={<ShareAltOutlined />}>Shares {elem.shares}</Button>
+                                                                <Button style={{ margin: "0px 10px" }} type="text" icon={<FolderViewOutlined />}>Views {elem.views}</Button>
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                } key={ind}><TextPost data={elem} /> </Panel>
+                                            </Collapse>
+                                        </Col>
+                                    ))
+                                    :
+                                    <div style={{ "height": "400px", "width": "100%" }}>
+                                        <Empty
+                                            image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                                            imageStyle={{
+                                                height: 60,
+                                            }}
+                                            description={
+                                                <span>
+                                                    No Content Available
+                                                </span>
+                                            } >
+                                        </Empty>
+                                    </div>
+                                }
                             </Row>
                         </TabPane>
                     </Tabs>
@@ -158,6 +229,90 @@ const Post = (props) => {
             <div className="post-single-card-image">
                 {<img alt='' src={props.typeImage} /> ?? null}
             </div>
+        </div>
+    )
+}
+
+
+const TextPost = (props) => {
+    const [load, setLoading] = useState(false);
+    const [error, setError] = useState('')
+    const notify = useNotifications();
+    const { set, user } = useAuth();
+    const [isTextEditModalVisible, setIsTextEditModalVisible] = useState(false);
+    const [isTextDeleteModalVisible, setIsTextDeleteModalVisible] = useState(false);
+
+    // Closes Edit Modal
+    const textEditCancel = () => {
+        setIsTextEditModalVisible(false)
+    }
+    // Toggles edit Support modal
+    const showEditTextModal = () => {
+        setIsTextEditModalVisible(true);
+    };
+
+    // Handles edit success cLick
+    const handleTextEdit = async (value) => {
+            console.log(value);
+            let builder = formValidator.validateContentUpdate(value, props.data, {}, setError)
+            if (!builder) {
+                return
+            }
+
+            builder.post_id = props.data?._id
+            setLoading(true);
+            let reqData = await lib.updateContent(builder, user?.token)
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg)
+                helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
+            }
+            if (reqData.status === 'ok') {
+                helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Content Updated' })
+                setIsTextEditModalVisible(false)
+            }
+            console.log(reqData);
+            setLoading(false);
+        
+    }
+
+    // Handles delete success cLick
+    const handleTextDelete = async () => {
+        console.log(props.data?._id);
+            setLoading(true);
+            let reqData = await lib.deleteContent(props.data?._id, user?.token)
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg)
+                helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
+            }
+            if (reqData.status === 'ok') {
+                helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Content Deleted' })
+                setIsTextDeleteModalVisible(false)
+            }
+            setLoading(false);
+            console.log(reqData);
+    }
+
+    // Closes Delete Modal
+    const textDeleteCancel = () => {
+        setIsTextDeleteModalVisible(false)
+    }
+    // Toggles delete Support modal
+    const showDeleteTextModal = () => {
+        console.log('dele');
+        setIsTextDeleteModalVisible(true);
+    };
+
+    return (
+        <div className='support-admin-card' style={{ display: "flex", flexDirection:"column", justifyContent: "space-between", backgroundColor: " ", padding: "10px" }}>
+            <div>
+                {props.data.text}
+            </div>
+            <div style={{minWidth: "200px", textAlign: 'end'}}>
+                <Button  onClick={showEditTextModal}  style={{ margin: "0px 10px" }} type="link">Edit</Button>
+                <Button  onClick={showDeleteTextModal}  style={{ margin: "0px 10px" }} type="link">Delete</Button>
+            </div>
+            <EditTextModal data={props.data} load={load} error={error} handleOk={handleTextEdit} handleCancel={textEditCancel} isTextModalVisible={isTextEditModalVisible} />
+            <DeleteTextModal data={props.data} load={load} error={error} handleOk={handleTextDelete} handleCancel={textDeleteCancel} isTextModalVisible={isTextDeleteModalVisible} />
         </div>
     )
 }

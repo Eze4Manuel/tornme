@@ -80,7 +80,9 @@ const FaqTabTile = (props) => {
             setLoading(true);
             let reqData = await lib.updateFaq(builder, user?.token)
             if (reqData.status === "error") {
-                helpers.sessionHasExpired(set, reqData.msg)
+                helpers.sessionHasExpired(set, reqData.msg);
+                helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
+
             }
             if (reqData.status === 'ok') {
                 helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Support Updated' })
@@ -99,7 +101,8 @@ const FaqTabTile = (props) => {
             setLoading(true);
             let reqData = await lib.deleteFaq(props.data?._id, user?.token)
             if (reqData.status === "error") {
-                helpers.sessionHasExpired(set, reqData.msg)
+                helpers.sessionHasExpired(set, reqData.msg);
+                helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
             }
             if (reqData.status === 'ok') {
                 helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Support Deleted' })
